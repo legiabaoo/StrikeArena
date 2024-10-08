@@ -15,9 +15,6 @@ public class health : MonoBehaviour
 
     [PunRPC]
 
-
-
-   
     public void TakeDamege(int dame)
     {
         healthText.text = healths.ToString();
