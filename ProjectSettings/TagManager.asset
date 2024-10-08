@@ -5,6 +5,15 @@ TagManager:
   serializedVersion: 2
   tags:
   - chet
+  - FxTemporaire
+  - Combined Mesh
+  - Tile Mesh
+  - Rule Tile
+  - CinemachineTarget
+  - kedich
+  - dongdoi
+  - Attacker
+  - Defender
   layers:
   - Default
   - TransparentFX
