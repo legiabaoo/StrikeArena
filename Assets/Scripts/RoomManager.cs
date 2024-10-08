@@ -21,7 +21,18 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [HideInInspector]
     public int deaths = 0;
 
+    public Renderer playerRender;
     public string roomNameToJoin = "test";
+
+    public Dropdown dropdownManager;
+    public GameObject attackTeamPrefab;  // Prefab cho ??i t?n công
+    public GameObject defenseTeamPrefab; // Prefab cho ??i phòng th?
+
+    [Space]
+    public Transform[] attackSpawnPoints; // ?i?m spawn cho ??i t?n công
+    public Transform[] defenseSpawnPoints; // ?i?m spawn cho ??i phòng th?
+
+    private GameObject currentPlayer;    // L?u tr? tham chi?u ??n nhân v?t hi?n t?i
 
     private void Awake()
     {
@@ -66,9 +77,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
         base.OnJoinedRoom();
 
         camRoom.SetActive(false);
-       ResPawnPlayer();
+        
+      HandleTeamSelection();
     
 }
+   
     public void ResPawnPlayer()
     {
         Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
@@ -76,6 +89,38 @@ public class RoomManager : MonoBehaviourPunCallbacks
         _player.GetComponent<PlayerSetup>().IsLocalPlayer();
         _player.GetComponent<health>().isLocalPlayer = true;
         _player.GetComponent<PhotonView>().RPC("SetNickname", RpcTarget.AllBuffered, nickname);
+        PhotonNetwork.LocalPlayer.NickName = nickname;
+        HandleTeamSelection();
+    }
+    private void HandleTeamSelection()
+    {
+        // L?y giá tr? team ???c ch?n t? DropdownManager
+        int selectedTeam = dropdownManager.teamDropdown.value; // L?y ch? s? c?a team ???c ch?n
+
+        Transform spawnPoint;
+        GameObject teamPrefab;
+
+        if (selectedTeam == 0) // N?u ??i t?n công ???c ch?n
+        {
+            Debug.Log("??i t?n công ???c ch?n.");
+            spawnPoint = attackSpawnPoints[Random.Range(0, attackSpawnPoints.Length)]; // Ch?n ng?u nhiên ?i?m spawn cho ??i t?n công
+            teamPrefab = attackTeamPrefab; // Nhân v?t cho ??i t?n công
+        }
+        else // N?u ??i phòng th? ???c ch?n
+        {
+            Debug.Log("??i phòng th? ???c ch?n.");
+            spawnPoint = defenseSpawnPoints[Random.Range(0, defenseSpawnPoints.Length)]; // Ch?n ng?u nhiên ?i?m spawn cho ??i phòng th?
+            teamPrefab = defenseTeamPrefab; // Nhân v?t cho ??i phòng th?
+        }
+
+        // T?o nhân v?t t?i ?i?m spawn t??ng ?ng và ??ng b? hóa gi?a t?t c? ng??i ch?i
+        GameObject _player = PhotonNetwork.Instantiate(teamPrefab.name, spawnPoint.position, spawnPoint.rotation);
+        
+        // ??t tên ng??i ch?i
+        _player.GetComponent<PhotonView>().RPC("SetNickname", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.NickName);
+        _player.GetComponent<PlayerSetup>().IsLocalPlayer();
+        _player.GetComponent<health>().isLocalPlayer = true;
+      
         PhotonNetwork.LocalPlayer.NickName = nickname;
     }
     public void SetHashes()
