@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using TMPro;
 public class RoomManager : MonoBehaviourPunCallbacks
 {
     public static RoomManager instance;
@@ -34,9 +35,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     private GameObject currentPlayer;    // L?u tr? tham chi?u ??n nhân v?t hi?n t?i
 
+    public string username;
+    public TMP_InputField edtUsername;
+
     private void Awake()
     {
-        instance = this;    
+        instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     public void ChangeNickname(string _name)
@@ -54,7 +59,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-     
+        edtUsername.text = username;
     }
     public override void OnConnectedToMaster()
     {
@@ -67,7 +72,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         base.OnJoinedLobby();
 
-        PhotonNetwork.JoinOrCreateRoom(roomNameToJoin,null,null);
+        PhotonNetwork.JoinOrCreateRoom(roomNameToJoin, null, null);
         Debug.Log("Dang ket noi va o trong phong ngay bay gio");
 
     }
@@ -77,11 +82,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
         base.OnJoinedRoom();
 
         camRoom.SetActive(false);
-        
-      HandleTeamSelection();
-    
-}
-   
+
+        HandleTeamSelection();
+
+    }
+
     public void ResPawnPlayer()
     {
         Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
@@ -115,12 +120,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         // T?o nhân v?t t?i ?i?m spawn t??ng ?ng và ??ng b? hóa gi?a t?t c? ng??i ch?i
         GameObject _player = PhotonNetwork.Instantiate(teamPrefab.name, spawnPoint.position, spawnPoint.rotation);
-        
+
         // ??t tên ng??i ch?i
         _player.GetComponent<PhotonView>().RPC("SetNickname", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.NickName);
         _player.GetComponent<PlayerSetup>().IsLocalPlayer();
         _player.GetComponent<health>().isLocalPlayer = true;
-      
+
         PhotonNetwork.LocalPlayer.NickName = nickname;
     }
     public void SetHashes()
@@ -129,7 +134,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         {
             Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
             hash["kills"] = kills;
-            hash["deaths"] =deaths;
+            hash["deaths"] = deaths;
 
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }

@@ -1490,7 +1490,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -4388,7 +4388,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 718081799}
   m_TextViewport: {fileID: 937619050}
   m_TextComponent: {fileID: 265434962}
@@ -6135,6 +6135,8 @@ MonoBehaviour:
   - {fileID: 47115956}
   defenseSpawnPoints:
   - {fileID: 1409576996}
+  username: 
+  edtUsername: {fileID: 718081798}
 --- !u!4 &958552425
 Transform:
   m_ObjectHideFlags: 0

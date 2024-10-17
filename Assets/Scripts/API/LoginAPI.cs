@@ -1,27 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using Newtonsoft.Json;
 using UnityEngine.Networking;
 using System.Text;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class LoginAPI : MonoBehaviour
 {
     public TMP_InputField edtEmail;
     public TMP_InputField edtPassword;
     public TMP_Text txtMessage;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
+
     public void Login()
     {
         string email = edtEmail.text;
@@ -29,9 +31,9 @@ public class LoginAPI : MonoBehaviour
         LoginModel loginModel = new LoginModel(email, pass);
         StartCoroutine(CheckLogin(loginModel));
     }
+
     IEnumerator CheckLogin(LoginModel loginModel)
     {
-        
         string jsonStringRequest = JsonConvert.SerializeObject(loginModel);
 
         var request = new UnityWebRequest("https://api-strikearena.onrender.com/login", "POST");
@@ -51,8 +53,33 @@ public class LoginAPI : MonoBehaviour
             LoginCallBackModel message = JsonConvert.DeserializeObject<LoginCallBackModel>(jsonString);
             txtMessage.text = message.message;
 
+            if (message.status == 1)
+            {
+                // Lưu username tạm thời
+                string username = message.username;
+
+                // Đăng ký sự kiện khi cảnh đã được tải
+                SceneManager.sceneLoaded += (scene, mode) =>
+                {
+                    if (RoomManager.instance != null)
+                    {
+                        RoomManager.instance.username = username;
+                        Debug.Log("Username đã được gán: " + username);
+                    }
+                    else
+                    {
+                        Debug.LogError("RoomManager không tồn tại trong cảnh.");
+                    }
+
+                    // Gỡ bỏ sự kiện để không gọi nhiều lần khi chuyển cảnh khác
+                    SceneManager.sceneLoaded -= (scene, mode) => { };
+                };
+
+                // Tải cảnh Scene1
+                SceneManager.LoadScene("Scene1");
+            }
         }
+
         request.Dispose();
     }
-
 }
