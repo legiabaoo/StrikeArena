@@ -99,32 +99,47 @@
             magText.text = mag.ToString();
             ammoText.text = ammo + "/" + magAmmo;
         }
-        private void Fire()
-        {
+    private void Fire()
+    {
+        recoiling = true;
+        recovering = false;
+        Ray ray = new Ray(camera.transform.position, camera.transform.forward);
+        RaycastHit hit;
 
-            recoiling = true;
-            recovering = false;
-            Ray ray = new Ray(camera.transform.position, camera.transform.forward);
-            RaycastHit hit;
-            PhotonNetwork.LocalPlayer.AddScore(0);
-            if (Physics.Raycast(ray.origin, ray.direction,out hit, doxa))
+        // L?y team c?a ng??i b?n t? Player
+        int shooterTeam = (int)GetComponentInParent<PhotonView>().Owner.CustomProperties["team"];
+
+        if (Physics.Raycast(ray.origin, ray.direction, out hit, doxa))
+        {
+            PhotonNetwork.Instantiate(hitVFX.name, hit.point, Quaternion.identity);
+            health targetHealth = hit.transform.gameObject.GetComponent<health>();
+
+            if (targetHealth != null)
             {
-                PhotonNetwork.Instantiate(hitVFX.name, hit.point, Quaternion.identity);
-                if (hit.transform.gameObject.GetComponent<health>())
+                // L?y team c?a ng??i b? b?n
+                int targetTeam = (int)hit.transform.gameObject.GetComponent<PhotonView>().Owner.CustomProperties["team"];
+
+                // Ki?m tra team tr??c khi gây sát th??ng
+                if (shooterTeam != targetTeam)
                 {
                     PhotonNetwork.LocalPlayer.AddScore(damege);
-                    if(damege >= hit.transform.gameObject.GetComponent<health>().healths)
+                    if (damege >= targetHealth.healths)
                     {
                         RoomManager.instance.kills++;
                         RoomManager.instance.SetHashes();
                         PhotonNetwork.LocalPlayer.AddScore(100);
                     }
-                    Debug.Log("ban trung roi ne");
-                    hit.transform.gameObject.GetComponent<PhotonView>().RPC("TakeDamege",RpcTarget.All,damege);
+                    hit.transform.gameObject.GetComponent<PhotonView>().RPC("TakeDamege", RpcTarget.All, damege);
+                }
+                else
+                {
+                    Debug.Log("Không th? b?n ??ng ??i.");
                 }
             }
         }
-        void Recoil()
+    }
+
+    void Recoil()
         {
             Vector3 finalPositon = new Vector3(origianlPosition.x, origianlPosition.y + recoilUp, origianlPosition.z - recoilBack);
             transform.localPosition = Vector3.SmoothDamp(transform.localPosition, finalPositon, ref recoilVeclocity, recoilLength);

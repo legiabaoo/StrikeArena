@@ -14,33 +14,24 @@ public class health : MonoBehaviour
 
 
     [PunRPC]
+
     public void TakeDamege(int dame)
     {
-        // L?y team c?a ng??i b?n và ng??i b? b?n
-        int shooterTeam = (int)PhotonNetwork.LocalPlayer.CustomProperties["team"];
-        int targetTeam = (int)GetComponent<PhotonView>().Owner.CustomProperties["team"];
+        healthText.text = healths.ToString();
+        healths -= dame;
+        if(healths <= 0)
+        {
 
-        // Ch? tr? máu n?u team khác nhau
-        if (shooterTeam != targetTeam)
-        {
-            healths -= dame;
-            healthText.text = healths.ToString();
-            if (healths <= 0)
+            if (isLocalPlayer)
             {
-                if (isLocalPlayer)
-                {
-                    RoomManager.instance.HandleTeamSelection();
-                    RoomManager.instance.deaths++;
-                    RoomManager.instance.SetHashes();
-                }
-                Destroy(gameObject);
+
+                RoomManager.instance.HandleTeamSelection();
+
+                RoomManager.instance.deaths++;
+                RoomManager.instance.SetHashes();
             }
-        }
-        else
-        {
-            Debug.Log("Không th? gây sát th??ng cho ??ng ??i.");
+            Destroy(gameObject);    
         }
     }
-
 
 }
