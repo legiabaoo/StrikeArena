@@ -2013,6 +2013,7 @@ GameObject:
   - component: {fileID: 7439006310637302810}
   - component: {fileID: 4148622655982671756}
   - component: {fileID: 3954651811525394679}
+  - component: {fileID: -7672117239142421342}
   m_Layer: 0
   m_Name: PlayerTanCong
   m_TagString: Player
@@ -2266,6 +2267,26 @@ MonoBehaviour:
   timeText: {fileID: 3761834262062901176}
   loaderboard: {fileID: 0}
   over: {fileID: 9077410629442362970}
+--- !u!95 &-7672117239142421342
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6025602435210889620}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: f6650522a30adc0469c40f090d5183a6, type: 3}
+  m_Controller: {fileID: 9100000, guid: cbd1db45c75e5b948a5befe9ecb80421, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6706269107780992725
 GameObject:
   m_ObjectHideFlags: 0
