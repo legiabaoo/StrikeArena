@@ -90,9 +90,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
         _player.GetComponent<health>().isLocalPlayer = true;
         _player.GetComponent<PhotonView>().RPC("SetNickname", RpcTarget.AllBuffered, nickname);
         PhotonNetwork.LocalPlayer.NickName = nickname;
-        HandleTeamSelection();
+     
     }
-    private void HandleTeamSelection()
+    public void HandleTeamSelection()
     {
         // L?y giá tr? team ???c ch?n t? DropdownManager
         int selectedTeam = dropdownManager.teamDropdown.value; // L?y ch? s? c?a team ???c ch?n
@@ -103,26 +103,32 @@ public class RoomManager : MonoBehaviourPunCallbacks
         if (selectedTeam == 0) // N?u ??i t?n công ???c ch?n
         {
             Debug.Log("??i t?n công ???c ch?n.");
-            spawnPoint = attackSpawnPoints[Random.Range(0, attackSpawnPoints.Length)]; // Ch?n ng?u nhiên ?i?m spawn cho ??i t?n công
+            spawnPoint = attackSpawnPoints[Random.Range(0, attackSpawnPoints.Length)];
             teamPrefab = attackTeamPrefab; // Nhân v?t cho ??i t?n công
         }
         else // N?u ??i phòng th? ???c ch?n
         {
             Debug.Log("??i phòng th? ???c ch?n.");
-            spawnPoint = defenseSpawnPoints[Random.Range(0, defenseSpawnPoints.Length)]; // Ch?n ng?u nhiên ?i?m spawn cho ??i phòng th?
+            spawnPoint = defenseSpawnPoints[Random.Range(0, defenseSpawnPoints.Length)];
             teamPrefab = defenseTeamPrefab; // Nhân v?t cho ??i phòng th?
         }
 
         // T?o nhân v?t t?i ?i?m spawn t??ng ?ng và ??ng b? hóa gi?a t?t c? ng??i ch?i
         GameObject _player = PhotonNetwork.Instantiate(teamPrefab.name, spawnPoint.position, spawnPoint.rotation);
-        
+
+        // Gán team cho ng??i ch?i trong Custom Properties
+        Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+        hash["team"] = selectedTeam; // Gán team vào Custom Properties
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
         // ??t tên ng??i ch?i
         _player.GetComponent<PhotonView>().RPC("SetNickname", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.NickName);
         _player.GetComponent<PlayerSetup>().IsLocalPlayer();
         _player.GetComponent<health>().isLocalPlayer = true;
-      
+
         PhotonNetwork.LocalPlayer.NickName = nickname;
     }
+
     public void SetHashes()
     {
         try
