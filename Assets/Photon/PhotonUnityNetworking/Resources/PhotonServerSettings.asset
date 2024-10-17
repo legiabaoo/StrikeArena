@@ -49,6 +49,7 @@ MonoBehaviour:
   - SetPlayerMaterial
   - TakeDamage
   - SetPlayerTag
+  - DestroyPlayer
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
