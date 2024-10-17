@@ -119,6 +119,7 @@
                         RoomManager.instance.SetHashes();
                         PhotonNetwork.LocalPlayer.AddScore(100);
                     }
+                    Debug.Log("ban trung roi ne");
                     hit.transform.gameObject.GetComponent<PhotonView>().RPC("TakeDamege",RpcTarget.All,damege);
                 }
             }
