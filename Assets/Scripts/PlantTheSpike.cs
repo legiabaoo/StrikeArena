@@ -59,6 +59,8 @@ public class PlantTheSpike : MonoBehaviour
     void PlaceSpike()
     {
         vertor3 = GameObject.Find("positionSpike").transform.position;
-        Instantiate(spikePrefab, vertor3, Quaternion.identity); // Sinh ra Spike
+        GameObject spike = Instantiate(spikePrefab, vertor3, Quaternion.identity); // Sinh ra Spike
+        spike.tag = "Spike"; // Gán tag cho spike để script Defuse nhận diện
     }
+
 }
