@@ -16,6 +16,7 @@ TagManager:
   - Defender
   - tancong
   - phongthu
+  - Spike
   layers:
   - Default
   - TransparentFX
