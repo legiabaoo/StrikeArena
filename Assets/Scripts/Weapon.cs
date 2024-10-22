@@ -149,7 +149,7 @@ public class Weapon : MonoBehaviour
                     }
 
                     // G?i RPC ?? c?p nh?t sát th??ng lên t?t c? các client
-                    targetPhotonView.RPC("TakeDamege", RpcTarget.All, damege);
+                    targetPhotonView.RPC("TakeDamage", RpcTarget.All, damege);
                 }
                 else
                 {
