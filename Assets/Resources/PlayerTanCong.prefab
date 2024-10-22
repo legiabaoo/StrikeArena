@@ -2463,7 +2463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb200292ab11cd468ba18ae8cb0e2d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spikePrefab: {fileID: 5934452941576658639, guid: f137c8a136e4ff746a23c4ce9302821a, type: 3}
+  spikePrefab: {fileID: 1244756615232544913, guid: 35a272a8009e9de41bff98a21eedec91, type: 3}
   holdTimeRequired: 3
 --- !u!1 &6706269107780992725
 GameObject:
