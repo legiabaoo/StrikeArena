@@ -15,7 +15,7 @@ public class PlantTheSpike : MonoBehaviour
     void Start()
     {
         progressBar = GameObject.Find("ProgressBar").GetComponent<Slider>();
-        vertor3 = GameObject.Find("positionSpike").transform.position;
+        
         // Đặt giá trị ban đầu cho thanh progressBar
         progressBar.gameObject.SetActive(false); // Ẩn thanh loading khi chưa nhấn phím
         progressBar.value = 0f; // Đặt giá trị ban đầu của thanh loading là 0
@@ -58,7 +58,7 @@ public class PlantTheSpike : MonoBehaviour
     // Hàm sinh đối tượng Spike tại vị trí của người chơi
     void PlaceSpike()
     {
-        
+        vertor3 = GameObject.Find("positionSpike").transform.position;
         Instantiate(spikePrefab, vertor3, Quaternion.identity); // Sinh ra Spike
     }
 }
