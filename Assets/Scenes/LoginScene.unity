@@ -2526,6 +2526,9 @@ MonoBehaviour:
   edtEmail: {fileID: 625802689}
   edtPassword: {fileID: 961672102}
   txtMessage: {fileID: 846341895}
+  LoginPage: {fileID: 553149357}
+  MainHall: {fileID: 105805490}
+  txtUsername: {fileID: 537188121}
 --- !u!1 &564797278
 GameObject:
   m_ObjectHideFlags: 0
@@ -3671,7 +3674,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 689394908}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
