@@ -717,6 +717,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ak-47_1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b95200d0e89a946478ab08e836b0a210, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b95200d0e89a946478ab08e836b0a210, type: 3}
 --- !u!1 &156234441 stripped
@@ -4637,7 +4641,7 @@ RectTransform:
   m_Children:
   - {fileID: 405190556}
   m_Father: {fileID: 1420784092}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -6211,7 +6215,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &958552424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7531,7 +7535,7 @@ RectTransform:
   m_Children:
   - {fileID: 2088050383}
   m_Father: {fileID: 1420784092}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
