@@ -36,7 +36,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        instance = this;    
+        instance = this;
     }
 
     public void ChangeNickname(string _name)
@@ -54,7 +54,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-     
+
     }
     public override void OnConnectedToMaster()
     {
@@ -67,7 +67,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         base.OnJoinedLobby();
 
-        PhotonNetwork.JoinOrCreateRoom(roomNameToJoin,null,null);
+        PhotonNetwork.JoinOrCreateRoom(roomNameToJoin, null, null);
         Debug.Log("Dang ket noi va o trong phong ngay bay gio");
 
     }
@@ -77,11 +77,15 @@ public class RoomManager : MonoBehaviourPunCallbacks
         base.OnJoinedRoom();
 
         camRoom.SetActive(false);
-        
-      HandleTeamSelection();
-    
-}
-   
+
+        HandleTeamSelection();
+
+        Debug.Log("Number of players in room: " + PhotonNetwork.CurrentRoom.PlayerCount);
+
+        Debug.Log("You are currently in the dev region: " + PhotonNetwork.CloudRegion);
+
+    }
+
     public void ResPawnPlayer()
     {
         Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
@@ -90,9 +94,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
         _player.GetComponent<health>().isLocalPlayer = true;
         _player.GetComponent<PhotonView>().RPC("SetNickname", RpcTarget.AllBuffered, nickname);
         PhotonNetwork.LocalPlayer.NickName = nickname;
-    
+
     }
-   
+
     public void HandleTeamSelection()
     {
         // L?y giá tr? team ???c ch?n t? DropdownManager
@@ -136,7 +140,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         {
             Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
             hash["kills"] = kills;
-            hash["deaths"] =deaths;
+            hash["deaths"] = deaths;
 
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }
