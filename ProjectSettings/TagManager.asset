@@ -17,6 +17,7 @@ TagManager:
   - tancong
   - phongthu
   - Spike
+  - Side
   layers:
   - Default
   - TransparentFX
