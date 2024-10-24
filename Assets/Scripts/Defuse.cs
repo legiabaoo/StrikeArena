@@ -82,20 +82,5 @@ public class Defuse : MonoBehaviour
         spikePhotonView.RPC("DestroySpike", RpcTarget.AllBuffered, spikePhotonView.GetComponent<PhotonView>().ViewID);
     }
 
-    // RPC để hủy spike
-    [PunRPC]
-    private void DestroySpike(int spikeViewID)
-    {
-        PhotonView spikeView = PhotonView.Find(spikeViewID);
-        if (spikeView != null)
-        {
-            Destroy(spikeView.gameObject); // Hủy spike trên tất cả các client
-            Debug.Log("Spike defused on all clients!");
-        }
-        else
-        {
-            Debug.LogError("Spike not found with ViewID: " + spikeViewID);
-        }
-        holdTime = 0.0f; // Reset thời gian
-    }
+    
 }
