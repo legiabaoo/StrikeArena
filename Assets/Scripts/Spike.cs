@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Spike : MonoBehaviour
 {
-    // RPC để đặt tag Spike
+    //Đặt tag Spike
     [PunRPC]
     public void SetSpikeTag(int spikeViewID)
     {
@@ -22,21 +22,15 @@ public class Spike : MonoBehaviour
             Debug.LogError("Spike object not found with the given ViewID: " + spikeViewID);
         }
     }
-    // RPC để hủy spike
+    //Gỡ spike 
     [PunRPC]
-    private void DestroySpike(int spikeViewID)
+    private void RemoveSpike(int spikeViewID)
     {
-        PhotonView spikeView = PhotonView.Find(spikeViewID);
-        if (spikeView != null)
+        GameObject spike = PhotonView.Find(spikeViewID).gameObject;
+        if (spike != null)
         {
-            Destroy(spikeView.gameObject); // Hủy spike trên tất cả các client
-            Debug.Log("Spike defused on all clients!");
+            Destroy(spike); 
         }
-        else
-        {
-            Debug.LogError("Spike not found with ViewID: " + spikeViewID);
-        }
-        //holdTime = 0.0f; // Reset thời gian
     }
     // Start is called before the first frame update
     void Start()

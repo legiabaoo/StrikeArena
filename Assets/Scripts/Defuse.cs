@@ -1,4 +1,6 @@
-﻿using Photon.Pun;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +15,7 @@ public class Defuse : MonoBehaviour
     void Start()
     {
         // Tìm ProgressBar trong prefab
-        
+
         if (progressBar != null)
         {
             progressBar.gameObject.SetActive(false); // Ẩn thanh loading khi bắt đầu
@@ -22,6 +24,17 @@ public class Defuse : MonoBehaviour
         else
         {
             Debug.LogError("ProgressBar not found in the player prefab!");
+        }
+
+        // Kiểm tra và cập nhật trạng thái spike từ custom properties
+        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
+        {
+            bool spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
+            if (!spikeExists)
+            {
+                // Nếu spike không còn tồn tại, gọi hàm xóa spike
+                RemoveSpikeFromScene();
+            }
         }
     }
 
@@ -79,8 +92,22 @@ public class Defuse : MonoBehaviour
     {
         PhotonView spikePhotonView = currentSpike.GetComponent<PhotonView>();
         // Gọi RPC để gỡ spike
-        spikePhotonView.RPC("DestroySpike", RpcTarget.AllBuffered, spikePhotonView.GetComponent<PhotonView>().ViewID);
+
+        spikePhotonView.RPC("RemoveSpike", RpcTarget.AllBuffered, spikePhotonView.GetComponent<PhotonView>().ViewID);
+
+        // Cập nhật custom properties để đánh dấu rằng spike không còn tồn tại
+        Hashtable properties = new Hashtable();
+        properties["SpikeExists"] = false; // Spike không còn tồn tại
+        PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
     }
 
-    
+    private void RemoveSpikeFromScene()
+    {
+        // Tìm và xóa spike nếu nó tồn tại trong scene
+        GameObject spike = GameObject.FindWithTag("Spike");
+        if (spike != null)
+        {
+            Destroy(spike); // Hủy spike nếu tìm thấy
+        }
+    }
 }

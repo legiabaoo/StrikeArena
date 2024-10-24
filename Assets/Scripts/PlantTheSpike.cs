@@ -1,5 +1,5 @@
-﻿using Photon.Pun;
-using System.Collections;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI; // Để sử dụng các thành phần UI
 
@@ -21,6 +21,17 @@ public class PlantTheSpike : MonoBehaviour
         // Đặt giá trị ban đầu cho thanh progressBar
         progressBar.gameObject.SetActive(false); // Ẩn thanh loading khi chưa nhấn phím
         progressBar.value = 0f; // Đặt giá trị ban đầu của thanh loading là 0
+
+        // Kiểm tra custom properties để xác định trạng thái của spike
+        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
+        {
+            bool spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
+            if (!spikeExists)
+            {
+                // Nếu spike không tồn tại, gọi hàm để xóa spike từ scene
+                RemoveSpikeFromScene();
+            }
+        }
     }
 
     void Update()
@@ -71,6 +82,11 @@ public class PlantTheSpike : MonoBehaviour
         {
             // Gọi RPC để đồng bộ hóa tag
             spikePhotonView.RPC("SetSpikeTag", RpcTarget.AllBuffered, spikePhotonView.ViewID);
+
+            // Cập nhật custom properties để đánh dấu rằng spike đã được đặt
+            Hashtable properties = new Hashtable();
+            properties["SpikeExists"] = true; // Spike tồn tại
+            PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
         }
         else
         {
@@ -78,8 +94,17 @@ public class PlantTheSpike : MonoBehaviour
         }
     }
 
+    private void RemoveSpikeFromScene()
+    {
+        // Tìm và xóa spike nếu nó tồn tại trong scene
+        GameObject spike = GameObject.FindWithTag("Spike");
+        if (spike != null)
+        {
+            Destroy(spike); // Hủy spike nếu tìm thấy
+        }
+    }
 
-    
+
     // Khi người chơi va chạm với đối tượng có tag "Side"
     private void OnTriggerEnter(Collider other)
     {
