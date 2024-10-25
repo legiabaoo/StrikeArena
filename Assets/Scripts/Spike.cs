@@ -1,10 +1,13 @@
-﻿using Photon.Pun;
+﻿using DevionGames;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Spike : MonoBehaviour
 {
+    
     //Đặt tag Spike
     [PunRPC]
     public void SetSpikeTag(int spikeViewID)

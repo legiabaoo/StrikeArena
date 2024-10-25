@@ -1,8 +1,9 @@
+﻿using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LineRenderer : MonoBehaviour
+public class EffectPlantSpike : MonoBehaviour
 {
     
     void Start()

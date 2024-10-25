@@ -1,6 +1,6 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Pun;
-
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,29 +11,27 @@ public class Defuse : MonoBehaviour
     private bool isInRange = false; // Biến kiểm tra xem người chơi có đứng gần bom không
     private GameObject currentSpike; // Spike hiện tại để gỡ
     public Slider progressBar; // Thanh loading
+    public Image iconPlant; // Icon nhấp nháy khi spike được đặt
+
+    private float blinkInterval = 0.5f; // Thời gian nhấp nháy icon
 
     void Start()
     {
-        // Tìm ProgressBar trong prefab
-
         if (progressBar != null)
         {
-            progressBar.gameObject.SetActive(false); // Ẩn thanh loading khi bắt đầu
-            progressBar.value = 0f; // Đặt giá trị ban đầu của thanh loading
+            progressBar.gameObject.SetActive(false);
+            progressBar.value = 0f;
         }
         else
         {
             Debug.LogError("ProgressBar not found in the player prefab!");
         }
-
-        // Kiểm tra và cập nhật trạng thái spike từ custom properties
         if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
         {
             bool spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
-            if (!spikeExists)
+            if (spikeExists)
             {
-                // Nếu spike không còn tồn tại, gọi hàm xóa spike
-                RemoveSpikeFromScene();
+                PhotonView.Get(this).RPC("StartBlinking", RpcTarget.All);
             }
         }
     }
@@ -44,70 +42,76 @@ public class Defuse : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Alpha4))
             {
-                // Bật thanh loading
                 progressBar.gameObject.SetActive(true);
-
-                // Tăng thời gian giữ phím
                 holdTime += Time.deltaTime;
-
-                // Cập nhật thanh loading (progressBar)
                 progressBar.value = holdTime / holdTimeRequired;
 
-                // Nếu giữ đủ thời gian yêu cầu, gỡ bom
                 if (holdTime >= holdTimeRequired)
                 {
                     DefuseSpike();
-                    progressBar.gameObject.SetActive(false); // Ẩn thanh loading sau khi gỡ bom
+                    progressBar.gameObject.SetActive(false);
                 }
             }
             else
             {
-                // Nếu thả phím, reset thời gian và ẩn thanh loading
                 holdTime = 0.0f;
-                progressBar.value = 0f; // Reset giá trị thanh loading
-                progressBar.gameObject.SetActive(false); // Ẩn thanh loading
+                progressBar.value = 0f;
+                progressBar.gameObject.SetActive(false);
             }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Spike")) // Thay thế "Spike" bằng tag của đối tượng Spike
+        if (other.CompareTag("Spike"))
         {
-            isInRange = true; // Đặt cờ cho phép gỡ bom
-            currentSpike = other.gameObject; // Lưu đối tượng spike hiện tại
+            isInRange = true;
+            currentSpike = other.gameObject;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Spike")) // Thay thế "Spike" bằng tag của đối tượng Spike
+        if (other.CompareTag("Spike"))
         {
-            isInRange = false; // Đặt cờ không cho phép gỡ bom
-            currentSpike = null; // Xóa đối tượng spike hiện tại
+            isInRange = false;
+            currentSpike = null;
         }
     }
 
     private void DefuseSpike()
     {
         PhotonView spikePhotonView = currentSpike.GetComponent<PhotonView>();
-        // Gọi RPC để gỡ spike
-
         spikePhotonView.RPC("RemoveSpike", RpcTarget.AllBuffered, spikePhotonView.GetComponent<PhotonView>().ViewID);
 
-        // Cập nhật custom properties để đánh dấu rằng spike không còn tồn tại
-        Hashtable properties = new Hashtable();
-        properties["SpikeExists"] = false; // Spike không còn tồn tại
+        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
+        properties["SpikeExists"] = false;
         PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+
+        // Ngừng nhấp nháy icon khi spike đã bị gỡ
+        StopBlinkingIcon();
     }
 
-    private void RemoveSpikeFromScene()
+    [PunRPC]
+    public void StartBlinking()
     {
-        // Tìm và xóa spike nếu nó tồn tại trong scene
-        GameObject spike = GameObject.FindWithTag("Spike");
-        if (spike != null)
+        StartCoroutine(BlinkIcon());
+    }
+
+    private IEnumerator BlinkIcon()
+    {
+        while (true)
         {
-            Destroy(spike); // Hủy spike nếu tìm thấy
+            iconPlant.gameObject.SetActive(false);
+            yield return new WaitForSeconds(blinkInterval);
+            iconPlant.gameObject.SetActive(true);
+            yield return new WaitForSeconds(blinkInterval);
         }
+    }
+
+    private void StopBlinkingIcon()
+    {
+        StopCoroutine(BlinkIcon());
+        iconPlant.gameObject.SetActive(false); // Tắt icon khi không cần nhấp nháy
     }
 }
