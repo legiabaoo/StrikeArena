@@ -1,5 +1,6 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Pun;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI; // Để sử dụng các thành phần UI
 
@@ -13,6 +14,8 @@ public class PlantTheSpike : MonoBehaviour
     private bool hasPlacedBomb = false; // Biến kiểm tra xem bom đã được đặt hay chưa
     private bool canPlantBomb = false; // Biến kiểm tra người chơi có thể đặt bom hay không
     private Vector3 vertor3;
+    private float blinkInterval = 0.5f; // Thời gian nhấp nháy spike
+    public Image iconPlant;
 
     void Start()
     {
@@ -80,11 +83,15 @@ public class PlantTheSpike : MonoBehaviour
 
         if (spikePhotonView != null)
         {
+            
+
             // Gọi RPC để đồng bộ hóa tag
             spikePhotonView.RPC("SetSpikeTag", RpcTarget.AllBuffered, spikePhotonView.ViewID);
 
+            PhotonView.Get(this).RPC("StartBlinking", RpcTarget.All);
+
             // Cập nhật custom properties để đánh dấu rằng spike đã được đặt
-            Hashtable properties = new Hashtable();
+            ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
             properties["SpikeExists"] = true; // Spike tồn tại
             PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
         }
@@ -92,8 +99,28 @@ public class PlantTheSpike : MonoBehaviour
         {
             Debug.LogError("No PhotonView found on Spike prefab!");
         }
+        
     }
 
+    [PunRPC]
+    public void StartBlinking()
+    {
+        StartCoroutine(Blink());
+    }
+
+    private IEnumerator Blink()
+    {
+        Debug.Log("Blinking started.");
+        while (true) // Vòng lặp vô hạn
+        {
+
+            iconPlant.gameObject.SetActive(false); // Tắt đối tượng
+            yield return new WaitForSeconds(blinkInterval); // Chờ một khoảng thời gian
+
+            iconPlant.gameObject.SetActive(true); // Bật đối tượng
+            yield return new WaitForSeconds(blinkInterval); // Chờ một khoảng thời gian
+        }
+    }
     private void RemoveSpikeFromScene()
     {
         // Tìm và xóa spike nếu nó tồn tại trong scene
