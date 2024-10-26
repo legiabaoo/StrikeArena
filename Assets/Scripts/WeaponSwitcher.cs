@@ -5,6 +5,7 @@ using UnityEngine;
 public class WeaponSwitcher : MonoBehaviour
 {
     private int selectedWeapon = 0;
+    public GameObject nutbanImage;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,14 +18,17 @@ public class WeaponSwitcher : MonoBehaviour
         int previousSelectedWeapon = selectedWeapon;
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
+            nutbanImage.SetActive(true);
             selectedWeapon = 0;
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
+            nutbanImage.SetActive(true);
             selectedWeapon = 1;
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
+            nutbanImage.SetActive(false);
             selectedWeapon = 2;
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))

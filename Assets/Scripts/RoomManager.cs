@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Photon.Realtime;
+
 public class RoomManager : MonoBehaviourPunCallbacks
 {
+    public GameObject thoigian;
     public static RoomManager instance;
     public GameObject player;
     [Space]
@@ -32,13 +35,23 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public Transform[] attackSpawnPoints; // ?i?m spawn cho ??i t?n công
     public Transform[] defenseSpawnPoints; // ?i?m spawn cho ??i phòng th?
 
-    private GameObject currentPlayer;    // L?u tr? tham chi?u ??n nhân v?t hi?n t?i
+    private GameObject currentPlayer;
+    public TimeManager timeManager;// L?u tr? tham chi?u ??n nhân v?t hi?n t?i
 
+    public GameObject TeamDoThang;
+    public GameObject TeamXanhThang;
+
+    health health;
     private void Awake()
     {
         instance = this;
     }
-
+    void Update()
+    {
+        CountPlayersInTeams();
+     
+      
+    }
     public void ChangeNickname(string _name)
     {
         nickname = _name;
@@ -50,6 +63,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
         nameUI.SetActive(false);
         connectingUI.SetActive(true);
+        thoigian.SetActive(true);
     }
     // Start is called before the first frame update
     void Start()
@@ -97,6 +111,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     }
 
+
     public void HandleTeamSelection()
     {
         // L?y giá tr? team ???c ch?n t? DropdownManager
@@ -123,7 +138,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         // Gán team cho ng??i ch?i trong Custom Properties
         Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
-        hash["team"] = selectedTeam; // Gán team vào Custom Properties
+        hash["isAlive"] = true;
+        hash["team"] = selectedTeam;
+        hash["spawnPoint"] = spawnPoint.position;// Gán team vào Custom Properties
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 
         // ??t tên ng??i ch?i
@@ -132,8 +149,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
         _player.GetComponent<health>().isLocalPlayer = true;
 
         PhotonNetwork.LocalPlayer.NickName = nickname;
+        
     }
-
+    
     public void SetHashes()
     {
         try
@@ -147,6 +165,78 @@ public class RoomManager : MonoBehaviourPunCallbacks
         catch
         {
 
+        }
+    }
+
+    public void CountPlayersInTeams()
+    {
+        int redTeamCount = 0;
+        int blueTeamCount = 0;
+
+        // L?y danh sách t?t c? ng??i ch?i trong phòng
+        Player[] players = PhotonNetwork.PlayerList;
+
+        // Duy?t qua t?ng ng??i ch?i
+        foreach (Player player in players)
+        {
+            // Ki?m tra n?u ng??i ch?i có Custom Properties ch?a key "team"
+            if (player.CustomProperties.TryGetValue("team", out var teamValue))
+            {
+                int team = (int)teamValue; // Chuy?n ??i giá tr? sang ki?u int
+
+                // ??m s? l??ng ng??i ch?i thu?c team ?? ho?c xanh
+                if (team == 0) // ??i ??
+                {
+                    redTeamCount++;
+                }
+                else if (team == 1) // ??i xanh
+                {
+                    blueTeamCount++;
+                }
+            }
+        }
+        if(redTeamCount > 0 && blueTeamCount > 0)
+        {
+            if(redTeamCount == 0)
+            {
+                TeamXanhThang.SetActive(true);
+            }
+            if(blueTeamCount == 0)
+            {
+                TeamDoThang.SetActive(true);
+            }
+        }
+      
+       
+    }
+    public void UpdatePlayerStatus(bool isAlive)
+    {
+        Hashtable hash = new Hashtable();
+        hash["isAlive"] = isAlive;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
+        CheckRedTeamStatus();
+    }
+   
+    public void CheckRedTeamStatus()
+    {
+        int aliveRedCount = 0;
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (player.CustomProperties.TryGetValue("team", out var teamValue) && (int)teamValue == 0)
+            {
+                if (player.CustomProperties.TryGetValue("isAlive", out var isAliveValue) && (bool)isAliveValue)
+                {
+                    aliveRedCount++;
+                }
+            }
+        }
+
+        if (aliveRedCount == 0)
+        {
+            // N?u t?t c? thành viên ??i ?? ?ã ch?t, reset th?i gian
+           
+            timeManager.EndGame();
         }
     }
 }

@@ -53,8 +53,10 @@ MonoBehaviour:
   - SetSpikeTag
   - DestroySpike
   - RemoveSpike
-  - StartBlinking
-  - StartBlinkingIcon
+  - UpdateScoreXanh
+  - UpdateScoreDo
+  - ResetPositions
+  - ResetPlayerPositions
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
