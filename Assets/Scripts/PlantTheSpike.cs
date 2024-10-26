@@ -39,6 +39,14 @@ public class PlantTheSpike : MonoBehaviour
 
     void Update()
     {
+        //if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
+        //{
+        //    bool spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
+        //    if (!spikeExists)
+        //    {
+        //        StopBlinkingIcon();
+        //    }
+        //}
         // Nếu chưa đặt bom thì mới cho phép đặt bom và hiển thị thanh loading
         if (!hasPlacedBomb && canPlantBomb)
         {
@@ -148,5 +156,10 @@ public class PlantTheSpike : MonoBehaviour
         {
             canPlantBomb = false; // Không cho phép đặt bom khi rời khỏi đối tượng có tag "Side"
         }
+    }
+    private void StopBlinkingIcon()
+    {
+        StopCoroutine(Blink());
+        iconPlant.gameObject.SetActive(false); // Tắt icon khi không cần nhấp nháy
     }
 }

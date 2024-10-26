@@ -26,6 +26,18 @@ public class Defuse : MonoBehaviour
         {
             Debug.LogError("ProgressBar not found in the player prefab!");
         }
+        //if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
+        //{
+        //    bool spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
+        //    if (spikeExists)
+        //    {
+        //        PhotonView.Get(this).RPC("StartBlinking", RpcTarget.All);
+        //    }
+        //}
+    }
+
+    void Update()
+    {
         if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
         {
             bool spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
@@ -34,10 +46,6 @@ public class Defuse : MonoBehaviour
                 PhotonView.Get(this).RPC("StartBlinking", RpcTarget.All);
             }
         }
-    }
-
-    void Update()
-    {
         if (isInRange && currentSpike != null)
         {
             if (Input.GetKey(KeyCode.Alpha4))
