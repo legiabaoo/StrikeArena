@@ -57,6 +57,7 @@ MonoBehaviour:
   - UpdateScoreDo
   - ResetPositions
   - ResetPlayerPositions
+  - StartBlinking
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
