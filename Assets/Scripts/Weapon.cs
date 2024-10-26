@@ -19,7 +19,7 @@ public class Weapon : MonoBehaviour
     public int ammo = 30;
     public int magAmmo = 30;
     [Header("UI")]
-    public TextMeshProUGUI magText;
+  
     public TextMeshProUGUI ammoText;
 
     [Header("Do Giat")]
@@ -41,7 +41,7 @@ public class Weapon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        magText.text = mag.ToString();
+       
         ammoText.text = ammo + "/" + magAmmo;
 
         origianlPosition = transform.localPosition;
@@ -63,7 +63,7 @@ public class Weapon : MonoBehaviour
             Debug.Log("ban ne...");
             nextFire = 1 / fireRate;
             ammo--;
-            magText.text = mag.ToString();
+     
             ammoText.text = ammo + "/" + magAmmo;
             Fire();
         }
@@ -91,7 +91,7 @@ public class Weapon : MonoBehaviour
             mag--;
             ammo = magAmmo;
         }
-        magText.text = mag.ToString();
+        
         ammoText.text = ammo + "/" + magAmmo;
     }
 
@@ -158,7 +158,7 @@ public class Weapon : MonoBehaviour
             }
             else
             {
-                Debug.LogError("??i t??ng không có component health.");
+                Debug.Log(" không có component health.");
             }
         }
     }
