@@ -18,6 +18,8 @@ TagManager:
   - phongthu
   - Spike
   - Side
+  - nutngam
+  - AmmoText
   layers:
   - Default
   - TransparentFX
