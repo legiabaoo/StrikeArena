@@ -18,6 +18,7 @@ TagManager:
   - phongthu
   - Spike
   - Side
+  - OldPlayer
   layers:
   - Default
   - TransparentFX

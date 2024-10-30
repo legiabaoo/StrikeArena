@@ -6,14 +6,16 @@ using UnityEngine.UI;
 
 public class Defuse : MonoBehaviour
 {
-    public float holdTimeRequired = 3.0f; // Thời gian giữ phím cần thiết để gỡ bom
-    private float holdTime = 0.0f; // Biến đếm thời gian giữ phím
-    private bool isInRange = false; // Biến kiểm tra xem người chơi có đứng gần bom không
-    private GameObject currentSpike; // Spike hiện tại để gỡ
-    public Slider progressBar; // Thanh loading
-    public Image iconPlant; // Icon nhấp nháy khi spike được đặt
+    public float holdTimeRequired = 3.0f;
+    private float holdTime = 0.0f;
+    private bool isInRange = false;
+    private GameObject currentSpike;
+    public Slider progressBar;
+    public Image iconPlant;
 
-    private float blinkInterval = 0.5f; // Thời gian nhấp nháy icon
+    private float blinkInterval = 0.5f;
+    private bool isBlinking = false;
+    private bool spikeExists = false;
 
     void Start()
     {
@@ -26,29 +28,33 @@ public class Defuse : MonoBehaviour
         {
             Debug.LogError("ProgressBar not found in the player prefab!");
         }
-        //if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
-        //{
-        //    bool spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
-        //    if (spikeExists)
-        //    {
-        //        PhotonView.Get(this).RPC("StartBlinking", RpcTarget.All);
-        //    }
-        //}
+
+        // Kiểm tra trạng thái spike khi bắt đầu
+        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
+        {
+            spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
+            if (!spikeExists) RemoveSpikeFromScene();
+        }
     }
 
     void Update()
     {
         if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
         {
-            bool spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
-            if (spikeExists)
+            bool currentSpikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
+            if (currentSpikeExists != spikeExists)
             {
-                PhotonView.Get(this).RPC("StartBlinking", RpcTarget.All);
+                spikeExists = currentSpikeExists;
+                if (spikeExists)
+                    StartBlinking();
+                else
+                    StopBlinkingIcon();
             }
         }
+
         if (isInRange && currentSpike != null)
         {
-            if (Input.GetKey(KeyCode.Alpha4))
+            if (Input.GetKey(KeyCode.F))
             {
                 progressBar.gameObject.SetActive(true);
                 holdTime += Time.deltaTime;
@@ -58,6 +64,7 @@ public class Defuse : MonoBehaviour
                 {
                     DefuseSpike();
                     progressBar.gameObject.SetActive(false);
+                    holdTime = 0.0f;
                 }
             }
             else
@@ -89,26 +96,31 @@ public class Defuse : MonoBehaviour
 
     private void DefuseSpike()
     {
+        if (currentSpike == null) return;
+
         PhotonView spikePhotonView = currentSpike.GetComponent<PhotonView>();
-        spikePhotonView.RPC("RemoveSpike", RpcTarget.AllBuffered, spikePhotonView.GetComponent<PhotonView>().ViewID);
+        spikePhotonView.RPC("RemoveSpike", RpcTarget.AllBuffered, spikePhotonView.ViewID);
 
-        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-        properties["SpikeExists"] = false;
+        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable
+        {
+            { "SpikeExists", false }
+        };
         PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-
-        // Ngừng nhấp nháy icon khi spike đã bị gỡ
-        StopBlinkingIcon();
     }
 
     [PunRPC]
     public void StartBlinking()
     {
-        StartCoroutine(BlinkIcon());
+        if (!isBlinking)
+        {
+            isBlinking = true;
+            StartCoroutine(BlinkIcon());
+        }
     }
 
     private IEnumerator BlinkIcon()
     {
-        while (true)
+        while (isBlinking)
         {
             iconPlant.gameObject.SetActive(false);
             yield return new WaitForSeconds(blinkInterval);
@@ -117,9 +129,17 @@ public class Defuse : MonoBehaviour
         }
     }
 
-    private void StopBlinkingIcon()
+    [PunRPC]
+    public void StopBlinkingIcon()
     {
-        StopCoroutine(BlinkIcon());
-        iconPlant.gameObject.SetActive(false); // Tắt icon khi không cần nhấp nháy
+        isBlinking = false;
+        StopAllCoroutines();
+        iconPlant.gameObject.SetActive(false);
+    }
+
+    private void RemoveSpikeFromScene()
+    {
+        GameObject spike = GameObject.FindWithTag("Spike");
+        if (spike != null) Destroy(spike);
     }
 }

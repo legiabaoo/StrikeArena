@@ -58,6 +58,13 @@ MonoBehaviour:
   - ResetPositions
   - ResetPlayerPositions
   - StartBlinking
+  - StopBlinkingIcon
+  - ResetTime
+  - RemovePlayerInstances
+  - EndGame
+  - HandleTeamSelection
+  - RequestDestroyPlayer
+  - SetTagForPlayers
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

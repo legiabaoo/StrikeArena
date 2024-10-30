@@ -24,5 +24,16 @@ public class PlayerSetup : MonoBehaviour
         nickname = _name;
         nickNameText.text = nickname;   
     }
-
+    [PunRPC]
+    public void RequestDestroyPlayer(int viewID)
+    {
+        PhotonView photonView = PhotonView.Find(viewID);
+        if (photonView != null)
+        {
+            if (photonView.IsMine )
+            {
+                PhotonNetwork.Destroy(photonView.gameObject);
+            }
+        }
+    }
 }
