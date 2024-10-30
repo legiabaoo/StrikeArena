@@ -78,21 +78,21 @@ public class GunShop : MonoBehaviourPun
         if (player.IsMine)
         {
                 Vector3 playerPosition = player.transform.position;
-                Debug.Log("V? trí c?a ng??i ch?i: " + playerPosition);
+           
                 // Tìm `GunPosition` theo ???ng d?n ??y ?? trong c?u trúc `Hierarchy`
                 gunPosition = player.transform.Find("Main Camera/GunPosition"); // ?ã ?i?u ch?nh ???ng d?n
 
             if (gunPosition != null)
             {
                 gunPositionFound = true; // ?ã tìm th?y v? trí g?n súng
-                Debug.Log("?ã tìm th?y v? trí GunPosition: " + gunPosition.position);
+           
                 
                 // L?y v? trí c?a ng??i ch?i
               
             }
             else
             {
-                Debug.LogWarning("Không tìm th?y v? trí GunPosition. Ki?m tra ???ng d?n trong c?u trúc nhân v?t.");
+            
             }
             break; // K?t thúc vòng l?p sau khi tìm th?y ng??i ch?i
         }
@@ -137,27 +137,29 @@ public class GunShop : MonoBehaviourPun
             weaponSwitcher.SetNutbanImageActive(true);
         }*/
     }
-  
+
 
     [PunRPC]
     void CreateGunForPlayer(int playerID, int gunIndex)
     {
-        // Ki?m tra n?u ?ây là ng??i ch?i hi?n t?i và súng h?p l?
+        // Ki?m tra n?u ?ây là ng??i ch?i hi?n t?i và ch? s? súng h?p l?
         if (PhotonNetwork.LocalPlayer.ActorNumber == playerID && gunIndex >= 0 && gunIndex < gunPrefabs.Length)
         {
             // L?y v? trí và rotation cho súng t??ng ?ng
             Vector3 fixedPosition = gunPositions[gunIndex];
             Quaternion fixedRotation = gunRotations[gunIndex];
 
-            // T?o súng t?i v? trí và rotation c? ??nh
-            GameObject gunInstance = Instantiate(gunPrefabs[gunIndex], fixedPosition, fixedRotation);
+            // T?o và ??ng b? cây súng trên t?t c? client
+            GameObject gunInstance = PhotonNetwork.Instantiate(gunPrefabs[gunIndex].name, fixedPosition, fixedRotation);
 
-            // Gán cây súng vào gunPosition n?u c?n thi?t, n?u không thì gán null
-            gunInstance.transform.SetParent(gunPosition,false); // Gán không có cha
+            // Gán cây súng vào gunPosition n?u c?n thi?t
+            gunInstance.transform.SetParent(gunPosition, false);
+
+            // Thi?t l?p các thu?c tính cho script Weapon n?u c?n
             Weapon weaponScript = gunInstance.GetComponent<Weapon>();
             if (weaponScript != null)
             {
-                // Tìm camera c?a ng??i ch?i qua tag ho?c qua c?u trúc hierarchy
+                // Tìm camera c?a ng??i ch?i qua tag ho?c c?u trúc hierarchy
                 Camera playerCamera = Camera.main; // N?u ?ã gán tag "MainCamera" cho camera ng??i ch?i
                 if (playerCamera != null)
                 {
@@ -168,31 +170,9 @@ public class GunShop : MonoBehaviourPun
                 {
                     weaponScript.ammoText = ammoText;
                 }
-
             }
-          /*  nutNgam nutNgam = gunInstance.GetComponent<nutNgam>();
-        
-            // Tìm ??i t??ng Player c?a ng??i ch?i hi?n t?i
-            PhotonView playerView = FindObjectsOfType<PhotonView>().FirstOrDefault(p => p.IsMine);
-            if (playerView != null)
-            {
-                Transform nutngamTransform = playerView.transform.Find("Main Camera/Cavas/nutNgam");
-                if (nutngamTransform != null)
-                {
-                    GameObject nutngam = nutngamTransform.gameObject;
-                    nutNgam.aimImage = nutngam;
-                }
-                else
-                {
-                    Debug.LogWarning("Không tìm th?y nutngam trong c?u trúc Player.");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("Không tìm th?y ??i t??ng Player c?a ng??i ch?i hi?n t?i.");
-            }*/
 
-            Debug.Log("Súng s? " + gunIndex + " ???c t?o t?i v? trí: " + fixedPosition + " v?i rotation: " + fixedRotation.eulerAngles);
+            Debug.Log("Súng s? " + gunIndex + " ?ã ???c t?o t?i v? trí: " + fixedPosition + " v?i rotation: " + fixedRotation.eulerAngles);
         }
     }
 
