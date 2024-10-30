@@ -63,7 +63,6 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                 }
                 else if (currentPhase == GamePhase.Battle)
                 {
-                    //PhotonView.Get(this).RPC("EndGame", RpcTarget.All);
                     EndGame(); // Kết thúc vòng đấu khi giai đoạn chiến đấu kết thúc
                 }
             }
@@ -113,29 +112,24 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         over.SetActive(false);
     }
 
-    //[PunRPC]
+    [PunRPC]
+    public void UI()
+    {
+        over.SetActive(true);
+    }
     public void EndGame()
     {
         isGameOver = true;
         scoreXanh++; // Cộng 1 điểm cho đội xanh
         photonView.RPC("UpdateScoreXanh", RpcTarget.All, scoreXanh);
-        over.SetActive(true);
+        PhotonView.Get(this).RPC("UI", RpcTarget.AllBuffered);
         
-        // Đặt lại thời gian sau 3 giây và gọi phương thức xóa nhân vật
-        //Invoke("RemovePlayersWithDelay", 3f);
+        // Đặt lại thời gian sau 3 giây
         Invoke("ResetTimeDelay", 3f);
     }
     private void ResetTimeDelay()
     {
         PhotonView.Get(this).RPC("ResetTime", RpcTarget.All);
-    }
-    private void RemovePlayersWithDelay()
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            // Gọi hàm RemovePlayerInstances qua photonView
-            RoomManager.instance.photonView.RPC("RemovePlayerInstances", RpcTarget.AllBuffered);
-        }
     }
 
     [PunRPC]
