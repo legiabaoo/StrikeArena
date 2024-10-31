@@ -22,6 +22,7 @@ public class PlayerSetup : MonoBehaviour
         photonView = GetComponent<PhotonView>(); // Gán photonView ở đây
         cameraPlayer.enabled = false;
         cameraPlayer.GetComponent<AudioListener>().enabled = false;
+        cameraPlayer.GetComponent<MouseLook>().enabled = false;
     }
     private void Start()
     {
@@ -36,7 +37,8 @@ public class PlayerSetup : MonoBehaviour
         movemnet.enabled = true;
         cameraPlayer.enabled = true;
         canvas.gameObject.SetActive(true);
-        cameraPlayer.GetComponent<AudioListener>().enabled = false;
+        cameraPlayer.GetComponent<AudioListener>().enabled = true;
+        cameraPlayer.GetComponent<MouseLook>().enabled = true;
     }
     public void OnPlayerDeath()
     {
