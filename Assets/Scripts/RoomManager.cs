@@ -7,6 +7,7 @@ using Photon.Realtime;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
+    private GunShop gunShop;
     public GameObject thoigian;
     public static RoomManager instance;
     public GameObject player;
@@ -115,6 +116,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void HandleTeamSelection()
     {
+        gunShop = FindObjectOfType<GunShop>();
         // L?y giá tr? team ???c ch?n t? DropdownManager
         int selectedTeam = dropdownManager.teamDropdown.value; // L?y ch? s? c?a team ???c ch?n
 
@@ -150,7 +152,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         _player.GetComponent<health>().isLocalPlayer = true;
 
         PhotonNetwork.LocalPlayer.NickName = nickname;
-        
+        gunShop.FindPlayerGunPosition();
     }
     
     public void SetHashes()

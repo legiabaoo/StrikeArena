@@ -20,12 +20,12 @@ public class dichuyen : MonoBehaviour
     private bool jumping;
     private bool grounded = false;
 
-     private Animator animator;
+   /*  private Animator animator;*/
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        animator = GetComponentInChildren<Animator>();
+      /*  animator = GetComponentInChildren<Animator>();*/
     }
 
     // Update is called once per frame
@@ -36,9 +36,9 @@ public class dichuyen : MonoBehaviour
         sprinting = Input.GetButton("Sprint");
         jumping = Input.GetButton("Jump");
 
-        Vector3 velocity = rb.velocity;
+      /*  Vector3 velocity = rb.velocity;
         animator.SetFloat("VelocityX", velocity.x);
-        animator.SetFloat("VelocityZ", velocity.z);
+        animator.SetFloat("VelocityZ", velocity.z);*/
     }
     private void OnTriggerStay(Collider other)
     {
