@@ -60,30 +60,31 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         Debug.Log("Ket Noi ...");
         PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.JoinOrCreateRoom(roomNameToJoin, null, null);
         nameUI.SetActive(false);
         connectingUI.SetActive(true);
         thoigian.SetActive(true);
     }
     // Start is called before the first frame update
-    void Start()
-    {
+    //void Start()
+    //{
 
-    }
-    public override void OnConnectedToMaster()
-    {
-        base.OnConnectedToMaster();
-        Debug.Log("Dang Ket Noi Sever...");
-        PhotonNetwork.JoinLobby();
+    //}
+    //public override void OnConnectedToMaster()
+    //{
+    //    base.OnConnectedToMaster();
+    //    Debug.Log("Dang Ket Noi Sever...");
+    //    PhotonNetwork.JoinLobby();
 
-    }
-    public override void OnJoinedLobby()
-    {
-        base.OnJoinedLobby();
+    //}
+    //public override void OnJoinedLobby()
+    //{
+    //    base.OnJoinedLobby();
 
-        PhotonNetwork.JoinOrCreateRoom(roomNameToJoin, null, null);
-        Debug.Log("Dang ket noi va o trong phong ngay bay gio");
+    //    PhotonNetwork.JoinOrCreateRoom(roomNameToJoin, null, null);
+    //    Debug.Log("Dang ket noi va o trong phong ngay bay gio");
 
-    }
+    //}
     public override void OnJoinedRoom()
     {
 
