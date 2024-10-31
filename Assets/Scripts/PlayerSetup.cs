@@ -1,4 +1,5 @@
-using Photon.Pun;
+﻿using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,15 +9,40 @@ using UnityEngine;
 public class PlayerSetup : MonoBehaviour
 {
     public dichuyen movemnet;
-    public GameObject camera;
-
+    public Camera cameraPlayer;
+    public Canvas canvas;
     public string nickname;
     public TextMeshPro nickNameText;
+    private PhotonView photonView;
+    [SerializeField]
+    private int actorNumber; // Biến này sẽ hiển thị trong Inspector
+
+    void Awake()
+    {
+        photonView = GetComponent<PhotonView>(); // Gán photonView ở đây
+        cameraPlayer.enabled = false;
+        cameraPlayer.GetComponent<AudioListener>().enabled = false;
+    }
+    private void Start()
+    {
+        if (PhotonNetwork.LocalPlayer != null)
+        {
+            actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+        }
+    }
 
     public void IsLocalPlayer()
     {
         movemnet.enabled = true;
-        camera.SetActive(true);
+        cameraPlayer.enabled = true;
+        canvas.gameObject.SetActive(true);
+        cameraPlayer.GetComponent<AudioListener>().enabled = false;
+    }
+    public void OnPlayerDeath()
+    {
+        // Tắt nhân vật
+        gameObject.SetActive(false);
+
     }
     [PunRPC]
     public void SetNickname(string _name)
@@ -36,4 +62,5 @@ public class PlayerSetup : MonoBehaviour
             }
         }
     }
+    
 }

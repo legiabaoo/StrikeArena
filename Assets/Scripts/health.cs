@@ -47,11 +47,30 @@ public class health : MonoBehaviour
         {
             if (isLocalPlayer)
             {
-                RoomManager.instance.HandleTeamSelection();
+                //RoomManager.instance.HandleTeamSelection();
                 RoomManager.instance.deaths++;
                 RoomManager.instance.SetHashes();
             }
-            Destroy(gameObject);
+            OnPlayerDeath();
         }
     }
+    private void OnPlayerDeath()
+    {
+        // Gọi phương thức trên PlayerSetup để xử lý khi chết
+        GetComponent<PlayerSetup>().OnPlayerDeath();
+
+        // Chuyển camera sang đồng đội
+        if (isLocalPlayer)
+        {
+            GameObject currentPlayerObject = gameObject; // Lấy GameObject của người chơi
+            Camera currentCamera = GetComponentInChildren<Camera>();
+
+            if (currentCamera != null)
+            {
+                CameraManager.instance.SwitchToTeammateCamera(currentPlayerObject);
+            }
+        }
+        RoomManager.instance.UpdatePlayerStatus(false);
+    }
+
 }
