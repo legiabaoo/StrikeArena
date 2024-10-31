@@ -2316,8 +2316,9 @@ GameObject:
   - component: {fileID: 1450269063761695348}
   - component: {fileID: 2645702516479466903}
   - component: {fileID: 2187792490489591079}
+  - component: {fileID: -1966782037145406603}
   m_Layer: 0
-  m_Name: PlayerTanCong
+  m_Name: PlayeThu
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2363,7 +2364,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 19f6a2e757e5d2f4aab8c6e20b105787, type: 2}
+  - {fileID: 2100000, guid: 46b802e0abd028146b506acf16c28c53, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2556,7 +2557,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3315615690427756698}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7eb200292ab11cd468ba18ae8cb0e2d5, type: 3}
   m_Name: 
@@ -2586,6 +2587,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3315615690427756698}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &-1966782037145406603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3315615690427756698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58dc3143076271d4ebc7c54007f9654e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  holdTimeRequired: 3
+  progressBar: {fileID: 4788373310961732973}
+  iconPlant: {fileID: 3700094256320702013}
 --- !u!1 &3380451713285586063
 GameObject:
   m_ObjectHideFlags: 0

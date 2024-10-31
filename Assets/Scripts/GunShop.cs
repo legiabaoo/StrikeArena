@@ -70,7 +70,7 @@ public class GunShop : MonoBehaviourPun
     }
 
 
-    void FindPlayerGunPosition()
+    public void FindPlayerGunPosition()
 {
     foreach (var player in FindObjectsOfType<PhotonView>())
     {

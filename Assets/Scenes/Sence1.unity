@@ -11301,7 +11301,7 @@ MonoBehaviour:
   roomNameToJoin: test
   dropdownManager: {fileID: 1787511050}
   attackTeamPrefab: {fileID: 3315615690427756698, guid: 53a49ccedec097643873bfea41158870, type: 3}
-  defenseTeamPrefab: {fileID: 6025602435210889620, guid: 1151ba2f56b684b4e931c7de8ec31d7d, type: 3}
+  defenseTeamPrefab: {fileID: 3315615690427756698, guid: dab62a127a304284a92af4304eaccc93, type: 3}
   attackSpawnPoints:
   - {fileID: 47115956}
   defenseSpawnPoints:
@@ -25837,7 +25837,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2089110259
 RectTransform:
   m_ObjectHideFlags: 0
