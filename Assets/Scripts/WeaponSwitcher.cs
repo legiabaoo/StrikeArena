@@ -11,7 +11,10 @@ public class WeaponSwitcher : MonoBehaviour
     {
         SelectWeapon();
     }
-
+     public void SetNutbanImageActive(bool isActive)
+    {
+        nutbanImage.SetActive(isActive);
+    }
     // Update is called once per frame
     void Update()
     {
