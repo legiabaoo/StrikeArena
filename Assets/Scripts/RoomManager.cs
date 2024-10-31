@@ -50,8 +50,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     void Update()
     {
         CountPlayersInTeams();
-     
-      
     }
     public void ChangeNickname(string _name)
     {
@@ -98,19 +96,27 @@ public class RoomManager : MonoBehaviourPunCallbacks
         Debug.Log("Number of players in room: " + PhotonNetwork.CurrentRoom.PlayerCount);
 
         Debug.Log("You are currently in the dev region: " + PhotonNetwork.CloudRegion);
+        CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
 
     }
-
-    public void ResPawnPlayer()
+    public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        GameObject _player = PhotonNetwork.Instantiate(player.name, spawnPoint.position, Quaternion.identity);
-        _player.GetComponent<PlayerSetup>().IsLocalPlayer();
-        _player.GetComponent<health>().isLocalPlayer = true;
-        _player.GetComponent<PhotonView>().RPC("SetNickname", RpcTarget.AllBuffered, nickname);
-        PhotonNetwork.LocalPlayer.NickName = nickname;
-
+        base.OnPlayerEnteredRoom(newPlayer);
+        // Gọi lại để cập nhật danh sách camera khi có người chơi mới
+        CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
     }
+
+
+    //public void ResPawnPlayer()
+    //{
+    //    Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+    //    GameObject _player = PhotonNetwork.Instantiate(player.name, spawnPoint.position, Quaternion.identity);
+    //    _player.GetComponent<PlayerSetup>().IsLocalPlayer();
+    //    _player.GetComponent<health>().isLocalPlayer = true;
+    //    _player.GetComponent<PhotonView>().RPC("SetNickname", RpcTarget.AllBuffered, nickname);
+    //    PhotonNetwork.LocalPlayer.NickName = nickname;
+
+    //}
 
 
     public void HandleTeamSelection()
@@ -149,10 +155,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
         _player.GetComponent<PlayerSetup>().IsLocalPlayer();
         _player.GetComponent<health>().isLocalPlayer = true;
 
+
         PhotonNetwork.LocalPlayer.NickName = nickname;
-        
+        UpdatePlayerStatus(true);
     }
-    
+
     public void SetHashes()
     {
         try
@@ -196,12 +203,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 }
             }
         }
-        if(redTeamCount >= 1 && blueTeamCount >= 1)
+        if (redTeamCount >= 5 && blueTeamCount >= 5)
         {
-            TimeManager.instance.startGame=true;
+            TimeManager.instance.startGame = true;
+            
         }
-      
-       
+        
     }
     public void UpdatePlayerStatus(bool isAlive)
     {
@@ -211,7 +218,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         CheckRedTeamStatus();
     }
-   
+
     public void CheckRedTeamStatus()
     {
         int aliveRedCount = 0;
@@ -225,12 +232,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 }
             }
         }
-
+        Debug.Log("Người chơi đỏ còn sống: "+aliveRedCount);
         if (aliveRedCount == 0)
         {
             // N?u t?t c? thành viên ??i ?? ?ă ch?t, reset th?i gian
-           
-            timeManager.EndGame();
+
+            TimeManager.instance.EndGame();
         }
     }
     public void RemovePlayerInstances()
@@ -247,5 +254,5 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
     }
 
-    
+
 }

@@ -682,7 +682,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3315615689125578397
 Transform:
   m_ObjectHideFlags: 0
@@ -1016,9 +1016,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movemnet: {fileID: 3315615690427756701}
-  camera: {fileID: 3315615689125578392}
+  cameraPlayer: {fileID: 3315615689125578394}
+  canvas: {fileID: 6111534738683479855}
   nickname: 
   nickNameText: {fileID: 6461819205642948528}
+  actorNumber: 0
 --- !u!135 &706515845518428179
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1826,7 +1828,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8459015232562083774
 RectTransform:
   m_ObjectHideFlags: 0
