@@ -3,79 +3,56 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviourPunCallbacks
+public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
 {
-    private List<GameObject> playerCameras = new List<GameObject>();
+    private List<GameObject> playerObjects = new List<GameObject>();
     public static CameraManager instance;
+    private Quaternion currentTeammateRotation; // Để lưu rotation từ camera đồng đội
 
     private void Awake()
     {
         instance = this;
     }
+
     [PunRPC]
     public void GetAllPlayerCameras()
     {
-        playerCameras.Clear();
-        //Debug.Log("Tổng số người chơi: " + PhotonNetwork.PlayerList.Length);
+        playerObjects.Clear();
 
         foreach (Player player in PhotonNetwork.PlayerList)
         {
-            //Debug.Log("Checking player: " + player.NickName + ", ActorNumber: " + player.ActorNumber);
-
-            // Thay vì sử dụng ActorNumber, hãy lấy ViewID của đối tượng
-            int viewID = player.ActorNumber * 1000 + 1; // Giả sử bạn gán ViewID trùng với ActorNumber trong lúc tạo
-
+            int viewID = player.ActorNumber * 1000 + 1;
             GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
 
             if (playerObject != null)
             {
-                //Debug.Log($"Found player object for ViewID {viewID}: {playerObject.name}");
-
-                // Giả sử bạn đã có camera trong đối tượng người chơi
-                //Camera playerCamera = playerObject.GetComponentInChildren<Camera>();
-                //if (playerCamera != null)
-                //{
-                playerCameras.Add(playerObject);
-                //Debug.Log($"Camera found for {playerObject.name}");
-                //}
-                //else
-                //{
-                //    Debug.Log($"No camera found in {playerObject.name}");
-                //}
-            }
-            else
-            {
-                //Debug.Log($"No player object found for ViewID {viewID}");
+                playerObjects.Add(playerObject);
             }
         }
 
-        Debug.Log("Tổng số người chơi(gameObject): " + playerCameras.Count);
+        Debug.Log("Tổng số người chơi(gameObject): " + playerObjects.Count);
     }
-
-
-
 
     public void SwitchToTeammateCamera(GameObject currentPlayer)
     {
-        foreach (GameObject obj in playerCameras)
+        foreach (GameObject obj in playerObjects)
         {
-            if (obj != currentPlayer) // Tìm camera đồng đội
+            if (obj != currentPlayer)
             {
-                // Tắt camera hiện tại
                 Camera currentPlayerCamera = currentPlayer.GetComponentInChildren<Camera>();
                 if (currentPlayerCamera != null)
                 {
-                    currentPlayerCamera.enabled = false; // Tắt camera người chơi hiện tại
+                    currentPlayerCamera.enabled = false;
                     currentPlayerCamera.GetComponent<MouseLook>().enabled = false;
+                    currentPlayerCamera.GetComponent<AudioListener>().enabled = false;
                 }
 
-                // Bật camera của đồng đội
                 Camera teammateCamera = obj.GetComponentInChildren<Camera>();
                 if (teammateCamera != null)
                 {
-                    teammateCamera.enabled = true; // Bật camera đồng đội
-                    teammateCamera.GetComponent<AudioListener>().enabled = false;
-                    currentPlayer.transform.rotation = teammateCamera.transform.rotation;
+                    teammateCamera.enabled = true;
+                    teammateCamera.GetComponent<AudioListener>().enabled = true;
+                    currentTeammateRotation = teammateCamera.transform.rotation;
                 }
 
                 break;
@@ -83,10 +60,32 @@ public class CameraManager : MonoBehaviourPunCallbacks
         }
     }
 
+    // Liên tục gửi rotation qua mạng khi SerializeView được gọi
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            // Nếu đây là máy chủ của camera đồng đội, gửi rotation của camera
+            stream.SendNext(currentTeammateRotation);
+        }
+        else
+        {
+            // Nhận rotation từ máy chủ và cập nhật cho camera của người chơi đã chết
+            currentTeammateRotation = (Quaternion)stream.ReceiveNext();
 
+            foreach (GameObject obj in playerObjects)
+            {
+                Camera teammateCamera = obj.GetComponentInChildren<Camera>();
+                if (teammateCamera != null && !teammateCamera.enabled) // Chỉ cập nhật cho camera của người chơi đã chết
+                {
+                    teammateCamera.transform.rotation = currentTeammateRotation;
+                }
+            }
+        }
+    }
 
     public List<GameObject> GetPlayerCameras()
     {
-        return playerCameras;
+        return playerObjects;
     }
 }

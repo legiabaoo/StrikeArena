@@ -145,10 +145,17 @@ public class RoomManager : MonoBehaviourPunCallbacks
         GameObject _player = PhotonNetwork.Instantiate(teamPrefab.name, spawnPoint.position, spawnPoint.rotation);
 
         // Gán team cho ng??i ch?i trong Custom Properties
-        Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
-        hash["isAlive"] = true;
-        hash["team"] = selectedTeam;
-        hash["spawnPoint"] = spawnPoint.position;// Gán team vào Custom Properties
+        //Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+        //hash["isAlive"] = true;
+        //hash["team"] = selectedTeam;
+        //hash["spawnPoint"] = spawnPoint.position;// Gán team vào Custom Properties
+        //PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        Hashtable hash = new Hashtable
+    {
+        { "isAlive", true },
+        { "team", selectedTeam },
+        { "spawnPoint", spawnPoint.position }
+    };
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 
         // ??t tên ng??i ch?i
@@ -158,7 +165,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
 
         PhotonNetwork.LocalPlayer.NickName = nickname;
-        UpdatePlayerStatus(true);
+        //UpdatePlayerStatus(true);
     }
 
     public void SetHashes()
@@ -204,7 +211,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 }
             }
         }
-        if (redTeamCount >= 5 && blueTeamCount >= 5)
+        if (redTeamCount >= 1 && blueTeamCount >= 1)
         {
             TimeManager.instance.startGame = true;
             
@@ -218,6 +225,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 
         CheckRedTeamStatus();
+    }
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (changedProps.ContainsKey("isAlive") || changedProps.ContainsKey("team"))
+        {
+            CheckRedTeamStatus();
+        }
     }
 
     public void CheckRedTeamStatus()
@@ -234,11 +248,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
             }
         }
         Debug.Log("Người chơi đỏ còn sống: "+aliveRedCount);
-        if (aliveRedCount == 0)
+        if (aliveRedCount == 0 && TimeManager.instance.startGame)
         {
             // N?u t?t c? thành viên ??i ?? ?ă ch?t, reset th?i gian
-
+            Debug.Log("Đội đỏ đã chết hết");
             TimeManager.instance.EndGame();
+
+
         }
     }
     public void RemovePlayerInstances()
@@ -254,6 +270,4 @@ public class RoomManager : MonoBehaviourPunCallbacks
             }
         }
     }
-
-
 }
