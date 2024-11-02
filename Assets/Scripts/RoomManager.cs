@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Photon.Realtime;
+using Unity.VisualScripting;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
@@ -41,6 +42,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public GameObject TeamDoThang;
     public GameObject TeamXanhThang;
 
+    public bool hasCalledEndGame = false;
+
     health health;
     private void Awake()
     {
@@ -65,26 +68,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         connectingUI.SetActive(true);
         thoigian.SetActive(true);
     }
-    // Start is called before the first frame update
-    //void Start()
-    //{
-
-    //}
-    //public override void OnConnectedToMaster()
-    //{
-    //    base.OnConnectedToMaster();
-    //    Debug.Log("Dang Ket Noi Sever...");
-    //    PhotonNetwork.JoinLobby();
-
-    //}
-    //public override void OnJoinedLobby()
-    //{
-    //    base.OnJoinedLobby();
-
-    //    PhotonNetwork.JoinOrCreateRoom(roomNameToJoin, null, null);
-    //    Debug.Log("Dang ket noi va o trong phong ngay bay gio");
-
-    //}
+    
     public override void OnJoinedRoom()
     {
 
@@ -144,12 +128,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         // T?o nhân v?t t?i ?i?m spawn t??ng ?ng và ??ng b? hóa gi?a t?t c? ng??i ch?i
         GameObject _player = PhotonNetwork.Instantiate(teamPrefab.name, spawnPoint.position, spawnPoint.rotation);
 
-        // Gán team cho ng??i ch?i trong Custom Properties
-        //Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
-        //hash["isAlive"] = true;
-        //hash["team"] = selectedTeam;
-        //hash["spawnPoint"] = spawnPoint.position;// Gán team vào Custom Properties
-        //PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         Hashtable hash = new Hashtable
     {
         { "isAlive", true },
@@ -165,7 +143,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
 
         PhotonNetwork.LocalPlayer.NickName = nickname;
-        //UpdatePlayerStatus(true);
     }
 
     public void SetHashes()
@@ -187,7 +164,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public void CountPlayersInTeams()
     {
         int redTeamCount = 0;
-        int blueTeamCount = 0;
+        int blueTeamCount = 1;
 
         // L?y danh sách t?t c? ng??i ch?i trong pḥng
         Player[] players = PhotonNetwork.PlayerList;
@@ -214,17 +191,18 @@ public class RoomManager : MonoBehaviourPunCallbacks
         if (redTeamCount >= 1 && blueTeamCount >= 1)
         {
             TimeManager.instance.startGame = true;
-            
         }
-        
+        //else
+        //{
+        //    TimeManager.instance.startGame = false;
+        //}
+
     }
     public void UpdatePlayerStatus(bool isAlive)
     {
         Hashtable hash = new Hashtable();
         hash["isAlive"] = isAlive;
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-
-        CheckRedTeamStatus();
     }
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
@@ -247,14 +225,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 }
             }
         }
-        Debug.Log("Người chơi đỏ còn sống: "+aliveRedCount);
-        if (aliveRedCount == 0 && TimeManager.instance.startGame)
+        Debug.Log("Người chơi đỏ còn sống: " + aliveRedCount);
+        if (aliveRedCount == 0 && TimeManager.instance.startGame && !TimeManager.instance.isGameOver && !hasCalledEndGame)
         {
+            hasCalledEndGame = true;
             // N?u t?t c? thành viên ??i ?? ?ă ch?t, reset th?i gian
             Debug.Log("Đội đỏ đã chết hết");
             TimeManager.instance.EndGame();
-
-
         }
     }
     public void RemovePlayerInstances()

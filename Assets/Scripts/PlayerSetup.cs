@@ -43,7 +43,7 @@ public class PlayerSetup : MonoBehaviour
     public void OnPlayerDeath()
     {
         // Tắt nhân vật
-        gameObject.SetActive(false);
+        gameObject.GetComponent<MeshRenderer>().enabled=false;
 
     }
     [PunRPC]

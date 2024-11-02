@@ -15,7 +15,7 @@ public class PlantTheSpike : MonoBehaviour
     private bool hasPlacedBomb = false;
     private bool canPlantBomb = false;
     private bool isBlinking = false;
-    private bool spikeExists = false;
+    //private bool spikeExists = false;
     private Vector3 spikePosition;
 
     private float blinkInterval = 0.5f;
@@ -26,11 +26,11 @@ public class PlantTheSpike : MonoBehaviour
         progressBar.gameObject.SetActive(false);
         progressBar.value = 0f;
 
-        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
-        {
-            spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
-            if (!spikeExists) RemoveSpikeFromScene();
-        }
+        //if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
+        //{
+        //    spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
+        //    if (!spikeExists) RemoveSpikeFromScene();
+        //}
     }
 
     void Update()
@@ -38,10 +38,10 @@ public class PlantTheSpike : MonoBehaviour
         if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
         {
             bool currentSpikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
-            if (currentSpikeExists != spikeExists)
+            if (currentSpikeExists != SpikeManager.instance.spikeExists)
             {
-                spikeExists = currentSpikeExists;
-                if (spikeExists)
+                SpikeManager.instance.spikeExists = currentSpikeExists;
+                if (SpikeManager.instance.spikeExists)
                     StartBlinking();
                 else
                     StopBlinkingIcon();
@@ -84,7 +84,8 @@ public class PlantTheSpike : MonoBehaviour
         if (spikePhotonView != null)
         {
             spikePhotonView.RPC("SetSpikeTag", RpcTarget.AllBuffered, spikePhotonView.ViewID);
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "SpikeExists", true } });
+            //PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "SpikeExists", true } });
+            SpikeManager.instance.photonView.RPC("ReateIsSpikeExists", RpcTarget.AllBuffered, true);
         }
         else
         {
@@ -98,6 +99,7 @@ public class PlantTheSpike : MonoBehaviour
         if (!isBlinking)
         {
             isBlinking = true;
+            TimeManager.instance.isPlantSpike = true;
             StartCoroutine(Blink());
         }
     }
@@ -114,11 +116,11 @@ public class PlantTheSpike : MonoBehaviour
         }
     }
 
-    private void RemoveSpikeFromScene()
-    {
-        GameObject spike = GameObject.FindWithTag("Spike");
-        if (spike != null) Destroy(spike);
-    }
+    //private void RemoveSpikeFromScene()
+    //{
+    //    GameObject spike = GameObject.FindWithTag("Spike");
+    //    if (spike != null) Destroy(spike);
+    //}
 
     private void OnTriggerEnter(Collider other)
     {

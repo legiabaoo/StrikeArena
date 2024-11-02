@@ -1031,7 +1031,6 @@ GameObject:
   - component: {fileID: 706515845518428179}
   - component: {fileID: 1918809733699849492}
   - component: {fileID: 4904012940546223746}
-  - component: {fileID: 1450269063761695348}
   - component: {fileID: 2645702516479466903}
   - component: {fileID: 2187792490489591079}
   - component: {fileID: -1966782037145406603}
@@ -1267,22 +1266,6 @@ MonoBehaviour:
   spawnPoint: {fileID: 4138107490801914455}
   destroyTime: 6
   maxBombs: 3
---- !u!114 &1450269063761695348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3315615690427756698}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7eb200292ab11cd468ba18ae8cb0e2d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spikePrefab: {fileID: 1244756615232544913, guid: 35a272a8009e9de41bff98a21eedec91, type: 3}
-  holdTimeRequired: 3
-  progressBar: {fileID: 4788373310961732973}
-  iconPlant: {fileID: 3700094256320702013}
 --- !u!114 &2645702516479466903
 MonoBehaviour:
   m_ObjectHideFlags: 0
