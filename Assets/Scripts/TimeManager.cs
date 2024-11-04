@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using Photon.Pun;
 using TMPro;
-using ExitGames.Client.Photon.StructWrapping;
+
 
 public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
 {
@@ -40,15 +40,14 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     }
     private void Start()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            photonView.RPC("SyncTime", RpcTarget.All, currentTime);
-        }
-        else
-        {
-            currentTime = buyPhaseTime;
-            
-        }
+        //if (PhotonNetwork.IsMasterClient)
+        //{
+        //    photonView.RPC("SyncTime", RpcTarget.All, currentTime);
+        //}
+        StartBuyPhase();
+        minutes = Mathf.FloorToInt(currentTime / 60);
+        seconds = Mathf.FloorToInt(currentTime % 60);
+        timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
     private void Update()
@@ -57,13 +56,21 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                if (currentPhase == GamePhase.Buy && !isTextBuy)
+                if (currentPhase == GamePhase.Buy)
                 {
-                    isTextBuy = true;
-                    over.GetComponentInChildren<Text>().color = Color.white;
-                    over.GetComponentInChildren<Text>().text = "BẮT ĐẦU MUA TRANG BỊ";
-                    PhotonView.Get(this).RPC("onText", RpcTarget.AllBuffered);
-                    Invoke("InvokeOffText", 1f);
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "SpikeExists", false } });
+                    if (!isTextBuy)
+                    {
+                        isTextBuy = true;
+                        //over.GetComponentInChildren<Text>().color = Color.white;
+                        //over.GetComponentInChildren<Text>().text = "BẮT ĐẦU MUA TRANG BỊ";
+                        Color color = Color.white;
+                        string colorString = $"{color.r},{color.g},{color.b},{color.a}";
+                        photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "BẮT ĐẦU MUA TRANG BỊ");
+                        PhotonView.Get(this).RPC("onText", RpcTarget.AllBuffered);
+                        Invoke("InvokeOffText", 1f);
+                    }
+
                 }
                 // Giảm thời gian còn lại
                 currentTime -= Time.deltaTime;
@@ -76,25 +83,27 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                 {
                     if (currentPhase == GamePhase.Buy)
                     {
-                        over.GetComponentInChildren<Text>().text = "BẮT ĐẦU CHIẾN ĐẤU";
-                        over.GetComponentInChildren<Text>().color = Color.green;
-                        PhotonView.Get(this).RPC("onText", RpcTarget.AllBuffered);
+                        Color color = Color.green;
+                        string colorString = $"{color.r},{color.g},{color.b},{color.a}";
+                        photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "BẮT ĐẦU CHIẾN ĐẤU");
+                        photonView.RPC("onText", RpcTarget.AllBuffered);
                         Invoke("InvokeOffText", 1f);
                         StartBattlePhase(); // Bắt đầu giai đoạn chiến đấu
                     }
                     else if (currentPhase == GamePhase.Battle)
                     {
-                        over.GetComponentInChildren<Text>().text = "ĐỘI PHÒNG THỦ \n" +
-                            "CHIÊN THẮNG";
-                        over.GetComponentInChildren<Text>().color = Color.blue;
+                        Color color = Color.blue;
+                        string colorString = $"{color.r},{color.g},{color.b},{color.a}";
+                        photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "ĐỘI PHÒNG THỦ \n CHIÊN THẮNG");
                         winner = Team.blue;
+                        Debug.LogError("1");
                         EndGame(); // Kết thúc vòng đấu khi giai đoạn chiến đấu kết thúc
                     }
                     else if (currentPhase == GamePhase.Plant)
                     {
-                        over.GetComponentInChildren<Text>().text = "ĐỘI TẤN CÔNG \n" +
-                            "CHIÊN THẮNG";
-                        over.GetComponentInChildren<Text>().color = Color.red;
+                        Color color = Color.red;
+                        string colorString = $"{color.r},{color.g},{color.b},{color.a}";
+                        photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "ĐỘI TẤN CÔNG \n CHIÊN THẮNG");
                         winner = Team.red;
                         EndGame();
                     }
@@ -105,11 +114,12 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                 }
                 if (!isPlantSpike && isSpikeTime)
                 {
-                    over.GetComponentInChildren<Text>().text = "ĐỘI PHÒNG THỦ \n" +
-                            "CHIÊN THẮNG";
-                    over.GetComponentInChildren<Text>().color = Color.blue;
+                    Color color = Color.blue;
+                    string colorString = $"{color.r},{color.g},{color.b},{color.a}";
+                    photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "ĐỘI PHÒNG THỦ \n CHIÊN THẮNG");
                     isSpikeTime = false;
                     winner = Team.blue;
+                    Debug.LogError("2");
                     EndGame();
                 }
             }
@@ -162,10 +172,20 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
 
         isGameOver = false;
         RoomManager.instance.hasCalledEndGame = false;
+        isSpikeTime = false;
+        isPlantSpike = false;
+        //set lai SpikeExists la false
+
+
         //}
-        SpikeManager.instance.photonView.RPC("SetIsSpikeExists", RpcTarget.AllBuffered, false);
+        RemoveSpikeFromScene();
         StartBuyPhase(); // Bắt đầu lại giai đoạn mua vũ khí
-        over.SetActive(false);
+        Invoke("InvokeOffText", 1f);
+    }
+    private void RemoveSpikeFromScene()
+    {
+        GameObject spike = GameObject.FindWithTag("Spike");
+        if (spike != null) Destroy(spike);
     }
 
     [PunRPC]
@@ -180,8 +200,17 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     }
     public void InvokeOffText()
     {
-        offText();
+        photonView.RPC("offText", RpcTarget.AllBuffered);
     }
+    [PunRPC]
+    public void SetNotify(string colorString, string text)
+    {
+        string[] rgba = colorString.Split(',');
+        Color color = new Color(float.Parse(rgba[0]), float.Parse(rgba[1]), float.Parse(rgba[2]), float.Parse(rgba[3]));
+        over.GetComponentInChildren<Text>().color = color;
+        over.GetComponentInChildren<Text>().text = text;
+    }
+    [PunRPC]
     public void EndGame()
     {
         isTextBuy = false;

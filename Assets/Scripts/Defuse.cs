@@ -16,7 +16,7 @@ public class Defuse : MonoBehaviour
 
     private float blinkInterval = 0.5f;
     private bool isBlinking = false;
-    //private bool spikeExists = false;
+    private bool spikeExists = false;
 
     private void Awake()
     {
@@ -34,12 +34,12 @@ public class Defuse : MonoBehaviour
             Debug.LogError("ProgressBar not found in the player prefab!");
         }
 
-        // Kiểm tra trạng thái spike khi bắt đầu
-        //if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
-        //{
-        //    spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
-        //    if (!spikeExists) RemoveSpikeFromScene();
-        //}
+        //Kiểm tra trạng thái spike khi bắt đầu
+        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
+        {
+            spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
+            if (!spikeExists) RemoveSpikeFromScene();
+        }
     }
 
     void Update()
@@ -47,10 +47,10 @@ public class Defuse : MonoBehaviour
         if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
         {
             bool currentSpikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
-            if (currentSpikeExists != SpikeManager.instance.spikeExists)
+            if (currentSpikeExists != spikeExists)
             {
-                SpikeManager.instance.spikeExists = currentSpikeExists;
-                if (SpikeManager.instance.spikeExists)
+                spikeExists = currentSpikeExists;
+                if (spikeExists)
                     StartBlinking();
                 else
                     StopBlinkingIcon();
@@ -106,13 +106,19 @@ public class Defuse : MonoBehaviour
         PhotonView spikePhotonView = currentSpike.GetComponent<PhotonView>();
         spikePhotonView.RPC("RemoveSpike", RpcTarget.AllBuffered, spikePhotonView.ViewID);
 
-        //ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable
-        //{
-        //    { "SpikeExists", false }
-        //};
-        //PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-        SpikeManager.instance.photonView.RPC("SetIsSpikeExists", RpcTarget.AllBuffered, false);
-
+        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable
+        {
+            { "SpikeExists", false }
+        };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+        //SpikeManager.instance.photonView.RPC("SetIsSpikeExists", RpcTarget.AllBuffered, false);
+        //TimeManager.instance.isPlantSpike = false;
+        PhotonView.Get(this).RPC("SetIsPlantSpike", RpcTarget.AllBuffered);
+    }
+    [PunRPC]
+    public void SetIsPlantSpike()
+    {
+        TimeManager.instance.isPlantSpike = false;
     }
 
     [PunRPC]
@@ -142,12 +148,11 @@ public class Defuse : MonoBehaviour
         isBlinking = false;
         StopAllCoroutines();
         iconPlant.gameObject.SetActive(false);
-        TimeManager.instance.isPlantSpike = false;
     }
 
-    //private void RemoveSpikeFromScene()
-    //{
-    //    GameObject spike = GameObject.FindWithTag("Spike");
-    //    if (spike != null) Destroy(spike);
-    //}
+    private void RemoveSpikeFromScene()
+    {
+        GameObject spike = GameObject.FindWithTag("Spike");
+        if (spike != null) Destroy(spike);
+    }
 }
