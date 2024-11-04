@@ -1,16 +1,23 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
-    public GameObject explosionEffect; // Hi?u ?ng n?
-    public float explosionDelay = 3f; // Th?i gian ??m ng??c tr??c khi n?
+    public GameObject explosionEffect; // Hiệu ứng nổ
+    public float explosionDelay = 3f; // Thời gian đếm ngược trước khi nổ
 
     private bool hasExploded = false;
 
     void Start()
     {
-        // B?t ??u ??m ng??c
+        // Kiểm tra xem hiệu ứng nổ có được gán không
+        if (explosionEffect == null)
+        {
+            Debug.LogError("Explosion effect not assigned in the Inspector!");
+            return;
+        }
+
+        // Bắt đầu đếm ngược
         Invoke(nameof(Explode), explosionDelay);
     }
 
@@ -20,12 +27,17 @@ public class Bomb : MonoBehaviour
 
         hasExploded = true;
 
-        // Hi?n th? hi?u ?ng n?
+        // Hiển thị hiệu ứng nổ
         GameObject explosion = Instantiate(explosionEffect, transform.position, transform.rotation);
+        Debug.Log("Explosion instantiated at: " + transform.position); // Log vị trí để kiểm tra
 
-        // H?y ??i t??ng hi?u ?ng n? sau m?t th?i gian (v� d?: 2 gi�y)
-        Destroy(explosion, 2f);
+        Destroy(gameObject);
 
-     
+        
+
+        // Log để xác nhận rằng bom đã bị hủy
+        Debug.Log("Bomb destroyed after explosion.");
     }
 }
+
+    
