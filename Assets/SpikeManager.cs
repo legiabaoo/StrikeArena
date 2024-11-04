@@ -7,6 +7,7 @@ public class SpikeManager : MonoBehaviourPunCallbacks
 {
     public static SpikeManager instance;
     public bool spikeExists = false;
+    private bool hasPlaceBomb = false;
     private void Awake()
     {
         instance = this;
@@ -14,17 +15,26 @@ public class SpikeManager : MonoBehaviourPunCallbacks
     }
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
+        if (PlantTheSpike.instance.hasPlacedBomb != null)
         {
-            spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
-            if (!spikeExists) RemoveSpikeFromScene();
+            hasPlaceBomb = PlantTheSpike.instance.hasPlacedBomb;
         }
+         
+        if (hasPlaceBomb)
+        {
+            if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
+            {
+                spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
+                if (!spikeExists) RemoveSpikeFromScene();
+            }
+        }
+
     }
     private void RemoveSpikeFromScene()
     {
@@ -45,5 +55,5 @@ public class SpikeManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "SpikeExists", isSpikeExists } });
     }
-    
+
 }

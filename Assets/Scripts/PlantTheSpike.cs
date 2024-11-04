@@ -6,19 +6,24 @@ using UnityEngine.UI;
 
 public class PlantTheSpike : MonoBehaviour
 {
+    public static PlantTheSpike instance;
     public GameObject spikePrefab;
     public float holdTimeRequired = 3.0f;
     public Slider progressBar;
     public Image iconPlant;
 
     private float holdTime = 0.0f;
-    private bool hasPlacedBomb = false;
+    public bool hasPlacedBomb = false;
     private bool canPlantBomb = false;
     private bool isBlinking = false;
-    //private bool spikeExists = false;
+    public bool spikeExists = false;
     private Vector3 spikePosition;
 
     private float blinkInterval = 0.5f;
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
@@ -26,11 +31,11 @@ public class PlantTheSpike : MonoBehaviour
         progressBar.gameObject.SetActive(false);
         progressBar.value = 0f;
 
-        //if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
-        //{
-        //    spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
-        //    if (!spikeExists) RemoveSpikeFromScene();
-        //}
+        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
+        {
+            spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
+            if (!spikeExists) RemoveSpikeFromScene();
+        }
     }
 
     void Update()
@@ -38,10 +43,10 @@ public class PlantTheSpike : MonoBehaviour
         if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
         {
             bool currentSpikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
-            if (currentSpikeExists != SpikeManager.instance.spikeExists)
+            if (currentSpikeExists != spikeExists)
             {
-                SpikeManager.instance.spikeExists = currentSpikeExists;
-                if (SpikeManager.instance.spikeExists)
+                spikeExists = currentSpikeExists;
+                if (spikeExists)
                     StartBlinking();
                 else
                     StopBlinkingIcon();
@@ -85,21 +90,31 @@ public class PlantTheSpike : MonoBehaviour
         {
             spikePhotonView.RPC("SetSpikeTag", RpcTarget.AllBuffered, spikePhotonView.ViewID);
             //PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "SpikeExists", true } });
-            SpikeManager.instance.photonView.RPC("ReateIsSpikeExists", RpcTarget.AllBuffered, true);
+            ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable
+            {
+                { "SpikeExists", true }
+            };
+            PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+            //SpikeManager.instance.photonView.RPC("ReateIsSpikeExists", RpcTarget.AllBuffered, true);
+            //TimeManager.instance.isPlantSpike = true;
+            PhotonView.Get(this).RPC("SetIsPlantSpike2", RpcTarget.AllBuffered);
         }
         else
         {
             Debug.LogError("No PhotonView found on Spike prefab!");
         }
     }
-
+    [PunRPC]
+    public void SetIsPlantSpike2()
+    {
+        TimeManager.instance.isPlantSpike = true;
+    }
     [PunRPC]
     public void StartBlinking()
     {
         if (!isBlinking)
         {
             isBlinking = true;
-            TimeManager.instance.isPlantSpike = true;
             StartCoroutine(Blink());
         }
     }
@@ -116,11 +131,11 @@ public class PlantTheSpike : MonoBehaviour
         }
     }
 
-    //private void RemoveSpikeFromScene()
-    //{
-    //    GameObject spike = GameObject.FindWithTag("Spike");
-    //    if (spike != null) Destroy(spike);
-    //}
+    private void RemoveSpikeFromScene()
+    {
+        GameObject spike = GameObject.FindWithTag("Spike");
+        if (spike != null) Destroy(spike);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
