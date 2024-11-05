@@ -210,6 +210,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             {
                 CheckRedTeamStatus();
             }
+            CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
         }
     }
 
