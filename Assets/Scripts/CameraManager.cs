@@ -7,11 +7,19 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     private List<GameObject> playerObjects = new List<GameObject>();
     public static CameraManager instance;
+    private int currentTeammateIndex = 0;
     private Quaternion currentTeammateRotation; // Để lưu rotation từ camera đồng đội
 
     private void Awake()
     {
         instance = this;
+    }
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            SwitchToNextTeammateCamera(); // Chuyển camera qua đồng đội
+        }
     }
 
     [PunRPC]
@@ -27,7 +35,7 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
             // Kiểm tra nếu player cùng đội với người chơi hiện tại
             if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("team", out var localTeamValue) &&
             player.CustomProperties.TryGetValue("team", out var teamValue) &&
-            (int)teamValue == (int)localTeamValue)
+            (int)teamValue == (int)localTeamValue && player.CustomProperties.TryGetValue("isAlive", out var isAliveValue) && (bool)isAliveValue)
             {
                 if (playerObject != null)
                 {
@@ -47,6 +55,7 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
             {
                 Camera currentPlayerCamera = currentPlayer.GetComponentInChildren<Camera>();
                 Canvas currentPlayerCanvas = currentPlayer.GetComponentInChildren<Canvas>();
+                dichuyen currentPlayerController = currentPlayer.GetComponent<dichuyen>();
                 if (currentPlayerCamera != null)
                 {
                     //currentPlayer.transform.position 
@@ -54,6 +63,7 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
                     currentPlayerCamera.GetComponent<MouseLook>().enabled = false;
                     currentPlayerCamera.GetComponent<AudioListener>().enabled = false;
                     currentPlayerCanvas.enabled = false;
+                    currentPlayerController.enabled = false;
                 }
 
                 Camera teammateCamera = obj.GetComponentInChildren<Camera>();
@@ -70,10 +80,43 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
             }
         }
     }
+    public void SwitchToNextTeammateCamera()
+    {
+        if (playerObjects.Count == 0) return;
+
+        // Tắt camera của đồng đội hiện tại
+        GameObject currentPlayer = playerObjects[currentTeammateIndex];
+        Camera currentPlayerCamera = currentPlayer.GetComponentInChildren<Camera>();
+        Canvas currentPlayerCanvas = currentPlayer.GetComponentInChildren<Canvas>();
+
+        if (currentPlayerCamera != null)
+        {
+            currentPlayerCamera.enabled = false;
+            currentPlayerCamera.GetComponent<AudioListener>().enabled = false;
+            currentPlayerCanvas.enabled = false;
+        }
+
+        // Tăng chỉ mục và đảm bảo vòng lại đầu nếu đạt cuối danh sách
+        currentTeammateIndex = (currentTeammateIndex + 1) % playerObjects.Count;
+
+        // Bật camera của đồng đội mới
+        GameObject nextTeammate = playerObjects[currentTeammateIndex];
+        Camera teammateCamera = nextTeammate.GetComponentInChildren<Camera>();
+        Canvas teammateCanvas = nextTeammate.GetComponentInChildren<Canvas>();
+
+        if (teammateCamera != null)
+        {
+            teammateCamera.enabled = true;
+            teammateCamera.GetComponent<AudioListener>().enabled = true;
+            currentTeammateRotation = teammateCamera.transform.rotation;
+            teammateCanvas.enabled = true;
+        }
+    }
     public void RespawnPlayerCamera(GameObject respawnedPlayer)
     {
         Camera playerCamera = respawnedPlayer.GetComponentInChildren<Camera>();
         Canvas playerCanvas = respawnedPlayer.GetComponentInChildren<Canvas>();
+        dichuyen PlayerController = respawnedPlayer.GetComponent<dichuyen>();
         if (playerCanvas != null)
         {
             playerCanvas.enabled = true;
@@ -82,6 +125,7 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             playerCamera.enabled = true;
             playerCamera.GetComponent<AudioListener>().enabled = true;
+            PlayerController.enabled = true;
 
             // Nếu bạn có MouseLook hay các thành phần khác, hãy kích hoạt chúng ở đây
             var mouseLook = playerCamera.GetComponent<MouseLook>();
