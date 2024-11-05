@@ -1286,6 +1286,7 @@ MonoBehaviour:
   iconPlant: {fileID: 3700094256320702013}
   hasPlacedBomb: 0
   spikeExists: 0
+  isLocalPlayer: 0
 --- !u!114 &2645702516479466903
 MonoBehaviour:
   m_ObjectHideFlags: 0

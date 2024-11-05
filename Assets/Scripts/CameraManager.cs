@@ -42,6 +42,7 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
                 Camera currentPlayerCamera = currentPlayer.GetComponentInChildren<Camera>();
                 if (currentPlayerCamera != null)
                 {
+                    //currentPlayer.transform.position 
                     currentPlayerCamera.enabled = false;
                     currentPlayerCamera.GetComponent<MouseLook>().enabled = false;
                     currentPlayerCamera.GetComponent<AudioListener>().enabled = false;
@@ -51,7 +52,7 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
                 if (teammateCamera != null)
                 {
                     teammateCamera.enabled = true;
-                    teammateCamera.GetComponent<AudioListener>().enabled = true;
+                    teammateCamera.GetComponent<AudioListener>().enabled = false;
                     currentTeammateRotation = teammateCamera.transform.rotation;
                 }
 
@@ -59,6 +60,23 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
             }
         }
     }
+    public void RespawnPlayerCamera(GameObject respawnedPlayer)
+    {
+        Camera playerCamera = respawnedPlayer.GetComponentInChildren<Camera>();
+        if (playerCamera != null)
+        {
+            playerCamera.enabled = true;
+            playerCamera.GetComponent<AudioListener>().enabled = true;
+
+            // Nếu bạn có MouseLook hay các thành phần khác, hãy kích hoạt chúng ở đây
+            var mouseLook = playerCamera.GetComponent<MouseLook>();
+            if (mouseLook != null)
+            {
+                mouseLook.enabled = true;
+            }
+        }
+    }
+
 
     // Liên tục gửi rotation qua mạng khi SerializeView được gọi
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

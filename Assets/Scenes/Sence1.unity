@@ -9163,7 +9163,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &782628376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9179,11 +9179,13 @@ MonoBehaviour:
   diemTeamXanh: {fileID: 1725501981}
   diemTeamDo: {fileID: 1718082578}
   timeText: {fileID: 40919617}
+  startGame: 0
   isGameOver: 0
   isPlantSpike: 0
+  isAllDeathRed: 0
+  isAllDeathBlue: 0
   over: {fileID: 1261418956}
   spawnScript: {fileID: 2645702516479466903, guid: 53a49ccedec097643873bfea41158870, type: 3}
-  startGame: 0
 --- !u!114 &782628377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9837,7 +9839,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &822838933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9850,7 +9852,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cffbf70ba68ec44db2226fb277dd051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spikeExists: 0
 --- !u!4 &822838934
 Transform:
   m_ObjectHideFlags: 0
@@ -11090,7 +11091,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e16881d3cfdbf34e8eb7641873f778c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thoigian: {fileID: 782628375}
+  thoigian: {fileID: 2089110258}
   player: {fileID: 6025602435210889620, guid: 602ee3fad508b6a42956452fd8d0bd9b, type: 3}
   spawnPoints:
   - {fileID: 1409576996}
@@ -25541,7 +25542,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2089110259
 RectTransform:
   m_ObjectHideFlags: 0
