@@ -39,6 +39,7 @@ public class PlayerSetup : MonoBehaviour
         canvas.gameObject.SetActive(true);
         cameraPlayer.GetComponent<AudioListener>().enabled = true;
         cameraPlayer.GetComponent<MouseLook>().enabled = true;
+        gameObject.GetComponentInChildren<Canvas>().enabled = true;
     }
     public void OnPlayerDeath()
     {
