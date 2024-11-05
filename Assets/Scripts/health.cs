@@ -69,8 +69,8 @@ public class health : MonoBehaviour
             {
                 CameraManager.instance.SwitchToTeammateCamera(currentPlayerObject);
             }
+            RoomManager.instance.UpdatePlayerStatus(false);
         }
-        RoomManager.instance.UpdatePlayerStatus(false);
     }
 
 }

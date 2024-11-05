@@ -16,13 +16,16 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     private int seconds;
 
     // Thời gian cho hai giai đoạn
-    private float buyPhaseTime = 2f; // Thời gian 30 giây cho mua vũ khí
-    private float battlePhaseTime = 15f; // Thời gian 1 phút 40 giây cho chiến đấu
+    private float buyPhaseTime = 30f; // Thời gian 30 giây cho mua vũ khí
+    private float battlePhaseTime = 100f; // Thời gian 1 phút 40 giây cho chiến đấu
     private float plantPhaseTime = 10f;
     private float currentTime;
 
+    public bool startGame = false;
     public bool isGameOver = false;
     public bool isPlantSpike = false;
+    public bool isAllDeathRed = false;
+    public bool isAllDeathBlue = false;
     private bool isSpikeTime = false;
     private bool isTextBuy = false;
     public GameObject over;
@@ -32,8 +35,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     private enum Team { red, blue };
     private Team winner;
     private GamePhase currentPhase;
-    public bool startGame = false;
-
+    
     private void Awake()
     {
         instance = this;
@@ -68,6 +70,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                         string colorString = $"{color.r},{color.g},{color.b},{color.a}";
                         photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "BẮT ĐẦU MUA TRANG BỊ");
                         PhotonView.Get(this).RPC("onText", RpcTarget.AllBuffered);
+                        photonView.RPC("SetTagForPlayers", RpcTarget.All); // Gọi RPC đặt tag cho người chơi
                         Invoke("InvokeOffText", 1f);
                     }
 
@@ -96,7 +99,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                         string colorString = $"{color.r},{color.g},{color.b},{color.a}";
                         photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "ĐỘI PHÒNG THỦ \n CHIÊN THẮNG");
                         winner = Team.blue;
-                        Debug.LogError("1");
+                        Debug.LogError("B1");
                         EndGame(); // Kết thúc vòng đấu khi giai đoạn chiến đấu kết thúc
                     }
                     else if (currentPhase == GamePhase.Plant)
@@ -105,6 +108,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                         string colorString = $"{color.r},{color.g},{color.b},{color.a}";
                         photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "ĐỘI TẤN CÔNG \n CHIÊN THẮNG");
                         winner = Team.red;
+                        Debug.LogError("R1");
                         EndGame();
                     }
                 }
@@ -119,7 +123,25 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                     photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "ĐỘI PHÒNG THỦ \n CHIÊN THẮNG");
                     isSpikeTime = false;
                     winner = Team.blue;
-                    Debug.LogError("2");
+                    Debug.LogError("B2");
+                    EndGame();
+                }
+                if (isAllDeathRed)
+                {
+                    winner = Team.blue;
+                    Color color = Color.blue;
+                    string colorString = $"{color.r},{color.g},{color.b},{color.a}";
+                    photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "ĐỘI PHÒNG THỦ \n CHIÊN THẮNG");
+                    Debug.LogError("B3");
+                    EndGame();
+                }
+                if (isAllDeathBlue)
+                {
+                    winner = Team.red;
+                    Color color = Color.red;
+                    string colorString = $"{color.r},{color.g},{color.b},{color.a}";
+                    photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "ĐỘI TẤN CÔNG \n CHIÊN THẮNG");
+                    Debug.LogError("R2");
                     EndGame();
                 }
             }
@@ -136,13 +158,13 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         currentPhase = GamePhase.Buy;
         currentTime = buyPhaseTime;
+        
     }
 
     private void StartBattlePhase()
     {
         currentPhase = GamePhase.Battle;
         currentTime = battlePhaseTime;
-        photonView.RPC("SetTagForPlayers", RpcTarget.All); // Gọi RPC đặt tag cho người chơi
     }
 
     private void PlantSpikePhase()
@@ -216,6 +238,8 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         isTextBuy = false;
         isGameOver = true;
         startGame = false;
+        isAllDeathRed = false;
+        isAllDeathBlue = false;
         if (winner == Team.red)
         {
             scoreDo++;

@@ -17,6 +17,7 @@ public class PlantTheSpike : MonoBehaviour
     private bool canPlantBomb = false;
     private bool isBlinking = false;
     public bool spikeExists = false;
+    public bool isLocalPlayer;
     private Vector3 spikePosition;
 
     private float blinkInterval = 0.5f;
@@ -27,7 +28,9 @@ public class PlantTheSpike : MonoBehaviour
 
     void Start()
     {
-        progressBar = GameObject.Find("ProgressBar").GetComponent<Slider>();
+        if (isLocalPlayer) { progressBar = GameObject.Find("ProgressBar").GetComponent<Slider>();}
+
+        
         progressBar.gameObject.SetActive(false);
         progressBar.value = 0f;
 

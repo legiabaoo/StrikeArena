@@ -1,59 +1,41 @@
-using Photon.Pun;
+﻿using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 
-public class SpikeManager : MonoBehaviourPunCallbacks
+public class SpikeManager : MonoBehaviour
 {
-    public static SpikeManager instance;
-    public bool spikeExists = false;
-    private bool hasPlaceBomb = false;
+    public static SpikeManager instance1;
     private void Awake()
     {
-        instance = this;
-        DontDestroyOnLoad(gameObject);
+        instance1 = this;
     }
-    void Start()
+    public void PrintPlayerProperties()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (PlantTheSpike.instance.hasPlacedBomb != null)
+        foreach (Player player in PhotonNetwork.PlayerList)
         {
-            hasPlaceBomb = PlantTheSpike.instance.hasPlacedBomb;
-        }
-         
-        if (hasPlaceBomb)
-        {
-            if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
+            ExitGames.Client.Photon.Hashtable properties = player.CustomProperties;
+
+            // Kiểm tra nếu hashtable không rỗng
+            if (properties != null && properties.Count > 0)
             {
-                spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
-                if (!spikeExists) RemoveSpikeFromScene();
+                string playerInfo = $"Player {player.NickName} Properties:";
+
+                foreach (DictionaryEntry entry in properties)
+                {
+                    playerInfo += $"\n{entry.Key}: {entry.Value}";
+                }
+
+                Debug.Log(playerInfo);
+            }
+            else
+            {
+                Debug.Log($"Player {player.NickName} has no custom properties.");
             }
         }
-
-    }
-    private void RemoveSpikeFromScene()
-    {
-        GameObject spike = GameObject.FindWithTag("Spike");
-        if (spike != null) Destroy(spike);
-    }
-    [PunRPC]
-    public void SetIsSpikeExists(bool isSpikeExists)
-    {
-        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable
-        {
-            { "SpikeExists", isSpikeExists }
-        };
-        PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-    }
-    [PunRPC]
-    public void ReateIsSpikeExists(bool isSpikeExists)
-    {
-        PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "SpikeExists", isSpikeExists } });
     }
 
 }

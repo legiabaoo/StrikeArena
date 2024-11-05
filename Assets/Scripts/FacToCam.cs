@@ -6,6 +6,6 @@ public class FacToCam : MonoBehaviour
 {
     void Update()
     {
-        //transform.LookAt(Camera.main.transform);
+        transform.LookAt(Camera.main.transform);
     }
 }
