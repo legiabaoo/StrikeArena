@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,8 +7,8 @@ public class canbang : MonoBehaviour
     public Transform PlayerTransform;
     public GameObject Gun;
     public Camera Camera;
-    public float range = 2f; // T?m xa c?a raycast
-    public float pickUpRange = 2f; // Kho?ng c�ch t?i ?a ?? nh?t s�ng
+    public float range = 2f; // Tầm xa của raycast
+    public float pickUpRange = 2f; // Khoảng cách tối đa để nhặt súng
 
     void Start()
     {
@@ -53,7 +53,7 @@ public class canbang : MonoBehaviour
 
     void EquipObject()
     {
-        // Ki?m tra kho?ng c�ch gi?a ng??i ch?i v� s�ng
+        // Kiểm tra khoảng cách giữa người chơi và súng
         float distanceToGun = Vector3.Distance(PlayerTransform.position, Gun.transform.position);
         if (distanceToGun <= pickUpRange)
         {
@@ -61,11 +61,11 @@ public class canbang : MonoBehaviour
             Gun.transform.position = PlayerTransform.transform.position;
             Gun.transform.rotation = PlayerTransform.transform.rotation;
             Gun.transform.SetParent(PlayerTransform);
-            Debug.Log("?� nh?t s�ng.");
+            Debug.Log("Đã nhặt súng.");
         }
         else
         {
-            Debug.Log("Qu� xa ?? nh?t s�ng.");
+            Debug.Log("Quá xa để nhặt súng.");
         }
     }
 }
