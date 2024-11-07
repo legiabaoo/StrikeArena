@@ -53,7 +53,7 @@ public class LoginAPI : MonoBehaviour
             var jsonString = request.downloadHandler.text.ToString();
             LoginCallBackModel message = JsonConvert.DeserializeObject<LoginCallBackModel>(jsonString);
             txtMessage.text = message.message;
-            if (message.status == 1)
+            if (message.status == 0)
             {
                 // Lưu username tạm thời
                 string username = message.username;
