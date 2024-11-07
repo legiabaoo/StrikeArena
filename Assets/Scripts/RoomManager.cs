@@ -5,6 +5,7 @@ using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Photon.Realtime;
 using Unity.VisualScripting;
+using TMPro;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
@@ -27,6 +28,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public Renderer playerRender;
     public string roomNameToJoin = "test";
+
+    public TMP_Text username;
 
     public Dropdown dropdownManager;
     public GameObject attackTeamPrefab;  // Prefab cho ??i t?n công
