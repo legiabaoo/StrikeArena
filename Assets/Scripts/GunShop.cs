@@ -23,19 +23,7 @@ public class GunShop : MonoBehaviourPun
         {
             Debug.LogError("gunPrefabs không ???c gán ho?c tr?ng!");
         }
-        gunPositions = new Vector3[10]; // 10 cây súng
-        gunRotations = new Quaternion[10];
-       
-        // Ví d? gán v? trí và rotation cho 10 cây súng
-        gunPositions[0] = new Vector3(-669.460022f, -221.089996f, 1f); // V? trí cho súng s? 1
-        gunRotations[0] = Quaternion.Euler(13, -99.3f, 13); // Rotation cho súng s? 1
-
-        gunPositions[1] = new Vector3(-669.1f, -221.3f, 1.32f); // V? trí cho súng s? 2
-        gunRotations[1] = Quaternion.Euler(-1.24f, 86.72f, 1.38f); // Rotation cho súng s? 2
-
-
-        gunPositions[2] = new Vector3(-669.6f, -221.3f, 0.7f); // V? trí cho súng s? 3
-        gunRotations[2] = Quaternion.Euler(-178.8f, 0.86f, 0.9f); // Rotation cho súng s? 3
+      
     }
 
     void Update()
@@ -51,8 +39,24 @@ public class GunShop : MonoBehaviourPun
         {
             ToggleShopUI();
         }
+        viTriSung();
     }
+    void viTriSung()
+    {
+        gunPositions = new Vector3[10]; // 10 cây súng
+        gunRotations = new Quaternion[10];
 
+        // Ví d? gán v? trí và rotation cho 10 cây súng
+        gunPositions[0] = new Vector3(-669.460022f, -221.089996f, 1f); // V? trí cho súng s? 1
+        gunRotations[0] = Quaternion.Euler(13, -99.3f, 13); // Rotation cho súng s? 1
+
+        gunPositions[1] = new Vector3(-669.1f, -221.3f, 1.32f); // V? trí cho súng s? 2
+        gunRotations[1] = Quaternion.Euler(-1.24f, 86.72f, 1.38f); // Rotation cho súng s? 2
+
+
+        gunPositions[2] = new Vector3(-669.6f, -221.3f, 0.7f); // V? trí cho súng s? 3
+        gunRotations[2] = Quaternion.Euler(-178.8f, 0.86f, 0.9f); // Rotation cho súng s? 3
+    }
     void ToggleShopUI()
     {
         shopUI.SetActive(!shopUI.activeSelf);
@@ -71,33 +75,33 @@ public class GunShop : MonoBehaviourPun
 
 
     public void FindPlayerGunPosition()
-{
-    foreach (var player in FindObjectsOfType<PhotonView>())
     {
-        // Ch? ki?m tra ??i t??ng c?a ng??i ch?i hi?n t?i
-        if (player.IsMine)
+        foreach (var player in FindObjectsOfType<PhotonView>())
         {
+            // Ch? ki?m tra ??i t??ng c?a ng??i ch?i hi?n t?i
+            if (player.IsMine)
+            {
                 Vector3 playerPosition = player.transform.position;
-           
+
                 // Tìm `GunPosition` theo ???ng d?n ??y ?? trong c?u trúc `Hierarchy`
                 gunPosition = player.transform.Find("Main Camera/GunPosition"); // ?ã ?i?u ch?nh ???ng d?n
 
-            if (gunPosition != null)
-            {
-                gunPositionFound = true; // ?ã tìm th?y v? trí g?n súng
-           
-                
-                // L?y v? trí c?a ng??i ch?i
-              
+                if (gunPosition != null)
+                {
+                    gunPositionFound = true; // ?ã tìm th?y v? trí g?n súng
+
+
+                    // L?y v? trí c?a ng??i ch?i
+
+                }
+                else
+                {
+
+                }
+                break; // K?t thúc vòng l?p sau khi tìm th?y ng??i ch?i
             }
-            else
-            {
-            
-            }
-            break; // K?t thúc vòng l?p sau khi tìm th?y ng??i ch?i
         }
     }
-}
 
 
 
@@ -128,14 +132,7 @@ public class GunShop : MonoBehaviourPun
         {
             Debug.Log("Không ?? ti?n ?? mua súng.");
         }
-        /*if (gunIndex == 2 )
-        {
-            weaponSwitcher.SetNutbanImageActive(false);
-        }
-        else
-        {
-            weaponSwitcher.SetNutbanImageActive(true);
-        }*/
+      
     }
 
 
@@ -175,6 +172,7 @@ public class GunShop : MonoBehaviourPun
             Debug.Log("Súng s? " + gunIndex + " ?ã ???c t?o t?i v? trí: " + fixedPosition + " v?i rotation: " + fixedRotation.eulerAngles);
         }
     }
+   
 
 
 
