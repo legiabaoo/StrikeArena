@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -38,12 +38,12 @@ public class ThrowingTutorial : MonoBehaviour
     {
         readyToThrow = false;
 
-        // kh?i t?o ??i t??ng ?? nÈm
+        // kh?i t?o ??i t??ng ?? n√©m
         GameObject projectile = Instantiate(objectToThorow, attackPoint.position, cam.rotation);
-        // l?y th‡nh ph?n rb
+        // l?y th√†nh ph?n rb
         Rigidbody projectileRB = projectile.GetComponent<Rigidbody>();
         
-        // canh h??ng nÈm
+        // canh h??ng n√©m
         Vector3 forceDirection = cam.transform.forward;
         
         RaycastHit hit;
@@ -53,7 +53,7 @@ public class ThrowingTutorial : MonoBehaviour
             forceDirection = (hit.point - attackPoint.position).normalized;
         }
 
-        //l?c nÈm
+        //l?c n√©m
         Vector3 forceToAdd = forceDirection * throwForce + transform.up * throwUpwardForce;
 
         projectileRB.AddForce(forceToAdd, ForceMode.Impulse);

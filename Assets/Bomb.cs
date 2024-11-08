@@ -31,13 +31,13 @@ public class Bomb : MonoBehaviour
         GameObject explosion = Instantiate(explosionEffect, transform.position, transform.rotation);
         Debug.Log("Explosion instantiated at: " + transform.position); // Log vị trí để kiểm tra
 
-        Destroy(gameObject);
+        // Hủy hiệu ứng nổ sau 5 giây
+        Destroy(explosion, 5f);
 
-        
+        // Hủy bom sau khi nổ
+        Destroy(gameObject);
 
         // Log để xác nhận rằng bom đã bị hủy
         Debug.Log("Bomb destroyed after explosion.");
     }
 }
-
-    
