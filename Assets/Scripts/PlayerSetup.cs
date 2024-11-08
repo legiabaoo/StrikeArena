@@ -1,5 +1,6 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
+using scgFullBodyController;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 public class PlayerSetup : MonoBehaviour
 {
-    public dichuyen movemnet;
+    public ThirdPersonUserControl movemnet;
     public Camera cameraPlayer;
     public Canvas canvas;
     public string nickname;

@@ -4,21 +4,15 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - chet
-  - FxTemporaire
-  - Combined Mesh
-  - Tile Mesh
-  - Rule Tile
-  - CinemachineTarget
-  - kedich
-  - dongdoi
-  - Attacker
-  - Defender
-  - tancong
-  - phongthu
-  - Spike
-  - Side
-  - OldPlayer
+  - concrete
+  - grass
+  - gravel
+  - water
+  - metal
+  - vaultObject
+  - Door
+  - hud
+  - hitCollider
   layers:
   - Default
   - TransparentFX
@@ -28,12 +22,12 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - player
+  - bullet
+  - weapon
+  - scopePost
+  - ground
+  - normalPost
   - 
   - 
   - 
