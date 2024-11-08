@@ -145,6 +145,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.NickName = nickname;
         GameObject currentPlayerObject = gameObject;
         CameraManager.instance.RespawnPlayerCamera(currentPlayerObject);
+        GunShop.instance.ResetGunPosition();
     }
 
     public void SetHashes()

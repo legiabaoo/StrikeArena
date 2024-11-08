@@ -2250,7 +2250,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 201797944}
   sceneViewId: 3
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -8549,7 +8550,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &750801072
 AudioListener:
   m_ObjectHideFlags: 0
@@ -11078,7 +11079,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &958552424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12754,6 +12755,7 @@ MonoBehaviour:
   - {fileID: 4563695519729902279, guid: 19499c100ccf3114bbdf8260e0c865ca, type: 3}
   - {fileID: 1694150165636238912, guid: dc354c63963ca8f45bfa28d254c1747e, type: 3}
   - {fileID: 4992266126766368194, guid: 3551801e5b0125f4d9a024c098a8bf87, type: 3}
+  gunPosition: {fileID: 0}
   gunPositions: []
   gunRotations: []
 --- !u!4 &1122015390
@@ -13590,7 +13592,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 750801071}
+      - m_Target: {fileID: 958552423}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
