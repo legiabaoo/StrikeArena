@@ -29,7 +29,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public Renderer playerRender;
     public string roomNameToJoin = "test";
 
-    public TMP_Text username;
+    public TMP_InputField username;
 
     public Dropdown dropdownManager;
     public GameObject attackTeamPrefab;  // Prefab cho ??i t?n công
@@ -51,7 +51,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
     private void Awake()
     {
         instance = this;
-
+        if (PlayerPrefs.HasKey("Username"))
+        {
+            username.text = PlayerPrefs.GetString("Username");
+            Debug.Log(username.text);
+            Debug.Log(PlayerPrefs.GetString("Username"));
+        }
     }
     void Update()
     {
@@ -74,6 +79,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         nameUI.SetActive(false);
         connectingUI.SetActive(true);
         thoigian.SetActive(true);
+        
     }
 
     public override void OnJoinedRoom()

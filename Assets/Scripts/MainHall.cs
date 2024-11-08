@@ -8,6 +8,10 @@ public class MainHall : MonoBehaviour
 {
     public TMP_Text username;
     // Start is called before the first frame update
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
     void Start()
     {
         
@@ -20,7 +24,7 @@ public class MainHall : MonoBehaviour
     }
     public void Play()
     {
-        RoomManager.instance.username.text = username.text;
+        PlayerPrefs.SetString("Username", username.text);
         SceneManager.LoadScene("Scene1");
     }
 }
