@@ -1,17 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class bomb : MonoBehaviour
+public class bomgaydau : MonoBehaviour
 {
-    [Header("Stats")]
-    public int health;
+    public float currentHealth = 100f;
 
-    public void TakeDamege(int damge)
+    public void TakeDamage(float amount)
     {
-        health -= damge;
+        currentHealth -= amount;
+        if (currentHealth <= 0f)
+        {
+            Die();
+        }
+    }
 
-        if (health <- 0 )
-            Destroy(gameObject);
+    void Die()
+    {
+        Debug.Log(gameObject.name + " has been destroyed!");
+        Destroy(gameObject);
     }
 }

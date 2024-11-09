@@ -1,12 +1,10 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Bomb : MonoBehaviour
+public class bomkhoi : MonoBehaviour
 {
     public GameObject explosionEffect; // Hiệu ứng nổ
     public float explosionDelay = 3f; // Thời gian đếm ngược trước khi nổ
-    public float explosionRadius = 5f; // Bán kính sát thương
-    public float explosionDamage = 50f; // Lượng sát thương
 
     private bool hasExploded = false;
 
@@ -32,19 +30,6 @@ public class Bomb : MonoBehaviour
         // Hiển thị hiệu ứng nổ
         GameObject explosion = Instantiate(explosionEffect, transform.position, transform.rotation);
         Debug.Log("Explosion instantiated at: " + transform.position); // Log vị trí để kiểm tra
-
-        // Gây sát thương lên tất cả đối tượng trong bán kính sát thương
-        Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
-        foreach (Collider nearbyObject in colliders)
-        {
-            // Kiểm tra xem đối tượng có thành phần Health hay không
-            bomgaydau bomgaydau = nearbyObject.GetComponent<bomgaydau>();
-            if (bomgaydau != null)
-            {
-                bomgaydau.TakeDamage(explosionDamage); // Gây sát thương
-                Debug.Log("Damage dealt to: " + nearbyObject.name); // Log đối tượng đã bị gây sát thương
-            }
-        }
 
         // Hủy hiệu ứng nổ sau 5 giây
         Destroy(explosion, 5f);

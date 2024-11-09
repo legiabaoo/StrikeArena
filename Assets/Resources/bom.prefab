@@ -471,7 +471,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionEffect: {fileID: 2504214343621411470, guid: 3ed0d324122d7b24eaec75c55c74aafc, type: 3}
-  explosionDelay: 2
+  explosionDelay: 5
 --- !u!1 &7759714358173280946
 GameObject:
   m_ObjectHideFlags: 0
