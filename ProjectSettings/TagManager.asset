@@ -13,6 +13,10 @@ TagManager:
   - Door
   - hud
   - hitCollider
+  - AmmoText
+  - nutngam
+  - Side
+  - OldPlayer
   layers:
   - Default
   - TransparentFX
