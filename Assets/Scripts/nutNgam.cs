@@ -25,18 +25,18 @@ public class nutNgam : MonoBehaviour
     {
         // Ki?m tra khi nút chu?t ph?i ???c nh?n
         // Ki?m tra khi nút chu?t ph?i ???c nh?n
-        if (Input.GetMouseButtonDown(1))
-        {
-            aimImage.SetActive(true);
-            // Zoom màn hình l?i
-            Camera.main.fieldOfView = zoomFieldOfView;
-        }
-        // Ki?m tra khi nút chu?t ph?i ???c th? ra
-        else if (Input.GetMouseButtonUp(1))
-        {
-            aimImage.SetActive(false);
-            // Khôi ph?c giá tr? field of view ban ??u c?a Camera
-            Camera.main.fieldOfView = initialFieldOfView;
-        }
+        //if (Input.GetMouseButtonDown(1))
+        //{
+        //    aimImage.SetActive(true);
+        //    // Zoom màn hình l?i
+        //    Camera.main.fieldOfView = zoomFieldOfView;
+        //}
+        //// Ki?m tra khi nút chu?t ph?i ???c th? ra
+        //else if (Input.GetMouseButtonUp(1))
+        //{
+        //    aimImage.SetActive(false);
+        //    // Khôi ph?c giá tr? field of view ban ??u c?a Camera
+        //    Camera.main.fieldOfView = initialFieldOfView;
+        //}
     }
 }

@@ -1,4 +1,4 @@
-using Photon.Pun;
+Ôªøusing Photon.Pun;
 using Photon.Realtime;
 using System.Linq;
 using TMPro;
@@ -6,51 +6,61 @@ using UnityEngine;
 
 public class GunShop : MonoBehaviourPun
 {
-    public GameObject shopUI;                  // UI c?a h‡ng
+    public static GunShop instance;
+    public GameObject shopUI;                  // UI c?a h√†ng
     public int playerMoney = 500;              // Ti?n c?a ng??i ch?i
-    public int gunPrice = 100;                 // Gi· c?a m?i s˙ng
-    public GameObject[] gunPrefabs;            // M?ng ch?a c·c prefab s˙ng
+    public int gunPrice = 100;                 // Gi√° c?a m?i s√∫ng
+    public GameObject[] gunPrefabs;            // M?ng ch?a c√°c prefab s√∫ng
 
-    private Transform gunPosition;             // V? trÌ g?n s˙ng trong nh‚n v?t
-    private bool gunPositionFound = false;     // C? ?? ki?m tra xem ?„ tÏm th?y v? trÌ g?n s˙ng ch?a
-    public Vector3[] gunPositions; // M?ng l?u v? trÌ c? ??nh c?a m?i c‚y s˙ng
-    public Quaternion[] gunRotations; // M?ng l?u rotation c? ??nh c?a m?i c‚y s˙ng
+    public Transform gunPosition;             // V? tr√≠ g?n s√∫ng trong nh√¢n v?t
+    private bool gunPositionFound = false;     // C? ?? ki?m tra xem ?ƒÉ tÃÅm th?y v? tr√≠ g?n s√∫ng ch?a
+    public Vector3[] gunPositions; // M?ng l?u v? tr√≠ c? ??nh c?a m?i c√¢y s√∫ng
+    public Quaternion[] gunRotations; // M?ng l?u rotation c? ??nh c?a m?i c√¢y s√∫ng
     private WeaponSwitcher weaponSwitcher;
+    private void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
         // Ki?m tra gunPrefabs
         if (gunPrefabs == null || gunPrefabs.Length == 0)
         {
-            Debug.LogError("gunPrefabs khÙng ???c g·n ho?c tr?ng!");
+            Debug.LogError("gunPrefabs kh√¥ng ???c g√°n ho?c tr?ng!");
         }
-        gunPositions = new Vector3[10]; // 10 c‚y s˙ng
+        gunPositions = new Vector3[10]; // 10 c√¢y s√∫ng
         gunRotations = new Quaternion[10];
        
-        // VÌ d? g·n v? trÌ v‡ rotation cho 10 c‚y s˙ng
-        gunPositions[0] = new Vector3(-669.460022f, -221.089996f, 1f); // V? trÌ cho s˙ng s? 1
-        gunRotations[0] = Quaternion.Euler(13, -99.3f, 13); // Rotation cho s˙ng s? 1
+        // V√≠ d? g√°n v? tr√≠ v√† rotation cho 10 c√¢y s√∫ng
+        gunPositions[0] = new Vector3(-669.460022f, -221.089996f, 1f); // V? tr√≠ cho s√∫ng s? 1
+        gunRotations[0] = Quaternion.Euler(13, -99.3f, 13); // Rotation cho s√∫ng s? 1
 
-        gunPositions[1] = new Vector3(-669.1f, -221.3f, 1.32f); // V? trÌ cho s˙ng s? 2
-        gunRotations[1] = Quaternion.Euler(-1.24f, 86.72f, 1.38f); // Rotation cho s˙ng s? 2
+        gunPositions[1] = new Vector3(-669.1f, -221.3f, 1.32f); // V? tr√≠ cho s√∫ng s? 2
+        gunRotations[1] = Quaternion.Euler(-1.24f, 86.72f, 1.38f); // Rotation cho s√∫ng s? 2
 
 
-        gunPositions[2] = new Vector3(-669.6f, -221.3f, 0.7f); // V? trÌ cho s˙ng s? 3
-        gunRotations[2] = Quaternion.Euler(-178.8f, 0.86f, 0.9f); // Rotation cho s˙ng s? 3
+        gunPositions[2] = new Vector3(-669.6f, -221.3f, 0.7f); // V? tr√≠ cho s√∫ng s? 3
+        gunRotations[2] = Quaternion.Euler(-178.8f, 0.86f, 0.9f); // Rotation cho s√∫ng s? 3
     }
 
     void Update()
     {
-        // TÏm nh‚n v?t c?a ng??i ch?i v‡ v? trÌ g?n s˙ng n?u ch?a tÏm th?y
+        // TÃÅm nh√¢n v?t c?a ng??i ch?i v√† v? tr√≠ g?n s√∫ng n?u ch?a tÃÅm th?y
         if (!gunPositionFound && PhotonNetwork.IsConnected)
         {
             FindPlayerGunPosition();
         }
 
-        // M? UI c?a h‡ng khi nh?n phÌm B
+        // M? UI c?a h√†ng khi nh?n ph√≠m B
         if (Input.GetKeyDown(KeyCode.B))
         {
             ToggleShopUI();
         }
+    }
+    public void ResetGunPosition()
+    {
+        gunPositionFound = false;
+        FindPlayerGunPosition(); // G·ªçi l·∫°i h√†m t√¨m v·ªã tr√≠ ƒë·ªÉ c·∫≠p nh·∫≠t gunPosition
     }
 
     void ToggleShopUI()
@@ -70,7 +80,7 @@ public class GunShop : MonoBehaviourPun
     }
 
 
-    void FindPlayerGunPosition()
+    public void FindPlayerGunPosition()
 {
     foreach (var player in FindObjectsOfType<PhotonView>())
     {
@@ -78,23 +88,23 @@ public class GunShop : MonoBehaviourPun
         if (player.IsMine)
         {
                 Vector3 playerPosition = player.transform.position;
-                Debug.Log("V? trÌ c?a ng??i ch?i: " + playerPosition);
-                // TÏm `GunPosition` theo ???ng d?n ??y ?? trong c?u tr˙c `Hierarchy`
-                gunPosition = player.transform.Find("Main Camera/GunPosition"); // ?„ ?i?u ch?nh ???ng d?n
+           
+                // TÃÅm `GunPosition` theo ???ng d?n ??y ?? trong c?u tr√∫c `Hierarchy`
+                gunPosition = player.transform.Find("Main Camera/GunPosition"); // ?ƒÉ ?i?u ch?nh ???ng d?n
 
             if (gunPosition != null)
             {
-                gunPositionFound = true; // ?„ tÏm th?y v? trÌ g?n s˙ng
-                Debug.Log("?„ tÏm th?y v? trÌ GunPosition: " + gunPosition.position);
+                gunPositionFound = true; // ?ƒÉ tÃÅm th?y v? tr√≠ g?n s√∫ng
+           
                 
-                // L?y v? trÌ c?a ng??i ch?i
+                // L?y v? tr√≠ c?a ng??i ch?i
               
             }
             else
             {
-                Debug.LogWarning("KhÙng tÏm th?y v? trÌ GunPosition. Ki?m tra ???ng d?n trong c?u tr˙c nh‚n v?t.");
+            
             }
-            break; // K?t th˙c vÚng l?p sau khi tÏm th?y ng??i ch?i
+            break; // K?t th√∫c vÃ£ng l?p sau khi tÃÅm th?y ng??i ch?i
         }
     }
 }
@@ -104,18 +114,18 @@ public class GunShop : MonoBehaviourPun
 
     public void BuyGunButton(int gunIndex)
     {
-        Debug.Log("Mua s˙ng v?i ch? s?: " + gunIndex);
+        Debug.Log("Mua s√∫ng v?i ch? s?: " + gunIndex);
         Debug.Log("Ti?n ng??i ch?i: " + playerMoney);
         Debug.Log("vi tri sung: " + gunIndex);
         if (gunPosition == null)
         {
-            Debug.LogError("KhÙng tÏm th?y v? trÌ g?n s˙ng (gunPosition)!");
+            Debug.LogError("Kh√¥ng tÃÅm th?y v? tr√≠ g?n s√∫ng (gunPosition)!");
             return;
         }
 
         if (gunIndex < 0 || gunIndex >= gunPrefabs.Length)
         {
-            Debug.LogError("Ch? s? s˙ng khÙng h?p l?: " + gunIndex);
+            Debug.LogError("Ch? s? s√∫ng kh√¥ng h?p l?: " + gunIndex);
             return;
         }
 
@@ -126,7 +136,7 @@ public class GunShop : MonoBehaviourPun
         }
         else
         {
-            Debug.Log("KhÙng ?? ti?n ?? mua s˙ng.");
+            Debug.Log("Kh√¥ng ?? ti?n ?? mua s√∫ng.");
         }
         /*if (gunIndex == 2 )
         {
@@ -137,28 +147,30 @@ public class GunShop : MonoBehaviourPun
             weaponSwitcher.SetNutbanImageActive(true);
         }*/
     }
-  
+
 
     [PunRPC]
     void CreateGunForPlayer(int playerID, int gunIndex)
     {
-        // Ki?m tra n?u ?‚y l‡ ng??i ch?i hi?n t?i v‡ s˙ng h?p l?
+        // Ki?m tra n?u ?√¢y l√† ng??i ch?i hi?n t?i v√† ch? s? s√∫ng h?p l?
         if (PhotonNetwork.LocalPlayer.ActorNumber == playerID && gunIndex >= 0 && gunIndex < gunPrefabs.Length)
         {
-            // L?y v? trÌ v‡ rotation cho s˙ng t??ng ?ng
+            // L?y v? tr√≠ v√† rotation cho s√∫ng t??ng ?ng
             Vector3 fixedPosition = gunPositions[gunIndex];
             Quaternion fixedRotation = gunRotations[gunIndex];
 
-            // T?o s˙ng t?i v? trÌ v‡ rotation c? ??nh
-            GameObject gunInstance = Instantiate(gunPrefabs[gunIndex], fixedPosition, fixedRotation);
+            // T?o v√† ??ng b? c√¢y s√∫ng tr√™n t?t c? client
+            GameObject gunInstance = PhotonNetwork.Instantiate(gunPrefabs[gunIndex].name, fixedPosition, fixedRotation);
 
-            // G·n c‚y s˙ng v‡o gunPosition n?u c?n thi?t, n?u khÙng thÏ g·n null
-            gunInstance.transform.SetParent(gunPosition,false); // G·n khÙng cÛ cha
+            // G√°n c√¢y s√∫ng v√†o gunPosition n?u c?n thi?t
+            gunInstance.transform.SetParent(gunPosition, false);
+
+            // Thi?t l?p c√°c thu?c t√≠nh cho script Weapon n?u c?n
             Weapon weaponScript = gunInstance.GetComponent<Weapon>();
             if (weaponScript != null)
             {
-                // TÏm camera c?a ng??i ch?i qua tag ho?c qua c?u tr˙c hierarchy
-                Camera playerCamera = Camera.main; // N?u ?„ g·n tag "MainCamera" cho camera ng??i ch?i
+                // TÃÅm camera c?a ng??i ch?i qua tag ho?c c?u tr√∫c hierarchy
+                Camera playerCamera = Camera.main; // N?u ?ƒÉ g√°n tag "MainCamera" cho camera ng??i ch?i
                 if (playerCamera != null)
                 {
                     weaponScript.camera = playerCamera;
@@ -168,31 +180,9 @@ public class GunShop : MonoBehaviourPun
                 {
                     weaponScript.ammoText = ammoText;
                 }
-
             }
-          /*  nutNgam nutNgam = gunInstance.GetComponent<nutNgam>();
-        
-            // TÏm ??i t??ng Player c?a ng??i ch?i hi?n t?i
-            PhotonView playerView = FindObjectsOfType<PhotonView>().FirstOrDefault(p => p.IsMine);
-            if (playerView != null)
-            {
-                Transform nutngamTransform = playerView.transform.Find("Main Camera/Cavas/nutNgam");
-                if (nutngamTransform != null)
-                {
-                    GameObject nutngam = nutngamTransform.gameObject;
-                    nutNgam.aimImage = nutngam;
-                }
-                else
-                {
-                    Debug.LogWarning("KhÙng tÏm th?y nutngam trong c?u tr˙c Player.");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("KhÙng tÏm th?y ??i t??ng Player c?a ng??i ch?i hi?n t?i.");
-            }*/
 
-            Debug.Log("S˙ng s? " + gunIndex + " ???c t?o t?i v? trÌ: " + fixedPosition + " v?i rotation: " + fixedRotation.eulerAngles);
+            Debug.Log("S√∫ng s? " + gunIndex + " ?ƒÉ ???c t?o t?i v? tr√≠: " + fixedPosition + " v?i rotation: " + fixedRotation.eulerAngles);
         }
     }
 

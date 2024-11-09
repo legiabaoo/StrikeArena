@@ -1,9 +1,11 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Photon.Realtime;
+using Unity.VisualScripting;
+using TMPro;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
@@ -27,30 +29,42 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public Renderer playerRender;
     public string roomNameToJoin = "test";
 
+    public TMP_InputField username;
+
     public Dropdown dropdownManager;
-    public GameObject attackTeamPrefab;  // Prefab cho ??i t?n c�ng
-    public GameObject defenseTeamPrefab; // Prefab cho ??i ph�ng th?
+    public GameObject attackTeamPrefab;  // Prefab cho ??i t?n công
+    public GameObject defenseTeamPrefab; // Prefab cho ??i pḥng th?
 
     [Space]
-    public Transform[] attackSpawnPoints; // ?i?m spawn cho ??i t?n c�ng
-    public Transform[] defenseSpawnPoints; // ?i?m spawn cho ??i ph�ng th?
+    public Transform[] attackSpawnPoints; // ?i?m spawn cho ??i t?n công
+    public Transform[] defenseSpawnPoints; // ?i?m spawn cho ??i pḥng th?
 
     private GameObject currentPlayer;
-    public TimeManager timeManager;// L?u tr? tham chi?u ??n nh�n v?t hi?n t?i
+    public TimeManager timeManager;// L?u tr? tham chi?u ??n nhân v?t hi?n t?i
 
     public GameObject TeamDoThang;
     public GameObject TeamXanhThang;
+
+    public bool hasCalledEndGame = false;
 
     health health;
     private void Awake()
     {
         instance = this;
+        if (PlayerPrefs.HasKey("Username"))
+        {
+            username.text = PlayerPrefs.GetString("Username");
+            Debug.Log(username.text);
+            Debug.Log(PlayerPrefs.GetString("Username"));
+        }
     }
     void Update()
     {
         CountPlayersInTeams();
-     
-      
+        //if (TimeManager.instance.startGame && !TimeManager.instance.isGameOver)
+        //{
+        //CheckRedTeamStatus();
+        //}
     }
     public void ChangeNickname(string _name)
     {
@@ -61,30 +75,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         Debug.Log("Ket Noi ...");
         PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.JoinOrCreateRoom(roomNameToJoin, null, null);
         nameUI.SetActive(false);
         connectingUI.SetActive(true);
         thoigian.SetActive(true);
+        
     }
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
-    public override void OnConnectedToMaster()
-    {
-        base.OnConnectedToMaster();
-        Debug.Log("Dang Ket Noi Sever...");
-        PhotonNetwork.JoinLobby();
-
-    }
-    public override void OnJoinedLobby()
-    {
-        base.OnJoinedLobby();
-
-        PhotonNetwork.JoinOrCreateRoom(roomNameToJoin, null, null);
-        Debug.Log("Dang ket noi va o trong phong ngay bay gio");
-
-    }
     public override void OnJoinedRoom()
     {
 
@@ -97,61 +94,60 @@ public class RoomManager : MonoBehaviourPunCallbacks
         Debug.Log("Number of players in room: " + PhotonNetwork.CurrentRoom.PlayerCount);
 
         Debug.Log("You are currently in the dev region: " + PhotonNetwork.CloudRegion);
+        CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
 
     }
-
-    public void ResPawnPlayer()
+    public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        GameObject _player = PhotonNetwork.Instantiate(player.name, spawnPoint.position, Quaternion.identity);
-        _player.GetComponent<PlayerSetup>().IsLocalPlayer();
-        _player.GetComponent<health>().isLocalPlayer = true;
-        _player.GetComponent<PhotonView>().RPC("SetNickname", RpcTarget.AllBuffered, nickname);
-        PhotonNetwork.LocalPlayer.NickName = nickname;
-
+        base.OnPlayerEnteredRoom(newPlayer);
+        // Gọi lại để cập nhật danh sách camera khi có người chơi mới
+        CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
     }
-
 
     public void HandleTeamSelection()
     {
-        // L?y gi� tr? team ???c ch?n t? DropdownManager
+        // L?y giá tr? team ???c ch?n t? DropdownManager
         int selectedTeam = dropdownManager.teamDropdown.value; // L?y ch? s? c?a team ???c ch?n
 
         Transform spawnPoint;
         GameObject teamPrefab;
 
-        if (selectedTeam == 0) // N?u ??i t?n c�ng ???c ch?n
+        if (selectedTeam == 0) // N?u ??i t?n công ???c ch?n
         {
-            Debug.Log("??i t?n c�ng ???c ch?n.");
+            Debug.Log("??i t?n công ???c ch?n.");
             spawnPoint = attackSpawnPoints[Random.Range(0, attackSpawnPoints.Length)];
-            teamPrefab = attackTeamPrefab; // Nh�n v?t cho ??i t?n c�ng
+            teamPrefab = attackTeamPrefab; // Nhân v?t cho ??i t?n công
         }
-        else // N?u ??i ph�ng th? ???c ch?n
+        else // N?u ??i pḥng th? ???c ch?n
         {
-            Debug.Log("??i ph�ng th? ???c ch?n.");
+            Debug.Log("??i pḥng th? ???c ch?n.");
             spawnPoint = defenseSpawnPoints[Random.Range(0, defenseSpawnPoints.Length)];
-            teamPrefab = defenseTeamPrefab; // Nh�n v?t cho ??i ph�ng th?
+            teamPrefab = defenseTeamPrefab; // Nhân v?t cho ??i pḥng th?
         }
 
-        // T?o nh�n v?t t?i ?i?m spawn t??ng ?ng v� ??ng b? h�a gi?a t?t c? ng??i ch?i
+        // T?o nhân v?t t?i ?i?m spawn t??ng ?ng và ??ng b? hóa gi?a t?t c? ng??i ch?i
         GameObject _player = PhotonNetwork.Instantiate(teamPrefab.name, spawnPoint.position, spawnPoint.rotation);
 
-        // G�n team cho ng??i ch?i trong Custom Properties
-        Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
-        hash["isAlive"] = true;
-        hash["team"] = selectedTeam;
-        hash["spawnPoint"] = spawnPoint.position;// G�n team v�o Custom Properties
+        Hashtable hash = new Hashtable
+        {
+            { "isAlive", true },
+            { "team", selectedTeam },
+            { "spawnPoint", spawnPoint.position }
+        };
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 
-        // ??t t�n ng??i ch?i
+        // ??t tên ng??i ch?i
         _player.GetComponent<PhotonView>().RPC("SetNickname", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.NickName);
         _player.GetComponent<PlayerSetup>().IsLocalPlayer();
         _player.GetComponent<health>().isLocalPlayer = true;
 
+
         PhotonNetwork.LocalPlayer.NickName = nickname;
-        
+        GameObject currentPlayerObject = gameObject;
+        CameraManager.instance.RespawnPlayerCamera(currentPlayerObject);
+        GunShop.instance.ResetGunPosition();
     }
-    
+
     public void SetHashes()
     {
         try
@@ -173,16 +169,16 @@ public class RoomManager : MonoBehaviourPunCallbacks
         int redTeamCount = 0;
         int blueTeamCount = 0;
 
-        // L?y danh s�ch t?t c? ng??i ch?i trong ph�ng
+        // L?y danh sách t?t c? ng??i ch?i trong pḥng
         Player[] players = PhotonNetwork.PlayerList;
 
         // Duy?t qua t?ng ng??i ch?i
         foreach (Player player in players)
         {
-            // Ki?m tra n?u ng??i ch?i c� Custom Properties ch?a key "team"
+            // Ki?m tra n?u ng??i ch?i có Custom Properties ch?a key "team"
             if (player.CustomProperties.TryGetValue("team", out var teamValue))
             {
-                int team = (int)teamValue; // Chuy?n ??i gi� tr? sang ki?u int
+                int team = (int)teamValue; // Chuy?n ??i giá tr? sang ki?u int
 
                 // ??m s? l??ng ng??i ch?i thu?c team ?? ho?c xanh
                 if (team == 0) // ??i ??
@@ -195,48 +191,97 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 }
             }
         }
-        if(redTeamCount > 0 && blueTeamCount > 0)
+        if (redTeamCount >= 1 && blueTeamCount >= 1)
         {
-            if(redTeamCount == 0)
-            {
-                TeamXanhThang.SetActive(true);
-            }
-            if(blueTeamCount == 0)
-            {
-                TeamDoThang.SetActive(true);
-            }
+            TimeManager.instance.startGame = true;
         }
-      
-       
+        //else
+        //{
+        //    TimeManager.instance.startGame = false;
+        //}
+
     }
     public void UpdatePlayerStatus(bool isAlive)
     {
-        Hashtable hash = new Hashtable();
-        hash["isAlive"] = isAlive;
-        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        Hashtable properties = new Hashtable
+            {
+                { "isAlive", isAlive }
+            };
+        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
 
-        CheckRedTeamStatus();
     }
-   
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        Debug.Log("Custom Properties updated: " + targetPlayer.CustomProperties.ToStringFull());
+
+        if (targetPlayer.CustomProperties.ContainsKey("isAlive"))
+        {
+            if (PhotonNetwork.IsMasterClient)  // Chỉ gọi từ Master Client để tránh việc gọi trùng lặp từ các máy khách
+            {
+                CheckRedTeamStatus();
+            }
+            CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
+        }
+    }
+
     public void CheckRedTeamStatus()
     {
         int aliveRedCount = 0;
+        int aliveBlueCount = 0;
+        bool allDeadRed = true;  // Biến này sẽ xác nhận nếu tất cả đội đỏ đã chết
+        bool allDeadBlue = true;
+
         foreach (Player player in PhotonNetwork.PlayerList)
         {
-            if (player.CustomProperties.TryGetValue("team", out var teamValue) && (int)teamValue == 0)
+            // Kiểm tra nếu người chơi thuộc đội đỏ
+            if (player.CustomProperties.TryGetValue("team", out var teamValueRed) && (int)teamValueRed == 0)
             {
+                // Kiểm tra nếu người chơi còn sống
                 if (player.CustomProperties.TryGetValue("isAlive", out var isAliveValue) && (bool)isAliveValue)
                 {
                     aliveRedCount++;
+                    allDeadRed = false;  // Có ít nhất một người chơi còn sống
+                }
+            }
+            if (player.CustomProperties.TryGetValue("team", out var teamValueBlue) && (int)teamValueBlue == 1)
+            {
+                // Kiểm tra nếu người chơi còn sống
+                if (player.CustomProperties.TryGetValue("isAlive", out var isAliveValue) && (bool)isAliveValue)
+                {
+                    aliveBlueCount++;
+                    allDeadBlue = false;  // Có ít nhất một người chơi còn sống
                 }
             }
         }
-
-        if (aliveRedCount == 0)
+        Debug.Log("allDeadRed: " + allDeadRed);
+        Debug.Log("allDeadBlue: " + allDeadBlue);
+        // Kiểm tra nếu tất cả đội đỏ đã chết
+        if (allDeadRed && TimeManager.instance.startGame && !TimeManager.instance.isGameOver && !hasCalledEndGame)
         {
-            // N?u t?t c? th�nh vi�n ??i ?? ?� ch?t, reset th?i gian
-           
-            timeManager.EndGame();
+            hasCalledEndGame = true;
+            Debug.Log("Đội đỏ đã chết hết");
+            TimeManager.instance.isAllDeathRed = true;
+        }
+        // Kiểm tra nếu tất cả đội xanh đã chết
+        if (allDeadBlue && TimeManager.instance.startGame && !TimeManager.instance.isGameOver && !hasCalledEndGame)
+        {
+            hasCalledEndGame = true;
+            Debug.Log("Đội xanh đã chết hết");
+            TimeManager.instance.isAllDeathBlue = true;
+        }
+    }
+
+    public void RemovePlayerInstances()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("OldPlayer");
+
+        foreach (GameObject player in players)
+        {
+            PhotonView photonView = player.GetComponent<PhotonView>();
+            if (photonView != null)
+            {
+                photonView.RPC("RequestDestroyPlayer", RpcTarget.AllBuffered, photonView.ViewID);
+            }
         }
     }
 }

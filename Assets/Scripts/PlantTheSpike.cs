@@ -2,164 +2,158 @@
 using Photon.Pun;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI; // Để sử dụng các thành phần UI
+using UnityEngine.UI;
 
 public class PlantTheSpike : MonoBehaviour
 {
-    public GameObject spikePrefab; // Prefab của Spike
-    public float holdTimeRequired = 3.0f; // Thời gian giữ phím cần thiết (3 giây)
-    public Slider progressBar; // Thanh loading
-
-    private float holdTime = 0.0f; // Biến đếm thời gian giữ phím
-    private bool hasPlacedBomb = false; // Biến kiểm tra xem bom đã được đặt hay chưa
-    private bool canPlantBomb = false; // Biến kiểm tra người chơi có thể đặt bom hay không
-    private Vector3 vertor3;
-    private float blinkInterval = 0.5f; // Thời gian nhấp nháy spike
+    public static PlantTheSpike instance;
+    public GameObject spikePrefab;
+    public float holdTimeRequired = 3.0f;
+    public Slider progressBar;
     public Image iconPlant;
+
+    private float holdTime = 0.0f;
+    public bool hasPlacedBomb = false;
+    private bool canPlantBomb = false;
+    private bool isBlinking = false;
+    public bool spikeExists = false;
+    public bool isLocalPlayer;
+    private Vector3 spikePosition;
+
+    private float blinkInterval = 0.5f;
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
-        progressBar = GameObject.Find("ProgressBar").GetComponent<Slider>();
-        
-        // Đặt giá trị ban đầu cho thanh progressBar
-        progressBar.gameObject.SetActive(false); // Ẩn thanh loading khi chưa nhấn phím
-        progressBar.value = 0f; // Đặt giá trị ban đầu của thanh loading là 0
+        if (isLocalPlayer) { progressBar = GameObject.Find("ProgressBar").GetComponent<Slider>();}
 
-        // Kiểm tra custom properties để xác định trạng thái của spike
+        
+        progressBar.gameObject.SetActive(false);
+        progressBar.value = 0f;
+
         if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
         {
-            bool spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
-            if (!spikeExists)
-            {
-                // Nếu spike không tồn tại, gọi hàm để xóa spike từ scene
-                RemoveSpikeFromScene();
-            }
+            spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
+            if (!spikeExists) RemoveSpikeFromScene();
         }
     }
 
     void Update()
     {
-        //if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
-        //{
-        //    bool spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
-        //    if (!spikeExists)
-        //    {
-        //        StopBlinkingIcon();
-        //    }
-        //}
-        // Nếu chưa đặt bom thì mới cho phép đặt bom và hiển thị thanh loading
-        if (!hasPlacedBomb && canPlantBomb)
+        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("SpikeExists"))
         {
-            if (Input.GetKey(KeyCode.Alpha4))
+            bool currentSpikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
+            if (currentSpikeExists != spikeExists)
             {
-                // Bật thanh loading
+                spikeExists = currentSpikeExists;
+                if (spikeExists)
+                    StartBlinking();
+                else
+                    StopBlinkingIcon();
+            }
+        }
+
+
+        if (Input.GetKey(KeyCode.Alpha4))
+        {
+            if (!hasPlacedBomb && canPlantBomb)
+            {
                 progressBar.gameObject.SetActive(true);
-
-                // Tăng thời gian giữ phím
                 holdTime += Time.deltaTime;
-
-                // Cập nhật thanh loading (progressBar)
                 progressBar.value = holdTime / holdTimeRequired;
 
-                // Nếu giữ đủ thời gian yêu cầu, đặt bom
                 if (holdTime >= holdTimeRequired)
                 {
                     PlaceSpike();
+                    Debug.Log("plant");
                     hasPlacedBomb = true;
-                    progressBar.gameObject.SetActive(false); // Ẩn thanh loading sau khi đặt bom
+                    progressBar.gameObject.SetActive(false);
                 }
             }
-            else
-            {
-                // Nếu thả phím, reset thời gian và ẩn thanh loading
-                holdTime = 0.0f;
-                progressBar.value = 0f; // Reset giá trị thanh loading
-                progressBar.gameObject.SetActive(false); // Ẩn thanh loading
-            }
         }
+        else
+        {
+            holdTime = 0.0f;
+            progressBar.value = 0f;
+            progressBar.gameObject.SetActive(false);
+        }
+
     }
 
-    // Hàm sinh đối tượng Spike tại vị trí của người chơi
     void PlaceSpike()
     {
-        vertor3 = GameObject.Find("positionSpike").transform.position;
-
-        GameObject spike = PhotonNetwork.Instantiate(spikePrefab.name, vertor3, Quaternion.identity);
-
-        // Lấy PhotonView của spike sau khi instantiate
+        spikePosition = GameObject.Find("positionSpike").transform.position;
+        GameObject spike = PhotonNetwork.Instantiate(spikePrefab.name, spikePosition, Quaternion.identity);
         PhotonView spikePhotonView = spike.GetComponent<PhotonView>();
 
         if (spikePhotonView != null)
         {
-            
-
-            // Gọi RPC để đồng bộ hóa tag
             spikePhotonView.RPC("SetSpikeTag", RpcTarget.AllBuffered, spikePhotonView.ViewID);
-
-            PhotonView.Get(this).RPC("StartBlinking", RpcTarget.All);
-
-            // Cập nhật custom properties để đánh dấu rằng spike đã được đặt
-            ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-            properties["SpikeExists"] = true; // Spike tồn tại
+            //PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "SpikeExists", true } });
+            ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable
+            {
+                { "SpikeExists", true }
+            };
             PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+            //SpikeManager.instance.photonView.RPC("ReateIsSpikeExists", RpcTarget.AllBuffered, true);
+            //TimeManager.instance.isPlantSpike = true;
+            PhotonView.Get(this).RPC("SetIsPlantSpike2", RpcTarget.AllBuffered);
         }
         else
         {
             Debug.LogError("No PhotonView found on Spike prefab!");
         }
-        
     }
-
+    [PunRPC]
+    public void SetIsPlantSpike2()
+    {
+        TimeManager.instance.isPlantSpike = true;
+    }
     [PunRPC]
     public void StartBlinking()
     {
-        StartCoroutine(Blink());
+        if (!isBlinking)
+        {
+            isBlinking = true;
+            StartCoroutine(Blink());
+        }
     }
 
     private IEnumerator Blink()
     {
-        Debug.Log("Blinking started.");
-        while (true) // Vòng lặp vô hạn
+        while (isBlinking)
         {
+            iconPlant.gameObject.SetActive(false);
+            yield return new WaitForSeconds(blinkInterval);
 
-            iconPlant.gameObject.SetActive(false); // Tắt đối tượng
-            yield return new WaitForSeconds(blinkInterval); // Chờ một khoảng thời gian
-
-            iconPlant.gameObject.SetActive(true); // Bật đối tượng
-            yield return new WaitForSeconds(blinkInterval); // Chờ một khoảng thời gian
+            iconPlant.gameObject.SetActive(true);
+            yield return new WaitForSeconds(blinkInterval);
         }
     }
+
     private void RemoveSpikeFromScene()
     {
-        // Tìm và xóa spike nếu nó tồn tại trong scene
         GameObject spike = GameObject.FindWithTag("Spike");
-        if (spike != null)
-        {
-            Destroy(spike); // Hủy spike nếu tìm thấy
-        }
+        if (spike != null) Destroy(spike);
     }
 
-
-    // Khi người chơi va chạm với đối tượng có tag "Side"
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Side"))
-        {
-            canPlantBomb = true; // Cho phép đặt bom khi ở trên đối tượng có tag "Side"
-        }
+        if (other.CompareTag("Side")) canPlantBomb = true;
     }
 
-    // Khi người chơi rời khỏi đối tượng có tag "Side"
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Side"))
-        {
-            canPlantBomb = false; // Không cho phép đặt bom khi rời khỏi đối tượng có tag "Side"
-        }
+        if (other.CompareTag("Side")) canPlantBomb = false;
     }
+
     private void StopBlinkingIcon()
     {
+        isBlinking = false;
         StopCoroutine(Blink());
-        iconPlant.gameObject.SetActive(false); // Tắt icon khi không cần nhấp nháy
+        iconPlant.gameObject.SetActive(false);
     }
 }

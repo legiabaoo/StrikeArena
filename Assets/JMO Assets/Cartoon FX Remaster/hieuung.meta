@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/JMO Assets/Cartoon FX Remaster/hieuung.meta
 guid: 2e1fe2dd1f94ef34ba9fc619aa707bf0
+========
+guid: 4921d70f9bb590741b04d8c028461d04
+>>>>>>>> origin/bao-backup2:Assets/swat.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
