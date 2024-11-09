@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using Photon.Pun;
 using TMPro;
+using Photon.Realtime;
 
 
 public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
@@ -158,11 +159,11 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         currentPhase = GamePhase.Buy;
         currentTime = buyPhaseTime;
-        
     }
 
     private void StartBattlePhase()
     {
+        RoomManager.instance.hasCalledEndGame = false;
         currentPhase = GamePhase.Battle;
         currentTime = battlePhaseTime;
     }
@@ -189,11 +190,12 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         RoomManager.instance.HandleTeamSelection();
         RoomManager.instance.RemovePlayerInstances();
+        GunShop.instance.playerMoney = 800;
         //if (isGameOver)
         //{
 
         isGameOver = false;
-        RoomManager.instance.hasCalledEndGame = false;
+        //startGame = true;
         isSpikeTime = false;
         isPlantSpike = false;
         //set lai SpikeExists la false

@@ -17,6 +17,7 @@ public class PlayerSetup : MonoBehaviour
     [SerializeField]
     private int actorNumber; // Biến này sẽ hiển thị trong Inspector
 
+
     void Awake()
     {
         photonView = GetComponent<PhotonView>(); // Gán photonView ở đây
@@ -30,6 +31,11 @@ public class PlayerSetup : MonoBehaviour
         {
             actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
         }
+    }
+
+    private void Update()
+    {
+        
     }
 
     public void IsLocalPlayer()

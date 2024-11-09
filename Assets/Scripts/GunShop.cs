@@ -3,12 +3,13 @@ using Photon.Realtime;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GunShop : MonoBehaviourPun
 {
     public static GunShop instance;
     public GameObject shopUI;                  // UI c?a hàng
-    public int playerMoney = 500;              // Ti?n c?a ng??i ch?i
+    public int playerMoney = 800;              // Ti?n c?a ng??i ch?i
     public int gunPrice = 100;                 // Giá c?a m?i súng
     public GameObject[] gunPrefabs;            // M?ng ch?a các prefab súng
 
@@ -17,6 +18,7 @@ public class GunShop : MonoBehaviourPun
     public Vector3[] gunPositions; // M?ng l?u v? trí c? ??nh c?a m?i cây súng
     public Quaternion[] gunRotations; // M?ng l?u rotation c? ??nh c?a m?i cây súng
     private WeaponSwitcher weaponSwitcher;
+    private Text txtTien;
     private void Awake()
     {
         instance = this;
@@ -30,7 +32,7 @@ public class GunShop : MonoBehaviourPun
         }
         gunPositions = new Vector3[10]; // 10 cây súng
         gunRotations = new Quaternion[10];
-       
+
         // Ví d? gán v? trí và rotation cho 10 cây súng
         gunPositions[0] = new Vector3(-669.460022f, -221.089996f, 1f); // V? trí cho súng s? 1
         gunRotations[0] = Quaternion.Euler(13, -99.3f, 13); // Rotation cho súng s? 1
@@ -45,6 +47,7 @@ public class GunShop : MonoBehaviourPun
 
     void Update()
     {
+        //SetMoney(playerMoney);
         // T́m nhân v?t c?a ng??i ch?i và v? trí g?n súng n?u ch?a t́m th?y
         if (!gunPositionFound && PhotonNetwork.IsConnected)
         {
@@ -81,71 +84,118 @@ public class GunShop : MonoBehaviourPun
 
 
     public void FindPlayerGunPosition()
-{
-    foreach (var player in FindObjectsOfType<PhotonView>())
     {
-        // Ch? ki?m tra ??i t??ng c?a ng??i ch?i hi?n t?i
-        if (player.IsMine)
+        foreach (var player in FindObjectsOfType<PhotonView>())
         {
+            // Ch? ki?m tra ??i t??ng c?a ng??i ch?i hi?n t?i
+            if (player.IsMine)
+            {
                 Vector3 playerPosition = player.transform.position;
-           
-                // T́m `GunPosition` theo ???ng d?n ??y ?? trong c?u trúc `Hierarchy`
-                gunPosition = player.transform.Find("Main Camera/GunPosition"); // ?ă ?i?u ch?nh ???ng d?n
 
-            if (gunPosition != null)
-            {
-                gunPositionFound = true; // ?ă t́m th?y v? trí g?n súng
-           
+                gunPosition = player.transform.Find("Main Camera/GunPosition");
                 
-                // L?y v? trí c?a ng??i ch?i
-              
+                if (gunPosition != null)
+                {
+                    gunPositionFound = true;
+                }
+                else
+                {
+                    gunPositionFound = false;
+                }
+                break;
             }
-            else
-            {
-            
-            }
-            break; // K?t thúc ṿng l?p sau khi t́m th?y ng??i ch?i
         }
     }
-}
+    public void SetMoney(int newMoneyAmount)
+    {
+        foreach (var player in FindObjectsOfType<PhotonView>())
+        {
+            // Kiểm tra nếu đây là đối tượng của người chơi hiện tại
+            if (player.IsMine)
+            {
+                // Cập nhật giá trị tiền mới
+                playerMoney = newMoneyAmount;
 
-
+                // Tìm đối tượng Text để hiển thị số tiền
+                var txtTienTransform = player.transform.Find("Main Camera/Canvas/Tien");
+                if (txtTienTransform != null)
+                {
+                    Text txtTien = txtTienTransform.GetComponentInChildren<Text>();
+                    if (txtTien != null)
+                    {
+                        txtTien.text = playerMoney.ToString();
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Không tìm thấy thành phần Text trên đối tượng 'Tien'.");
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("Không tìm thấy đối tượng 'Canvas/Tien' trong Main Camera.");
+                }
+                
+            }
+        }
+    }
 
 
     public void BuyGunButton(int gunIndex)
     {
-        Debug.Log("Mua súng v?i ch? s?: " + gunIndex);
-        Debug.Log("Ti?n ng??i ch?i: " + playerMoney);
-        Debug.Log("vi tri sung: " + gunIndex);
-        if (gunPosition == null)
-        {
-            Debug.LogError("Không t́m th?y v? trí g?n súng (gunPosition)!");
-            return;
-        }
-
         if (gunIndex < 0 || gunIndex >= gunPrefabs.Length)
         {
             Debug.LogError("Ch? s? súng không h?p l?: " + gunIndex);
             return;
         }
-
-        if (playerMoney >= gunPrice)
+        if (gunPosition == null)
         {
-            playerMoney -= gunPrice; // Tr? ti?n khi mua
-            photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
+            return;
         }
-        else
+        if (gunIndex == 0)
         {
-            Debug.Log("Không ?? ti?n ?? mua súng.");
+            Debug.Log("Súng 0");
+            gunPrice = 100;
+            if (playerMoney >= gunPrice)
+            {
+                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
+                SetMoney(tien);
+                photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
+            }
+            else
+            {
+                Debug.Log("Không ?? ti?n ?? mua súng.");
+            }
         }
-        /*if (gunIndex == 2 )
+        else if (gunIndex == 1)
         {
-            weaponSwitcher.SetNutbanImageActive(false);
+            Debug.Log("Súng 1");
+            gunPrice = 200;
+            if (playerMoney >= gunPrice)
+            {
+                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
+                SetMoney(tien);
+                photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
+            }
+            else
+            {
+                Debug.Log("Không ?? ti?n ?? mua súng.");
+            }
         }
-        else
+        else if (gunIndex == 2)
         {
-            weaponSwitcher.SetNutbanImageActive(true);
-        }*/
+            Debug.Log("Súng 3");
+            gunPrice = 300;
+            if (playerMoney >= gunPrice)
+            {
+                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
+                SetMoney(tien);
+                photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
+            }
+            else
+            {
+                Debug.Log("Không ?? ti?n ?? mua súng.");
+            }
+        }
     }
 
 
@@ -161,7 +211,7 @@ public class GunShop : MonoBehaviourPun
 
             // T?o và ??ng b? cây súng trên t?t c? client
             GameObject gunInstance = PhotonNetwork.Instantiate(gunPrefabs[gunIndex].name, fixedPosition, fixedRotation);
-
+            gunInstance.SetActive(false);
             // Gán cây súng vào gunPosition n?u c?n thi?t
             gunInstance.transform.SetParent(gunPosition, false);
 
@@ -182,7 +232,7 @@ public class GunShop : MonoBehaviourPun
                 }
             }
 
-            Debug.Log("Súng s? " + gunIndex + " ?ă ???c t?o t?i v? trí: " + fixedPosition + " v?i rotation: " + fixedRotation.eulerAngles);
+            Debug.Log("Súng số " + gunIndex + " ?ă ???c t?o t?i v? trí: " + fixedPosition + " v?i rotation: " + fixedRotation.eulerAngles);
         }
     }
 

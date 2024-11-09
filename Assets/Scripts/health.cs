@@ -27,6 +27,7 @@ public class health : MonoBehaviour
                 healthBar.SetPlayerHealth(healths); // Gán sức khỏe ban đầu
             }
         }
+        RoomManager.instance.UpdatePlayerStatus(true);
     }
 
     [PunRPC]

@@ -2,6 +2,8 @@
 using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using DevionGames;
 
 public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
 {
@@ -56,6 +58,8 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
                 Camera currentPlayerCamera = currentPlayer.GetComponentInChildren<Camera>();
                 Canvas currentPlayerCanvas = currentPlayer.GetComponentInChildren<Canvas>();
                 dichuyen currentPlayerController = currentPlayer.GetComponent<dichuyen>();
+                TMP_Text username = currentPlayer.transform.Find("Ten").GetComponent<TMP_Text>();
+
                 if (currentPlayerCamera != null)
                 {
                     //currentPlayer.transform.position 
@@ -64,6 +68,7 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
                     currentPlayerCamera.GetComponent<AudioListener>().enabled = false;
                     currentPlayerCanvas.enabled = false;
                     currentPlayerController.enabled = false;
+                    username.enabled = false;
                 }
 
                 Camera teammateCamera = obj.GetComponentInChildren<Camera>();
@@ -117,6 +122,8 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
         Camera playerCamera = respawnedPlayer.GetComponentInChildren<Camera>();
         Canvas playerCanvas = respawnedPlayer.GetComponentInChildren<Canvas>();
         dichuyen PlayerController = respawnedPlayer.GetComponent<dichuyen>();
+        //TMP_Text username = respawnedPlayer.transform.Find("Ten").GetComponent<TMP_Text>();
+
         if (playerCanvas != null)
         {
             playerCanvas.enabled = true;
@@ -126,6 +133,7 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
             playerCamera.enabled = true;
             playerCamera.GetComponent<AudioListener>().enabled = true;
             PlayerController.enabled = true;
+            //username.enabled = true;
 
             // Nếu bạn có MouseLook hay các thành phần khác, hãy kích hoạt chúng ở đây
             var mouseLook = playerCamera.GetComponent<MouseLook>();

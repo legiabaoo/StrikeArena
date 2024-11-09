@@ -18,6 +18,7 @@ public class WeaponSwitcher : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        SelectWeapon();
         int previousSelectedWeapon = selectedWeapon;
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
