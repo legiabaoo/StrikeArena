@@ -345,7 +345,8 @@ GameObject:
   - component: {fileID: 2462826471012670943}
   - component: {fileID: -7704492937902223699}
   - component: {fileID: -4148436568615087770}
-  - component: {fileID: -6625457174438541932}
+  - component: {fileID: 2760871760450899894}
+  - component: {fileID: -2846988583837500060}
   m_Layer: 0
   m_Name: bomkhoi
   m_TagString: Untagged
@@ -410,7 +411,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-6625457174438541932
+--- !u!114 &2760871760450899894
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -419,11 +420,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 2983185108419463013}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd5283c5642e8ec408db6d4be4df6074, type: 3}
+  m_Script: {fileID: 11500000, guid: 44f134bc799de5a429cbaa68175d6f3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   explosionEffect: {fileID: 8656522925564163052, guid: e509867be4f82f246a95eca1ee5a2d61, type: 3}
-  explosionDelay: 5
+  explosionDelay: 3
+  explosionRadius: 5
+  explosionDamage: 50
+--- !u!114 &-2846988583837500060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2983185108419463013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &3320485560159100494
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,43 +1,34 @@
 ﻿using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 
-public class bomkhoi : MonoBehaviour
+public class BomKhoi : MonoBehaviourPun
 {
-    public GameObject explosionEffect; // Hiệu ứng nổ
-    public float explosionDelay = 3f; // Thời gian đếm ngược trước khi nổ
+    public GameObject explosionEffect;      // Hiệu ứng khói
+    public float explosionDelay = 3f;       // Thời gian đếm ngược trước khi nổ
 
     private bool hasExploded = false;
 
-    void Start()
-    {
-        // Kiểm tra xem hiệu ứng nổ có được gán không
-        if (explosionEffect == null)
-        {
-            Debug.LogError("Explosion effect not assigned in the Inspector!");
-            return;
-        }
-
-        // Bắt đầu đếm ngược
-        Invoke(nameof(Explode), explosionDelay);
-    }
-
+    [PunRPC]
     void Explode()
     {
         if (hasExploded) return;
 
         hasExploded = true;
 
-        // Hiển thị hiệu ứng nổ
+        // Hiển thị hiệu ứng khói trên tất cả các máy khách
         GameObject explosion = Instantiate(explosionEffect, transform.position, transform.rotation);
-        Debug.Log("Explosion instantiated at: " + transform.position); // Log vị trí để kiểm tra
+        Destroy(explosion, 5f); // Hủy hiệu ứng sau 5 giây
 
-        // Hủy hiệu ứng nổ sau 5 giây
-        Destroy(explosion, 5f);
+        // Hủy bom sau khi kích hoạt hiệu ứng
+        PhotonNetwork.Destroy(gameObject);
 
-        // Hủy bom sau khi nổ
-        Destroy(gameObject);
+        Debug.Log("Smoke bomb activated and destroyed.");
+    }
 
-        // Log để xác nhận rằng bom đã bị hủy
-        Debug.Log("Bomb destroyed after explosion.");
+    public void StartExplosionCountdown()
+    {
+        // Gọi hàm Explode trên tất cả các máy khách để kích hoạt hiệu ứng khói đồng bộ
+        photonView.RPC("Explode", RpcTarget.All);
     }
 }
