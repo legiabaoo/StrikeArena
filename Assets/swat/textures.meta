@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/JMO Assets/Cartoon FX Remaster/hieuung/Electric.meta
+guid: cba6297c45219ed41a981bb84cf16b1e
+========
 guid: 5796349262b4496449ca3d1c2dce87ea
+>>>>>>>> origin/bao-backup2:Assets/swat/textures.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
