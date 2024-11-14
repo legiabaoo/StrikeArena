@@ -103,46 +103,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
     }
 
-    //public void HandleTeamSelection()
-    //{
-    //    int selectedTeam = dropdownManager.teamDropdown.value; // Lấy chỉ số của team được chọn
-
-    //    // Lấy các điểm spawn tương ứng với team
-    //    Transform[] teamSpawnPoints = selectedTeam == 0 ? attackSpawnPoints : defenseSpawnPoints;
-    //    GameObject teamPrefab = selectedTeam == 0 ? attackTeamPrefab : defenseTeamPrefab;
-
-    //    Transform spawnPoint = GetAvailableSpawnPoint(teamSpawnPoints); // Lấy điểm spawn trống
-
-    //    // Nếu không còn điểm spawn nào trống
-    //    if (spawnPoint == null)
-    //    {
-    //        Debug.LogError("Tất cả các điểm spawn đã bị chiếm.");
-    //        return;
-    //    }
-
-    //    // Tạo nhân vật tại điểm spawn và đồng bộ hóa với tất cả người chơi
-    //    GameObject _player = PhotonNetwork.Instantiate(teamPrefab.name, spawnPoint.position, spawnPoint.rotation);
-
-    //    // Thiết lập thuộc tính cho người chơi hiện tại, bao gồm vị trí spawn
-    //    Hashtable hash = new Hashtable
-    //{
-    //    { "isAlive", true },
-    //    { "team", selectedTeam },
-    //    { "spawnPoint", spawnPoint.position },
-
-    //};
-    //    PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-
-    //    // Đặt tên cho người chơi và thiết lập camera, vị trí vũ khí
-    //    _player.GetComponent<PhotonView>().RPC("SetNickname", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.NickName);
-    //    _player.GetComponent<PlayerSetup>().IsLocalPlayer();
-    //    _player.GetComponent<health>().isLocalPlayer = true;
-
-    //    PhotonNetwork.LocalPlayer.NickName = nickname;
-    //    GameObject currentPlayerObject = gameObject;
-    //    CameraManager.instance.RespawnPlayerCamera(currentPlayerObject);
-    //    GunShop.instance.ResetGunPosition();
-    //}
     public void HandleTeamSelection()
     {
         int selectedTeam = dropdownManager.teamDropdown.value; // Lấy chỉ số của team được chọn

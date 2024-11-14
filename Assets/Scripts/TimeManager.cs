@@ -18,7 +18,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     private int seconds;
 
     // Thời gian cho hai giai đoạn
-    private float buyPhaseTime = 3f; // Thời gian 30 giây cho mua vũ khí
+    private float buyPhaseTime = 30f; // Thời gian 30 giây cho mua vũ khí
     private float battlePhaseTime = 100f; // Thời gian 1 phút 40 giây cho chiến đấu
     private float plantPhaseTime = 10f;
     private float currentTime;
@@ -34,6 +34,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     public GameObject win;
     public GameObject lose;
     public Spawn spawnScript;
+    public GameObject[] listshield;
 
     private enum GamePhase { Buy, Battle, Plant }
     private enum Team { red, blue };
@@ -191,6 +192,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         RoomManager.instance.hasCalledEndGame = false;
         currentPhase = GamePhase.Battle;
         currentTime = battlePhaseTime;
+        photonView.RPC("ShieldDown", RpcTarget.AllBuffered, false);
     }
 
     private void PlantSpikePhase()
@@ -218,7 +220,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         GunShop.instance.playerMoney = 800;
         //if (isGameOver)
         //{
-
+        photonView.RPC("ShieldDown", RpcTarget.AllBuffered, true);
         isGameOver = false;
         //startGame = true;
         isSpikeTime = false;
@@ -230,6 +232,18 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         RemoveSpikeFromScene();
         StartBuyPhase(); // Bắt đầu lại giai đoạn mua vũ khí
         Invoke("InvokeOffText", 1f);
+    }
+    [PunRPC]
+    public void ShieldDown(bool enabledShield)
+    {
+        foreach (GameObject shield in listshield)
+        {
+            MeshRenderer meshRenderer = shield.GetComponent<MeshRenderer>();
+            MeshCollider collider = shield.GetComponent<MeshCollider>();
+            meshRenderer.enabled = enabledShield;
+            collider.enabled = enabledShield;
+
+        }
     }
     private void RemoveSpikeFromScene()
     {
