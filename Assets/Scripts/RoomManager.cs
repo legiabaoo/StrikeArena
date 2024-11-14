@@ -174,13 +174,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         // Tạo nhân vật tại điểm spawn và đồng bộ hóa với tất cả người chơi
         GameObject _player = PhotonNetwork.Instantiate(teamPrefab.name, spawnPoint.position, spawnPoint.rotation);
-
+        int playerViewID = _player.GetComponent<PhotonView>().ViewID;
         // Thiết lập thuộc tính cho người chơi hiện tại
         Hashtable hash = new Hashtable
     {
         { "isAlive", true },
         { "team", selectedTeam },
-        { "spawnPoint", spawnPoint.position }
+        { "spawnPoint", spawnPoint.position },
+        { "viewID", playerViewID }
     };
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 

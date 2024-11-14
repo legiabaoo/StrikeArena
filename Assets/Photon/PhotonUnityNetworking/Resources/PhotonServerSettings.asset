@@ -77,6 +77,8 @@ MonoBehaviour:
   - SetIsPlantSpike
   - SetIsPlantSpikee
   - SetIsPlantSpike2
+  - DisplayEndGameResult
+  - BackHome
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

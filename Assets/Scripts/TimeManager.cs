@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using TMPro;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
 
 public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
@@ -17,7 +18,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     private int seconds;
 
     // Thời gian cho hai giai đoạn
-    private float buyPhaseTime = 30f; // Thời gian 30 giây cho mua vũ khí
+    private float buyPhaseTime = 3f; // Thời gian 30 giây cho mua vũ khí
     private float battlePhaseTime = 100f; // Thời gian 1 phút 40 giây cho chiến đấu
     private float plantPhaseTime = 10f;
     private float currentTime;
@@ -30,13 +31,15 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     private bool isSpikeTime = false;
     private bool isTextBuy = false;
     public GameObject over;
+    public GameObject win;
+    public GameObject lose;
     public Spawn spawnScript;
 
     private enum GamePhase { Buy, Battle, Plant }
     private enum Team { red, blue };
     private Team winner;
     private GamePhase currentPhase;
-    
+
     private void Awake()
     {
         instance = this;
@@ -135,6 +138,11 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                     photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "ĐỘI PHÒNG THỦ \n CHIÊN THẮNG");
                     Debug.LogError("B3");
                     EndGame();
+                    //if (scoreXanh == 4)
+                    //{
+                    //    Debug.Log("Xanh thắng");
+                    //    photonView.RPC("DisplayEndGameResult", RpcTarget.All, 1); // Truyền 1 cho team Xanh là đội chiến thắng
+                    //}
                 }
                 if (isAllDeathBlue)
                 {
@@ -144,6 +152,11 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                     photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "ĐỘI TẤN CÔNG \n CHIÊN THẮNG");
                     Debug.LogError("R2");
                     EndGame();
+                    //if (scoreDo == 4)
+                    //{
+                    //    Debug.Log("Xanh thắng");
+                    //    photonView.RPC("DisplayEndGameResult", RpcTarget.All, 0); // Truyền 1 cho team Xanh là đội chiến thắng
+                    //}
                 }
             }
 
@@ -154,7 +167,19 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
-
+    [PunRPC]
+    public void DisplayEndGameResult(int winningTeam)
+    {
+        // Kiểm tra xem người chơi hiện tại thuộc team nào và hiển thị kết quả phù hợp
+        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("team", out var teamValue) && (int)teamValue == winningTeam)
+        {
+            win.SetActive(true); // Hiển thị chiến thắng nếu là team thắng
+        }
+        else
+        {
+            lose.SetActive(true); // Hiển thị thua nếu không phải là team thắng
+        }
+    }
     private void StartBuyPhase()
     {
         currentPhase = GamePhase.Buy;
@@ -252,12 +277,34 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
             scoreXanh++;// Cộng 1 điểm cho đội xanh
             photonView.RPC("UpdateScoreXanh", RpcTarget.All, scoreXanh);
         }
+        if (scoreXanh == 2)
+        {
+            Debug.Log("Xanh thắng");
+            photonView.RPC("DisplayEndGameResult", RpcTarget.All, 1); // Truyền 1 cho team Xanh là đội chiến thắng
+            Invoke("BackHomeDelay", 1f);
+        }
+        else if (scoreDo == 2)
+        {
+            Debug.Log("Xanh thắng");
+            photonView.RPC("DisplayEndGameResult", RpcTarget.All, 0); // Truyền 1 cho team Xanh là đội chiến thắng
+            Invoke("BackHomeDelay", 1f);
+        }
+        else
+        {
+            PhotonView.Get(this).RPC("onText", RpcTarget.AllBuffered);
+            // Đặt lại thời gian sau 3 giây
+            Invoke("ResetTimeDelay", 3f);
+        }
 
-
-        PhotonView.Get(this).RPC("onText", RpcTarget.AllBuffered);
-
-        // Đặt lại thời gian sau 3 giây
-        Invoke("ResetTimeDelay", 3f);
+    }
+    public void BackHomeDelay()
+    {
+        photonView.RPC("BackHome", RpcTarget.All);
+    }
+    [PunRPC]
+    private void BackHome()
+    {
+        SceneManager.LoadScene("LoginScene");
     }
     private void ResetTimeDelay()
     {

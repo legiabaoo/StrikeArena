@@ -49,9 +49,7 @@ public class PlayerSetup : MonoBehaviour
     }
     public void OnPlayerDeath()
     {
-        // Tắt nhân vật
         gameObject.GetComponent<MeshRenderer>().enabled=false;
-
     }
     [PunRPC]
     public void SetNickname(string _name)
