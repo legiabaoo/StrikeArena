@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 namespace scgFullBodyController
 {
@@ -32,6 +33,10 @@ namespace scgFullBodyController
 
         void Update()
         {
+            if (!GetComponent<PhotonView>().IsMine)
+            {
+                return;
+            }
             //To add more weapons, just copy one of these blocks of code, add an else if, and change the keybind to the next one up ex., 
             //Aplha4, then set index to the corresponding key value such as 4
             if (Input.GetKeyDown(KeyCode.Alpha1) && index != 0)
@@ -86,7 +91,9 @@ namespace scgFullBodyController
         }
         void swapWeapons()
         {
-            //Set every other weapon except the one we want to swap to at index to false
+            if (!GetComponent<PhotonView>().IsMine) return;
+
+            // Set every other weapon except the one we want to swap to at index to false
             for (int i = 0; i < weapons.Length; i++)
             {
                 if (i != index)
@@ -95,11 +102,11 @@ namespace scgFullBodyController
                 }
             }
 
-            //Set desired weapon to active
+            // Set desired weapon to active
             weapons[index].SetActive(true);
             Invoke("setSwappedWeaponPositions", .567f + .25f);
 
-            //Initliaze the correct spine rotation on the spine bone's orientation script
+            // Initialize the correct spine rotation on the spine bone's orientation script
             if (weapons[index].GetComponent<GunController>().Weapon == GunController.WeaponTypes.Rifle)
             {
                 oRot.rifle = true;
@@ -110,6 +117,38 @@ namespace scgFullBodyController
                 oRot.rifle = false;
                 oRot.pistol = true;
             }
+
+            anim.SetBool("putaway", false);
+
+            // Gửi thông tin đổi súng đến các client khác
+            GetComponent<PhotonView>().RPC("RPC_SyncWeapon", RpcTarget.Others, index);
+        }
+        [PunRPC]
+        void RPC_SyncWeapon(int weaponIndex)
+        {
+            index = weaponIndex; // Cập nhật chỉ số súng
+            for (int i = 0; i < weapons.Length; i++)
+            {
+                if (i != index)
+                {
+                    weapons[i].SetActive(false);
+                }
+            }
+
+            weapons[index].SetActive(true); // Bật súng được chọn
+
+            // Đồng bộ hóa trạng thái của các spine bone (nếu cần)
+            if (weapons[index].GetComponent<GunController>().Weapon == GunController.WeaponTypes.Rifle)
+            {
+                oRot.rifle = true;
+                oRot.pistol = false;
+            }
+            else if (weapons[index].GetComponent<GunController>().Weapon == GunController.WeaponTypes.Pistol)
+            {
+                oRot.rifle = false;
+                oRot.pistol = true;
+            }
+
             anim.SetBool("putaway", false);
         }
 

@@ -45,8 +45,19 @@ public class PlayerSetup : MonoBehaviour
     public void OnPlayerDeath()
     {
         // Tắt nhân vật
-        gameObject.GetComponent<MeshRenderer>().enabled=false;
+    /*    gameObject.GetComponent<MeshRenderer>().enabled=false;*/
+        // Tìm GameObject con theo tên
+        Transform child = transform.Find("Ch15_nonPBR");
 
+        if (child != null)
+        {
+            // Tắt GameObject con
+            child.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError("Không tìm thấy GameObject con!");
+        }
     }
     [PunRPC]
     public void SetNickname(string _name)

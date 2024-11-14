@@ -1,5 +1,6 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
+using scgFullBodyController;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,10 +17,11 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
     }
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown(KeyCode.P))
         {
             SwitchToNextTeammateCamera(); // Chuyển camera qua đồng đội
         }
+
     }
 
     [PunRPC]
@@ -55,7 +57,7 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
             {
                 Camera currentPlayerCamera = currentPlayer.GetComponentInChildren<Camera>();
                 Canvas currentPlayerCanvas = currentPlayer.GetComponentInChildren<Canvas>();
-                dichuyen currentPlayerController = currentPlayer.GetComponent<dichuyen>();
+               ThirdPersonCharacter currentPlayerController = currentPlayer.GetComponent<ThirdPersonCharacter>();
                 if (currentPlayerCamera != null)
                 {
                     //currentPlayer.transform.position 

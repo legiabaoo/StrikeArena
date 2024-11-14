@@ -156,10 +156,10 @@ namespace scgFullBodyController
                 sprint = false;
             }
 
-            if (Input.GetButtonDown("Melee"))
+         /*   if (Input.GetButtonDown("Melee"))
             {
                 m_Character.kick();
-            }
+            }*/
 
             if (Input.GetAxis("Vertical") < 0)
             {

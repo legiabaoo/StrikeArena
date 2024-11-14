@@ -17,6 +17,7 @@ TagManager:
   - nutngam
   - Side
   - OldPlayer
+  - Spike
   layers:
   - Default
   - TransparentFX

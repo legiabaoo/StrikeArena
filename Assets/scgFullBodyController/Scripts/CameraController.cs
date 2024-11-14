@@ -1,10 +1,7 @@
-﻿//SlapChickenGames
-//2021
-//Camera controller for x and y movement
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 namespace scgFullBodyController
 {
@@ -20,21 +17,35 @@ namespace scgFullBodyController
         [HideInInspector] public float yaw = 0f;
         [HideInInspector] public float relativeYaw = 0f;
 
+        private PhotonView photonView; // Thêm biến PhotonView
+
+        void Awake()
+        {
+            // Lấy PhotonView từ GameObject
+            photonView = GetComponent<PhotonView>();
+        }
+
         void OnEnable()
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            if (photonView.IsMine) // Chỉ thực hiện khi là nhân vật của người chơi này
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
 
         void LateUpdate()
         {
+            if (!photonView.IsMine) // Kiểm tra quyền sở hữu
+                return;
+
             CameraRotate();
             transform.position = boneParent.position;
         }
 
         void CameraRotate()
         {
-            //Get input to turn the cam view
+            // Get input to turn the cam view
             relativeYaw = Input.GetAxis("Mouse X") * Sensitivity;
             pitch -= Input.GetAxis("Mouse Y") * Sensitivity;
             yaw += Input.GetAxis("Mouse X") * Sensitivity;

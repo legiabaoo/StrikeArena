@@ -6,12 +6,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using Photon.Pun;
 namespace scgFullBodyController
 {
     [RequireComponent(typeof(AudioSource))]
     public class GunController : MonoBehaviour
     {
+        Weapon weapon;
+        private PhotonView photonView;
         [HideInInspector] public bool reloading = false;
         [HideInInspector] public bool firing = false;
         [HideInInspector] public bool recoilAuto = false;
@@ -121,6 +123,7 @@ namespace scgFullBodyController
 
         void Start()
         {
+            photonView = GetComponent<PhotonView>();
             //Set the ammo count
             bulletsInMag = bulletsPerMag;
             originalCamPos = mainCam.transform.localPosition;
@@ -134,16 +137,21 @@ namespace scgFullBodyController
 
         void Update()
         {
+            if (!photonView.IsMine) return;
             //Input and actions for shooting
             if (Input.GetButtonDown("Fire1") && !firing && reloading == false && bulletsInMag > 0 && !cycling && !swapping)
             {
                 firing = true;
                 foreach (ParticleSystem ps in muzzleFlashes)
                 {
-                    ps.Play();
+                    ps.Play(); // Hiệu ứng cho local player
                 }
+
+                // Gửi thông báo tới các client khác để phát hiệu ứng
+                GetComponent<PhotonView>().RPC("RPC_PlayMuzzleFlash", RpcTarget.Others);
                 gameObject.GetComponent<AudioSource>().PlayOneShot(fireSound);
-                spawnBullet();
+              /*  spawnBullet();
+                weapon.Fire(Damage);*/
                 bulletsInMag--;
 
                 if (shootType == ShootTypes.FullAuto)
@@ -217,13 +225,21 @@ namespace scgFullBodyController
             }
 
             //UI
-         /*   GameObject ui = GameObject.FindGameObjectWithTag("hud");
+            GameObject ui = GameObject.FindGameObjectWithTag("hud");
             ui.GetComponent<hudController>().uiBullets.text = bulletsInMag.ToString() + "/" + totalBullets;
-*/
+
             //Anims
             anim.SetBool("Fire", firing);
             camAnim.SetBool("recoilAuto", recoilAuto);
             camAnim.SetBool("recoilSemi", recoilSemi);
+        }
+        [PunRPC]
+        void RPC_PlayMuzzleFlash()
+        {
+            foreach (ParticleSystem ps in muzzleFlashes)
+            {
+                ps.Play(); // Phát hiệu ứng trên các client khác
+            }
         }
 
         void cycleFire()
@@ -259,8 +275,8 @@ namespace scgFullBodyController
                 aimFinished = false;
 
                 //Disable crosshair
-             /*   GameObject ui = GameObject.FindGameObjectWithTag("hud");
-                ui.GetComponent<hudController>().crosshair.SetActive(false);*/
+                GameObject ui = GameObject.FindGameObjectWithTag("hud");
+                ui.GetComponent<hudController>().crosshair.SetActive(false);
             }
             else if (Input.GetButtonUp("Fire2") && aiming && !swapping)
             {
@@ -271,9 +287,9 @@ namespace scgFullBodyController
                 anim.SetFloat("idleAnimSpeed", 1);
                 mainCam.GetComponent<Camera>().nearClipPlane = originalCamClipPlane;
 
-           /*     //Disable crosshair
+                //Disable crosshair
                 GameObject ui = GameObject.FindGameObjectWithTag("hud");
-                ui.GetComponent<hudController>().crosshair.SetActive(true);*/
+                ui.GetComponent<hudController>().crosshair.SetActive(true);
             }
 
             if (aiming && !aimFinished)
@@ -342,9 +358,13 @@ namespace scgFullBodyController
                     gameObject.GetComponent<AudioSource>().PlayOneShot(fireSound);
                     foreach (ParticleSystem ps in muzzleFlashes)
                     {
-                        ps.Play();
+                        ps.Play(); // Hiệu ứng cho local player
                     }
-                    spawnBullet();
+
+                    // Gửi thông báo tới các client khác để phát hiệu ứng
+                    GetComponent<PhotonView>().RPC("RPC_PlayMuzzleFlash", RpcTarget.Others);
+                /*    spawnBullet();
+                    weapon.Fire(Damage);*/
                     spawnShell();
                     bulletsInMag--;
                 }
@@ -428,7 +448,7 @@ namespace scgFullBodyController
             tempShell.transform.Rotate(Vector3.left * 90);
 
             //Add forward force based on where ejection point is pointing (blue axis)
-            Rigidbody tempRigidBody;
+            Rigidbody tempRigidBody;    
             tempRigidBody = tempShell.GetComponent<Rigidbody>();
             tempRigidBody.AddForce(ejectionPoint.transform.forward * shellVelocity);
 

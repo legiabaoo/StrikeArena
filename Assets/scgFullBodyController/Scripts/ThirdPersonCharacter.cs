@@ -16,7 +16,7 @@ namespace scgFullBodyController
         //IMPORTANT, this script needs to be on the root transform
 
         [SerializeField] float m_JumpPower = 12f;
-        [Range(1f, 4f)] [SerializeField] float m_GravityMultiplier = 2f;
+        [Range(1f, 20f)] [SerializeField] float m_GravityMultiplier = 2f;
         [SerializeField] float m_RunCycleLegOffset = 0.2f; //specific to the character in sample assets, will need to be modified to work with others
         [SerializeField] float m_MoveSpeedMultiplier = 1f;
         [SerializeField] float m_AnimSpeedMultiplier = 1f;
@@ -275,12 +275,26 @@ namespace scgFullBodyController
             }
         }
 
-        void initiateJump()
+        /*void initiateJump()
         {
             // Jump
             m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x * jumpDamping, m_JumpPower, m_Rigidbody.velocity.z * jumpDamping);
             m_IsGrounded = false;
             m_Animator.applyRootMotion = false;
+            m_GroundCheckDistance = 0.1f;
+        }*/
+        void initiateJump()
+        {
+            // Jump: Gi? nguyên v?n t?c theo chi?u ngang (x, z), ch? thay ??i v?n t?c theo chi?u d?c (y)
+            m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, m_JumpPower, m_Rigidbody.velocity.z);
+
+            // ??t tr?ng thái không còn ??ng trên m?t ??t
+            m_IsGrounded = false;
+
+            // T?t root motion c?a animator khi nh?y
+            m_Animator.applyRootMotion = false;
+
+            // C?p nh?t kho?ng cách ki?m tra m?t ??t
             m_GroundCheckDistance = 0.1f;
         }
 

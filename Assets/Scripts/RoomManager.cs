@@ -205,7 +205,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        Debug.Log("Custom Properties updated: " + targetPlayer.CustomProperties.ToStringFull());
+      /*  Debug.Log("Custom Properties updated: " + targetPlayer.CustomProperties.ToStringFull());*/
 
         if (targetPlayer.CustomProperties.ContainsKey("isAlive"))
         {
