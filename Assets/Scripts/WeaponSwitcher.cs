@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class WeaponSwitcher : MonoBehaviour
 {
-    private int selectedWeapon = 0;
+    public static WeaponSwitcher instance;
+    public int selectedWeapon = 0;
     public GameObject nutbanImage;
+    private void Awake()
+    {
+        instance = this;
+    }
     // Start is called before the first frame update
     void Start()
     {

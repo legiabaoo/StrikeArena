@@ -1,65 +1,117 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using Photon.Pun;
 
 public class ThrowingTutorial : MonoBehaviour
 {
-    [Header("Reference")]
-    public Transform cam;
-    public Transform attackPoint;
-    public GameObject objectToThorow;
+    public static ThrowingTutorial Instance;
+    [Header("References")]
+    public Transform cam; // Camera của người chơi
+    public Transform attackPoint; // Điểm ném
+    public GameObject bom; // Đối tượng để ném (bom hoặc vật phẩm khác)
+    public GameObject smoke;
 
-    [Header("Setting")]
-    public int totalThrows;
-    public float throwCooldown;
+    [Header("Settings")]
+    public int totalBom; // Tổng số lần ném
+    public int totalSmoke;
+    public float throwCooldown; // Thời gian chờ giữa các lần ném
 
-    [Header("Reference")]
-    public KeyCode throwKey = KeyCode.Mouse0;
-    public float throwForce;
-    public float throwUpwardForce;
+    [Header("Throw Settings")]
+    public KeyCode throwKey = KeyCode.Mouse0; // Phím để ném
+    public float throwForce; // Lực ném về phía trước
+    public float throwUpwardForce; // Lực ném hướng lên
 
-    bool readyToThrow;
+    private bool readyToThrow;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         readyToThrow = true;
+        totalBom = 0;
+        totalSmoke = 0;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(throwKey) && readyToThrow && totalThrows > 0)
+        if (Input.GetKeyDown(throwKey) && readyToThrow )
         {
-            Throw();
+            if (totalBom>0 && WeaponSwitcher.instance.selectedWeapon==3)
+            {
+                ThrowBom();
+            }
+            if(totalSmoke > 0 && WeaponSwitcher.instance.selectedWeapon == 4)
+            {
+                ThrowSmoke();
+            }
         }
     }
 
-    private void Throw()
+    private void ThrowBom()
     {
         readyToThrow = false;
 
-        // kh?i t?o ??i t??ng ?? ném
-        GameObject projectile = Instantiate(objectToThorow, attackPoint.position, cam.rotation);
-        // l?y thành ph?n rb
-        Rigidbody projectileRB = projectile.GetComponent<Rigidbody>();
-        
-        // canh h??ng ném
-        Vector3 forceDirection = cam.transform.forward;
-        
-        RaycastHit hit;
+        // Khởi tạo đối tượng để ném
+        GameObject projectile = PhotonNetwork.Instantiate(bom.name, attackPoint.position, cam.rotation);
 
-        if(Physics.Raycast(cam.position, cam.forward, out hit, 500f))
+        // Lấy thành phần Rigidbody của đối tượng ném
+        Rigidbody projectileRB = projectile.GetComponent<Rigidbody>();
+
+        // Tính toán hướng ném
+        Vector3 forceDirection = cam.transform.forward;
+
+        // Kiểm tra va chạm với tia raycast
+        RaycastHit hit;
+        if (Physics.Raycast(cam.position, cam.forward, out hit, 500f))
         {
             forceDirection = (hit.point - attackPoint.position).normalized;
         }
 
-        //l?c ném
-        Vector3 forceToAdd = forceDirection * throwForce + transform.up * throwUpwardForce;
+        // Tính toán lực ném kết hợp với lực đẩy lên
+        Vector3 forceToAdd = forceDirection * throwForce + Vector3.up * throwUpwardForce;
 
+        // Áp dụng lực vào đối tượng ném
         projectileRB.AddForce(forceToAdd, ForceMode.Impulse);
 
-        totalThrows--;
+        // Giảm số lần ném
+        totalBom--;
 
+        // Đặt thời gian chờ cho lần ném tiếp theo
+        Invoke(nameof(ResetThrow), throwCooldown);
+    }
+    private void ThrowSmoke()
+    {
+        readyToThrow = false;
+
+        // Khởi tạo đối tượng để ném
+        GameObject projectile = PhotonNetwork.Instantiate(smoke.name, attackPoint.position, cam.rotation);
+
+        // Lấy thành phần Rigidbody của đối tượng ném
+        Rigidbody projectileRB = projectile.GetComponent<Rigidbody>();
+
+        // Tính toán hướng ném
+        Vector3 forceDirection = cam.transform.forward;
+
+        // Kiểm tra va chạm với tia raycast
+        RaycastHit hit;
+        if (Physics.Raycast(cam.position, cam.forward, out hit, 500f))
+        {
+            forceDirection = (hit.point - attackPoint.position).normalized;
+        }
+
+        // Tính toán lực ném kết hợp với lực đẩy lên
+        Vector3 forceToAdd = forceDirection * throwForce + Vector3.up * throwUpwardForce;
+
+        // Áp dụng lực vào đối tượng ném
+        projectileRB.AddForce(forceToAdd, ForceMode.Impulse);
+
+        // Giảm số lần ném
+        totalSmoke--;
+
+        // Đặt thời gian chờ cho lần ném tiếp theo
         Invoke(nameof(ResetThrow), throwCooldown);
     }
 
@@ -67,5 +119,4 @@ public class ThrowingTutorial : MonoBehaviour
     {
         readyToThrow = true;
     }
-
 }

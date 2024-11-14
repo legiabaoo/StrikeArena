@@ -1346,6 +1346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee018065f77eeea40abf0f44e2420bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedWeapon: 0
   nutbanImage: {fileID: 579607392672052237}
 --- !u!1 &3857904003644022838
 GameObject:

@@ -1307,7 +1307,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 142461368}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1122015389}
+        m_TargetAssemblyTypeName: GunShop, Assembly-CSharp
+        m_MethodName: BuyGunButton
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &142461368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8178,7 +8190,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 699385574}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1122015389}
+        m_TargetAssemblyTypeName: GunShop, Assembly-CSharp
+        m_MethodName: BuyGunButton
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &699385574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13360,6 +13384,8 @@ MonoBehaviour:
   - {fileID: 4563695519729902279, guid: 19499c100ccf3114bbdf8260e0c865ca, type: 3}
   - {fileID: 1694150165636238912, guid: dc354c63963ca8f45bfa28d254c1747e, type: 3}
   - {fileID: 4992266126766368194, guid: 3551801e5b0125f4d9a024c098a8bf87, type: 3}
+  - {fileID: 5766885306629243985, guid: 9bd54ed01c9f45d40b7182a1da63209c, type: 3}
+  - {fileID: 2983185108419463013, guid: 3c9672393c1efd14b9d0506977089ad3, type: 3}
   gunPosition: {fileID: 0}
   gunPositions: []
   gunRotations: []

@@ -43,6 +43,12 @@ public class GunShop : MonoBehaviourPun
 
         gunPositions[2] = new Vector3(-669.6f, -221.3f, 0.7f); // V? trí cho súng s? 3
         gunRotations[2] = Quaternion.Euler(-178.8f, 0.86f, 0.9f); // Rotation cho súng s? 3
+
+        gunPositions[3] = new Vector3(-669.454224f, -221.10997f, 1.03728712f); // V? trí cho súng s? 3
+        gunRotations[3] = Quaternion.Euler(-1.06721711e-06f, 354.690002f, 18.2900028f);
+
+        gunPositions[4] = new Vector3(-669.454224f, -221.10997f, 1.03728712f); // V? trí cho súng s? 3
+        gunRotations[4] = Quaternion.Euler(-1.06721711e-06f, 354.690002f, 18.2900028f);
     }
 
     void Update()
@@ -196,6 +202,38 @@ public class GunShop : MonoBehaviourPun
                 Debug.Log("Không ?? ti?n ?? mua súng.");
             }
         }
+        else if (gunIndex == 3)
+        {
+            Debug.Log("bom");
+            gunPrice = 5;
+            if (playerMoney >= gunPrice)
+            {
+                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
+                SetMoney(tien);
+                ThrowingTutorial.Instance.totalBom++;
+                photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
+            }
+            else
+            {
+                Debug.Log("Không ?? ti?n ?? mua súng.");
+            }
+        }
+        else if (gunIndex == 4)
+        {
+            Debug.Log("khoi");
+            gunPrice = 5;
+            if (playerMoney >= gunPrice)
+            {
+                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
+                SetMoney(tien);
+                ThrowingTutorial.Instance.tolalSmoke++;
+                photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
+            }
+            else
+            {
+                Debug.Log("Không ?? ti?n ?? mua súng.");
+            }
+        }
     }
 
 
@@ -212,8 +250,18 @@ public class GunShop : MonoBehaviourPun
             // T?o và ??ng b? cây súng trên t?t c? client
             GameObject gunInstance = PhotonNetwork.Instantiate(gunPrefabs[gunIndex].name, fixedPosition, fixedRotation);
             gunInstance.SetActive(false);
-            // Gán cây súng vào gunPosition n?u c?n thi?t
+            // Lấy con đầu tiên của gunPosition (game con thứ 1)
+            Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(gunIndex) : null;
+
+            // Kiểm tra và xóa game con cũ nếu nó tồn tại
+            if (oldChild != null)
+            {
+                Destroy(oldChild.gameObject); // Hoặc dùng `oldChild.gameObject.SetActive(false);` nếu chỉ muốn ẩn đi
+            }
+
+            // Đặt gunInstance làm con của gunPosition
             gunInstance.transform.SetParent(gunPosition, false);
+            gunInstance.transform.SetSiblingIndex(gunIndex);
 
             // Thi?t l?p các thu?c tính cho script Weapon n?u c?n
             Weapon weaponScript = gunInstance.GetComponent<Weapon>();
