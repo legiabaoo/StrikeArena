@@ -11618,8 +11618,8 @@ MonoBehaviour:
   roomNameToJoin: test
   username: {fileID: 718081798}
   dropdownManager: {fileID: 1787511050}
-  attackTeamPrefab: {fileID: 3315615690427756698, guid: 53a49ccedec097643873bfea41158870, type: 3}
-  defenseTeamPrefab: {fileID: 3315615690427756698, guid: dab62a127a304284a92af4304eaccc93, type: 3}
+  attackTeamPrefab: {fileID: 758308687150719498, guid: c926831b746d1504aac19f1a8c44e74c, type: 3}
+  defenseTeamPrefab: {fileID: 758308687150719498, guid: 11985614b520f7c458d1d3b67408b05e, type: 3}
   attackSpawnPoints:
   - {fileID: 1994754551}
   - {fileID: 253541133}

@@ -92,20 +92,59 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
             }
         }
     }
+    //public void SwitchToNextTeammateCamera()
+    //{
+    //    if (playerObjects.Count == 0) return;
+
+    //    // Tắt camera của đồng đội hiện tại
+    //    GameObject currentPlayer = playerObjects[currentTeammateIndex];
+    //    Camera currentPlayerCamera = currentPlayer.GetComponentInChildren<Camera>();
+    //    Canvas currentPlayerCanvas = currentPlayer.GetComponentInChildren<Canvas>();
+
+    //    if (currentPlayerCamera != null)
+    //    {
+    //        currentPlayerCamera.enabled = false;
+    //        currentPlayerCamera.GetComponent<AudioListener>().enabled = false;
+    //        currentPlayerCanvas.enabled = false;
+    //    }
+
+    //    // Tăng chỉ mục và đảm bảo vòng lại đầu nếu đạt cuối danh sách
+    //    currentTeammateIndex = (currentTeammateIndex + 1) % playerObjects.Count;
+
+    //    // Bật camera của đồng đội mới
+    //    GameObject nextTeammate = playerObjects[currentTeammateIndex];
+    //    Camera teammateCamera = nextTeammate.GetComponentInChildren<Camera>();
+    //    Canvas teammateCanvas = nextTeammate.GetComponentInChildren<Canvas>();
+
+    //    if (teammateCamera != null)
+    //    {
+    //        teammateCamera.enabled = true;
+    //        teammateCamera.GetComponent<AudioListener>().enabled = true;
+    //        currentTeammateRotation = teammateCamera.transform.rotation;
+    //        teammateCanvas.enabled = true;
+    //    }
+    //}
     public void SwitchToNextTeammateCamera()
     {
         if (playerObjects.Count == 0) return;
 
         // Tắt camera của đồng đội hiện tại
         GameObject currentPlayer = playerObjects[currentTeammateIndex];
-        Camera currentPlayerCamera = currentPlayer.GetComponentInChildren<Camera>();
-        Canvas currentPlayerCanvas = currentPlayer.GetComponentInChildren<Canvas>();
+        Transform cameraControl = currentPlayer.transform.Find("CameraControl/Main Camera");
 
-        if (currentPlayerCamera != null)
+        if (cameraControl != null)
         {
-            currentPlayerCamera.enabled = false;
-            currentPlayerCamera.GetComponent<AudioListener>().enabled = false;
-            currentPlayerCanvas.enabled = false;
+            Camera currentPlayerCamera = cameraControl.GetComponent<Camera>();
+            Canvas currentPlayerCanvas = currentPlayer.GetComponentInChildren<Canvas>();
+
+            if (currentPlayerCamera != null)
+            {
+                currentPlayerCamera.enabled = false;
+                currentPlayerCamera.GetComponent<AudioListener>().enabled = false;
+
+                if (currentPlayerCanvas != null)
+                    currentPlayerCanvas.enabled = false;
+            }
         }
 
         // Tăng chỉ mục và đảm bảo vòng lại đầu nếu đạt cuối danh sách
@@ -113,17 +152,25 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
 
         // Bật camera của đồng đội mới
         GameObject nextTeammate = playerObjects[currentTeammateIndex];
-        Camera teammateCamera = nextTeammate.GetComponentInChildren<Camera>();
-        Canvas teammateCanvas = nextTeammate.GetComponentInChildren<Canvas>();
+        Transform nextCameraControl = nextTeammate.transform.Find("CameraControl/Main Camera");
 
-        if (teammateCamera != null)
+        if (nextCameraControl != null)
         {
-            teammateCamera.enabled = true;
-            teammateCamera.GetComponent<AudioListener>().enabled = true;
-            currentTeammateRotation = teammateCamera.transform.rotation;
-            teammateCanvas.enabled = true;
+            Camera teammateCamera = nextCameraControl.GetComponent<Camera>();
+            Canvas teammateCanvas = nextTeammate.GetComponentInChildren<Canvas>();
+
+            if (teammateCamera != null)
+            {
+                teammateCamera.enabled = true;
+                teammateCamera.GetComponent<AudioListener>().enabled = true;
+                currentTeammateRotation = teammateCamera.transform.rotation;
+
+                if (teammateCanvas != null)
+                    teammateCanvas.enabled = true;
+            }
         }
     }
+
     public void RespawnPlayerCamera(GameObject respawnedPlayer)
     {
         Camera playerCamera = respawnedPlayer.GetComponentInChildren<Camera>();
