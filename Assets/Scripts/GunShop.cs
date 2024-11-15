@@ -226,7 +226,7 @@ public class GunShop : MonoBehaviourPun
             {
                 int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
                 SetMoney(tien);
-                ThrowingTutorial.Instance.tolalSmoke++;
+                ThrowingTutorial.Instance.totalSmoke++;
                 photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
             }
             else
