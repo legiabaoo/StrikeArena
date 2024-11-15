@@ -53,6 +53,12 @@ public class Weapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        PhotonView photonView = GetComponentInParent<PhotonView>();
+        if (photonView == null || !photonView.IsMine)
+        {
+            return;
+        }
+
         if (nextFire > 0)
         {
             nextFire -= Time.deltaTime;
@@ -60,20 +66,20 @@ public class Weapon : MonoBehaviour
 
         if (Input.GetButton("Fire1") && nextFire <= 0 && ammo > 0)
         {
-            Debug.Log("ban ne...");
-            nextFire = 1 / fireRate;
+            Debug.Log("ban ne.............");
+         /*   nextFire = 1 / fireRate;
             ammo--;
-     
-            ammoText.text = ammo + "/" + magAmmo;
+
+            ammoText.text = ammo + "/" + magAmmo;*/
             Fire();
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && mag > 0)
+       /* if (Input.GetKeyDown(KeyCode.R) && mag > 0)
         {
             Reload();
-        }
+        }*/
 
-        if (recoiling)
+      /*  if (recoiling)
         {
             Recoil();
         }
@@ -81,10 +87,10 @@ public class Weapon : MonoBehaviour
         if (recovering)
         {
             Recovering();
-        }
+        }*/
     }
 
-    void Reload()
+/*    void Reload()
     {
         if (mag > 0)
         {
@@ -93,9 +99,9 @@ public class Weapon : MonoBehaviour
         }
         
         ammoText.text = ammo + "/" + magAmmo;
-    }
+    }*/
 
-    private void Fire()
+    public void Fire()
     {
         recoiling = true;
         recovering = false;
@@ -147,7 +153,7 @@ public class Weapon : MonoBehaviour
                         RoomManager.instance.SetHashes();
                         PhotonNetwork.LocalPlayer.AddScore(100);
                     }
-
+                    Debug.LogWarning(damege);
                     // G?i RPC ?? c?p nh?t sát th??ng lên t?t c? các client
                     targetPhotonView.RPC("TakeDamage", RpcTarget.All, damege);
                 }
@@ -163,7 +169,7 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    void Recoil()
+   /* void Recoil()
     {
         Vector3 finalPositon = new Vector3(origianlPosition.x, origianlPosition.y + recoilUp, origianlPosition.z - recoilBack);
         transform.localPosition = Vector3.SmoothDamp(transform.localPosition, finalPositon, ref recoilVeclocity, recoilLength);
@@ -185,5 +191,5 @@ public class Weapon : MonoBehaviour
             recoiling = false;
             recovering = false;
         }
-    }
+    }*/
 }

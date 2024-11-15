@@ -1,5 +1,6 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
+using scgFullBodyController;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 public class PlayerSetup : MonoBehaviour
 {
-    public dichuyen movemnet;
+    public ThirdPersonUserControl movemnet;
     public Camera cameraPlayer;
     public Canvas canvas;
     public string nickname;
@@ -16,7 +17,6 @@ public class PlayerSetup : MonoBehaviour
     private PhotonView photonView;
     [SerializeField]
     private int actorNumber; // Biến này sẽ hiển thị trong Inspector
-
 
     void Awake()
     {
@@ -33,11 +33,6 @@ public class PlayerSetup : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        
-    }
-
     public void IsLocalPlayer()
     {
         movemnet.enabled = true;
@@ -49,7 +44,20 @@ public class PlayerSetup : MonoBehaviour
     }
     public void OnPlayerDeath()
     {
-        gameObject.GetComponent<MeshRenderer>().enabled=false;
+        // Tắt nhân vật
+    /*    gameObject.GetComponent<MeshRenderer>().enabled=false;*/
+        // Tìm GameObject con theo tên
+        Transform child = transform.Find("Ch15_nonPBR");
+
+        if (child != null)
+        {
+            // Tắt GameObject con
+            child.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError("Không tìm thấy GameObject con!");
+        }
     }
     [PunRPC]
     public void SetNickname(string _name)
