@@ -27,6 +27,7 @@ public class health : MonoBehaviour
                 healthBar.SetPlayerHealth(healths); // Gán sức khỏe ban đầu
             }
         }
+        RoomManager.instance.UpdatePlayerStatus(true);
     }
 
     [PunRPC]
@@ -67,7 +68,12 @@ public class health : MonoBehaviour
 
             if (currentCamera != null)
             {
+                
                 CameraManager.instance.SwitchToTeammateCamera(currentPlayerObject);
+
+            }else if(currentCamera == null)
+            {
+                Debug.Log("Camera bi null");
             }
             RoomManager.instance.UpdatePlayerStatus(false);
         }

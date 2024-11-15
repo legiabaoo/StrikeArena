@@ -20,11 +20,10 @@ public class MainHall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        username.text = PlayerPrefs.GetString("Username");
     }
     public void Play()
     {
-        PlayerPrefs.SetString("Username", username.text);
         SceneManager.LoadScene("Scene1");
     }
 }

@@ -17,6 +17,7 @@ public class PlayerSetup : MonoBehaviour
     [SerializeField]
     private int actorNumber; // Biến này sẽ hiển thị trong Inspector
 
+
     void Awake()
     {
         photonView = GetComponent<PhotonView>(); // Gán photonView ở đây
@@ -32,6 +33,11 @@ public class PlayerSetup : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        
+    }
+
     public void IsLocalPlayer()
     {
         movemnet.enabled = true;
@@ -43,9 +49,7 @@ public class PlayerSetup : MonoBehaviour
     }
     public void OnPlayerDeath()
     {
-        // Tắt nhân vật
         gameObject.GetComponent<MeshRenderer>().enabled=false;
-
     }
     [PunRPC]
     public void SetNickname(string _name)

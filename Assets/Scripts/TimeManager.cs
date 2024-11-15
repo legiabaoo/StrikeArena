@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using Photon.Pun;
 using TMPro;
+using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
 
 public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
@@ -29,13 +31,16 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     private bool isSpikeTime = false;
     private bool isTextBuy = false;
     public GameObject over;
+    public GameObject win;
+    public GameObject lose;
     public Spawn spawnScript;
+    public GameObject[] listshield;
 
     private enum GamePhase { Buy, Battle, Plant }
     private enum Team { red, blue };
     private Team winner;
     private GamePhase currentPhase;
-    
+
     private void Awake()
     {
         instance = this;
@@ -134,6 +139,11 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                     photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "ĐỘI PHÒNG THỦ \n CHIÊN THẮNG");
                     Debug.LogError("B3");
                     EndGame();
+                    //if (scoreXanh == 4)
+                    //{
+                    //    Debug.Log("Xanh thắng");
+                    //    photonView.RPC("DisplayEndGameResult", RpcTarget.All, 1); // Truyền 1 cho team Xanh là đội chiến thắng
+                    //}
                 }
                 if (isAllDeathBlue)
                 {
@@ -143,6 +153,11 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                     photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "ĐỘI TẤN CÔNG \n CHIÊN THẮNG");
                     Debug.LogError("R2");
                     EndGame();
+                    //if (scoreDo == 4)
+                    //{
+                    //    Debug.Log("Xanh thắng");
+                    //    photonView.RPC("DisplayEndGameResult", RpcTarget.All, 0); // Truyền 1 cho team Xanh là đội chiến thắng
+                    //}
                 }
             }
 
@@ -153,18 +168,31 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
-
+    [PunRPC]
+    public void DisplayEndGameResult(int winningTeam)
+    {
+        // Kiểm tra xem người chơi hiện tại thuộc team nào và hiển thị kết quả phù hợp
+        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("team", out var teamValue) && (int)teamValue == winningTeam)
+        {
+            win.SetActive(true); // Hiển thị chiến thắng nếu là team thắng
+        }
+        else
+        {
+            lose.SetActive(true); // Hiển thị thua nếu không phải là team thắng
+        }
+    }
     private void StartBuyPhase()
     {
         currentPhase = GamePhase.Buy;
         currentTime = buyPhaseTime;
-        
     }
 
     private void StartBattlePhase()
     {
+        RoomManager.instance.hasCalledEndGame = false;
         currentPhase = GamePhase.Battle;
         currentTime = battlePhaseTime;
+        photonView.RPC("ShieldDown", RpcTarget.AllBuffered, false);
     }
 
     private void PlantSpikePhase()
@@ -189,11 +217,12 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         RoomManager.instance.HandleTeamSelection();
         RoomManager.instance.RemovePlayerInstances();
+        GunShop.instance.playerMoney = 800;
         //if (isGameOver)
         //{
-
+        photonView.RPC("ShieldDown", RpcTarget.AllBuffered, true);
         isGameOver = false;
-        RoomManager.instance.hasCalledEndGame = false;
+        //startGame = true;
         isSpikeTime = false;
         isPlantSpike = false;
         //set lai SpikeExists la false
@@ -203,6 +232,18 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         RemoveSpikeFromScene();
         StartBuyPhase(); // Bắt đầu lại giai đoạn mua vũ khí
         Invoke("InvokeOffText", 1f);
+    }
+    [PunRPC]
+    public void ShieldDown(bool enabledShield)
+    {
+        foreach (GameObject shield in listshield)
+        {
+            MeshRenderer meshRenderer = shield.GetComponent<MeshRenderer>();
+            MeshCollider collider = shield.GetComponent<MeshCollider>();
+            meshRenderer.enabled = enabledShield;
+            collider.enabled = enabledShield;
+
+        }
     }
     private void RemoveSpikeFromScene()
     {
@@ -250,12 +291,34 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
             scoreXanh++;// Cộng 1 điểm cho đội xanh
             photonView.RPC("UpdateScoreXanh", RpcTarget.All, scoreXanh);
         }
+        if (scoreXanh == 2)
+        {
+            Debug.Log("Xanh thắng");
+            photonView.RPC("DisplayEndGameResult", RpcTarget.All, 1); // Truyền 1 cho team Xanh là đội chiến thắng
+            Invoke("BackHomeDelay", 1f);
+        }
+        else if (scoreDo == 2)
+        {
+            Debug.Log("Xanh thắng");
+            photonView.RPC("DisplayEndGameResult", RpcTarget.All, 0); // Truyền 1 cho team Xanh là đội chiến thắng
+            Invoke("BackHomeDelay", 1f);
+        }
+        else
+        {
+            PhotonView.Get(this).RPC("onText", RpcTarget.AllBuffered);
+            // Đặt lại thời gian sau 3 giây
+            Invoke("ResetTimeDelay", 3f);
+        }
 
-
-        PhotonView.Get(this).RPC("onText", RpcTarget.AllBuffered);
-
-        // Đặt lại thời gian sau 3 giây
-        Invoke("ResetTimeDelay", 3f);
+    }
+    public void BackHomeDelay()
+    {
+        photonView.RPC("BackHome", RpcTarget.All);
+    }
+    [PunRPC]
+    private void BackHome()
+    {
+        SceneManager.LoadScene("LoginScene");
     }
     private void ResetTimeDelay()
     {
