@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class ThrowingTutorial : MonoBehaviour
+public class ThrowingTutorial : MonoBehaviourPunCallbacks
 {
     public static ThrowingTutorial Instance;
     [Header("References")]
@@ -114,6 +114,45 @@ public class ThrowingTutorial : MonoBehaviour
         // Đặt thời gian chờ cho lần ném tiếp theo
         Invoke(nameof(ResetThrow), throwCooldown);
     }
+    //[PunRPC]
+    //public void ApplyThrowForce(Vector3 forceDirection)
+    //{
+    //    // Áp dụng lực đẩy lên bom khói
+    //    Rigidbody projectileRB = GetComponent<Rigidbody>();
+    //    if (projectileRB != null)
+    //    {
+    //        Vector3 forceToAdd = forceDirection * throwForce + Vector3.up * throwUpwardForce;
+    //        projectileRB.AddForce(forceToAdd, ForceMode.Impulse);
+    //    }
+    //}
+
+    //private void ThrowSmoke()
+    //{
+    //    readyToThrow = false;
+
+    //    // Khởi tạo đối tượng khói
+    //    GameObject projectile = PhotonNetwork.Instantiate(smoke.name, attackPoint.position, cam.rotation);
+
+    //    // Lấy thành phần Rigidbody của đối tượng khói
+    //    Rigidbody projectileRB = projectile.GetComponent<Rigidbody>();
+
+    //    // Tính toán hướng ném
+    //    Vector3 forceDirection = cam.transform.forward;
+    //    RaycastHit hit;
+    //    if (Physics.Raycast(cam.position, cam.forward, out hit, 500f))
+    //    {
+    //        forceDirection = (hit.point - attackPoint.position).normalized;
+    //    }
+
+    //    // Gọi RPC để áp dụng lực đẩy cho bom khói
+    //    photonView.RPC("ApplyThrowForce", RpcTarget.AllBuffered, forceDirection);
+
+    //    // Giảm số lần ném
+    //    totalBom--;
+
+    //    // Đặt thời gian chờ cho lần ném tiếp theo
+    //    Invoke(nameof(ResetThrow), throwCooldown);
+    //}
 
     private void ResetThrow()
     {
