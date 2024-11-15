@@ -6120,7 +6120,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 758308687150719498}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 8d1ba60a12b89084fac936ed6f2d6b1c, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 36303962ddee1844c9cd4f5a4e4a147d, type: 3}
   m_Controller: {fileID: 9100000, guid: ebae7573d1d3b524cbb5907771350b4d, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
@@ -17034,7 +17034,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 8341161198671653776, guid: 8d1ba60a12b89084fac936ed6f2d6b1c, type: 3}
+  m_Mesh: {fileID: 8341161198671653776, guid: 36303962ddee1844c9cd4f5a4e4a147d, type: 3}
   m_Bones:
   - {fileID: 5522813105551292325}
   - {fileID: 5245568306949899318}
@@ -19241,6 +19241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee018065f77eeea40abf0f44e2420bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedWeapon: 0
   nutbanImage: {fileID: 3156888108176751628}
 --- !u!1 &2157094903721577763
 GameObject:
@@ -21110,7 +21111,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 8341161198671653776, guid: 8d1ba60a12b89084fac936ed6f2d6b1c, type: 3}
+  m_Mesh: {fileID: 8341161198671653776, guid: 36303962ddee1844c9cd4f5a4e4a147d, type: 3}
   m_Bones:
   - {fileID: 5522813105551292325}
   - {fileID: 5245568306949899318}
