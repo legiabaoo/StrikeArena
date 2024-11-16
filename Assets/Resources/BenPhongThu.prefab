@@ -20793,7 +20793,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u0110ang \u0111\u1EB7t bom..."
+  m_Text: "\u0110ang g\u1EE1 bom..."
 --- !u!1 &3838403171659212824
 GameObject:
   m_ObjectHideFlags: 0
@@ -22596,7 +22596,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4490995829139316688
 RectTransform:
   m_ObjectHideFlags: 0

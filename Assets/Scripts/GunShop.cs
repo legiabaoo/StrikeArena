@@ -89,29 +89,63 @@ public class GunShop : MonoBehaviourPun
     }
 
 
+    //public void FindPlayerGunPosition()
+    //{
+    //    foreach (var player in FindObjectsOfType<PhotonView>())
+    //    {
+    //        // Ch? ki?m tra ??i t??ng c?a ng??i ch?i hi?n t?i
+    //        if (player.IsMine)
+    //        {
+    //            Vector3 playerPosition = player.transform.position;
+
+    //            gunPosition = player.transform.Find("CameraControl/Main Camera/GunPosition");
+    //            Debug.Log(player);
+    //            if (gunPosition != null)
+    //            {
+    //                gunPositionFound = true;
+    //            }
+    //            else
+    //            {
+    //                gunPositionFound = false;
+    //                Debug.Log("GunPO nul roio");
+    //            }
+    //            break;
+    //        }
+    //    }
+    //}
     public void FindPlayerGunPosition()
     {
-        foreach (var player in FindObjectsOfType<PhotonView>())
+        // Tìm đối tượng của người chơi cục bộ
+        foreach (var player in PhotonNetwork.PlayerList)
         {
-            // Ch? ki?m tra ??i t??ng c?a ng??i ch?i hi?n t?i
-            if (player.IsMine)
-            {
-                Vector3 playerPosition = player.transform.position;
+            // Tính toán ViewID từ ActorNumber
+            int viewID = player.ActorNumber * 1000 + 1;
 
-                gunPosition = player.transform.Find("Main Camera/GunPosition");
-                
-                if (gunPosition != null)
+            // Tìm đối tượng GameObject liên quan đến người chơi này
+            GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
+
+            if (playerObject != null)
+            {
+                // Tìm Main Camera trong cấu trúc con của GameObject này
+                Transform cameraTransform = playerObject.transform.Find("CameraControl/Main Camera/GunPosition");
+                if (cameraTransform != null)
                 {
                     gunPositionFound = true;
                 }
                 else
                 {
                     gunPositionFound = false;
+                    Debug.Log("GunPO nul roio");
                 }
-                break;
+            }
+            else
+            {
+                Debug.LogWarning($"No GameObject found for Player: {player.NickName}");
             }
         }
+
     }
+
     public void SetMoney(int newMoneyAmount)
     {
         foreach (var player in FindObjectsOfType<PhotonView>())
@@ -123,7 +157,7 @@ public class GunShop : MonoBehaviourPun
                 playerMoney = newMoneyAmount;
 
                 // Tìm đối tượng Text để hiển thị số tiền
-                var txtTienTransform = player.transform.Find("Main Camera/Canvas/Tien");
+                var txtTienTransform = player.transform.Find("CameraControl/Main Camera/Canvas/Tien");
                 if (txtTienTransform != null)
                 {
                     Text txtTien = txtTienTransform.GetComponentInChildren<Text>();
