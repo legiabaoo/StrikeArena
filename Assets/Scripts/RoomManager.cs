@@ -47,7 +47,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public GameObject TeamXanhThang;
 
     public bool hasCalledEndGame = false;
-    private bool allPlayersSpawned = false;  // Biến cờ để theo dõi trạng thái spawn
     public bool isCountTeam = false;
 
     health health;
@@ -71,15 +70,26 @@ public class RoomManager : MonoBehaviourPunCallbacks
     }
     public void JoinRoomButtonPressed()
     {
+        Debug.Log("Kết nối ...");
 
-        Debug.Log("Ket Noi ...");
-        PhotonNetwork.ConnectUsingSettings();
-        PhotonNetwork.JoinOrCreateRoom(roomNameToJoin, null, null);
-        nameUI.SetActive(false);
-        connectingUI.SetActive(true);
-        thoigian.SetActive(true);
+        if (!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
 
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.JoinOrCreateRoom(roomNameToJoin, null, null);
+            nameUI.SetActive(false);
+            connectingUI.SetActive(true);
+            thoigian.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("Chưa kết nối được với Photon!");
+        }
     }
+
 
     public override void OnJoinedRoom()
     {

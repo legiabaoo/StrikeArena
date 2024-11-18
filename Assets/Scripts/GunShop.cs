@@ -44,10 +44,10 @@ public class GunShop : MonoBehaviourPun
         gunPositions[2] = new Vector3(-669.6f, -221.3f, 0.7f); // V? trí cho súng s? 3
         gunRotations[2] = Quaternion.Euler(-178.8f, 0.86f, 0.9f); // Rotation cho súng s? 3
 
-        gunPositions[3] = new Vector3(-669.454224f, -221.10997f, 1.03728712f); // V? trí cho súng s? 3
+        gunPositions[3] = new Vector3(0.200000003f, -0.129999995f, 0.289999992f); // V? trí cho súng s? 3
         gunRotations[3] = Quaternion.Euler(-1.06721711e-06f, 354.690002f, 18.2900028f);
 
-        gunPositions[4] = new Vector3(-669.454224f, -221.10997f, 1.03728712f); // V? trí cho súng s? 3
+        gunPositions[4] = new Vector3(0.200000003f, -0.129999995f, 0.289999992f); // V? trí cho súng s? 3
         gunRotations[4] = Quaternion.Euler(-1.06721711e-06f, 354.690002f, 18.2900028f);
     }
 
@@ -118,29 +118,29 @@ public class GunShop : MonoBehaviourPun
         // Tìm đối tượng của người chơi cục bộ
         foreach (var player in PhotonNetwork.PlayerList)
         {
-            // Tính toán ViewID từ ActorNumber
-            int viewID = player.ActorNumber * 1000 + 1;
-
-            // Tìm đối tượng GameObject liên quan đến người chơi này
-            GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
-
-            if (playerObject != null)
+            if (player.CustomProperties.TryGetValue("viewID", out var viewIDValue) &&
+                viewIDValue is int viewID)
             {
-                // Tìm Main Camera trong cấu trúc con của GameObject này
-                Transform cameraTransform = playerObject.transform.Find("CameraControl/Main Camera/GunPosition");
-                if (cameraTransform != null)
+                GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
+                if (playerObject != null)
                 {
-                    gunPositionFound = true;
+                    // Tìm Main Camera trong cấu trúc con của GameObject này
+                    gunPosition = playerObject.transform.Find("CameraControl/Main Camera/GunPosition");
+                    if (gunPosition != null)
+                    {
+                        gunPositionFound = true;
+                        Debug.Log("GunPO");
+                    }
+                    else
+                    {
+                        gunPositionFound = false;
+                        Debug.Log("GunPO nul roio");
+                    }
                 }
                 else
                 {
-                    gunPositionFound = false;
-                    Debug.Log("GunPO nul roio");
+                    Debug.LogWarning($"No GameObject found for Player: {player.NickName}");
                 }
-            }
-            else
-            {
-                Debug.LogWarning($"No GameObject found for Player: {player.NickName}");
             }
         }
 

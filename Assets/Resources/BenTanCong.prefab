@@ -853,7 +853,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 758308686651600168}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1db6430de3a83747a7be23591258ba1, type: 3}
   m_Name: 
@@ -6228,7 +6228,6 @@ GameObject:
   - component: {fileID: 758308687140538732}
   - component: {fileID: 758308687140579656}
   - component: {fileID: 758308687150719499}
-  - component: {fileID: 758308687150719496}
   - component: {fileID: 6898800885094063737}
   - component: {fileID: 6898800885094063738}
   - component: {fileID: 1989374547227379113}
@@ -6377,29 +6376,6 @@ MonoBehaviour:
   anim: {fileID: 758308687141290316}
   oRot: {fileID: 5308396501109853700}
   swapTime: 0.5
---- !u!114 &758308687150719496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 758308687150719498}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6e018d537235a54cbc3a74ec3035163, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 100
-  ragdoll: {fileID: 4728404276885658393, guid: 76873c39c076369418c0097374ccd4de, type: 3}
-  dontSpawnRagdoll: 0
-  deadTime: 0
-  isAiOrDummy: 0
-  playNoiseOnHurt: 1
-  percentageToPlay: 0.3
-  hurtNoise: {fileID: 8300000, guid: 7fd84186c85e2d446b9c205e28131542, type: 3}
-  regen: 1
-  timeBeforeRegen: 5
-  regenSpeed: 0.1
 --- !u!114 &6898800885094063737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11794,7 +11770,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 758308687545898484}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1db6430de3a83747a7be23591258ba1, type: 3}
   m_Name: 
@@ -17213,7 +17189,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 8341161198671653776, guid: 8d1ba60a12b89084fac936ed6f2d6b1c, type: 3}
+  m_Mesh: {fileID: 8341161198671653776, guid: 36303962ddee1844c9cd4f5a4e4a147d, type: 3}
   m_Bones:
   - {fileID: 5522813105551292325}
   - {fileID: 5245568306949899318}
@@ -19010,7 +18986,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1862986573802335894}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1db6430de3a83747a7be23591258ba1, type: 3}
   m_Name: 
@@ -19428,7 +19404,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2024525651795561584}
   m_LocalRotation: {x: 0.06540306, y: -0, z: -0, w: 0.99785894}
-  m_LocalPosition: {x: 450.47305, y: 145.30206, z: 27.485935}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.6666667, y: 0.6666666, z: 0.6666666}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -20517,7 +20493,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5120030135017674203}
-  - component: {fileID: 8245937091010822713}
   m_Layer: 0
   m_Name: NickName
   m_TagString: Untagged
@@ -20546,18 +20521,6 @@ RectTransform:
   m_AnchoredPosition: {x: -0.09, y: 1.219}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &8245937091010822713
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3305717851650235279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f36535a1ec4cdd047910f2fa6d825a6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3315875059496958467
 GameObject:
   m_ObjectHideFlags: 0

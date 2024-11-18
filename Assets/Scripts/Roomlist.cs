@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
@@ -24,16 +24,16 @@ public class Roomlist : MonoBehaviourPunCallbacks
     {
         string roomName = roomNameInputField.text;
 
-        // Ki?m tra xem tÍn phÚng cÛ h?p l? khÙng
+        // Ki?m tra xem t√™n phÃ£ng c√≥ h?p l? kh√¥ng
         if (!string.IsNullOrEmpty(roomName))
         {
-            // G?i ph??ng th?c trong RoomManager ?? t?o phÚng
+            // G?i ph??ng th?c trong RoomManager ?? t?o phÃ£ng
            
             Debug.Log("Tao phong thanh cong");
         }
         else
         {
-            Debug.LogError("TÍn phÚng khÙng h?p l?!");
+            Debug.LogError("T√™n phong kh√¥ng hop li");
         }
     }
     public void ChangRoomToCreateName(string _roomName)
@@ -54,7 +54,8 @@ public class Roomlist : MonoBehaviourPunCallbacks
         }
         yield return new WaitUntil(() => !PhotonNetwork.IsConnected);
 
-        PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = "asia"; // Ch·ªâ ƒë·ªãnh v√πng
+        PhotonNetwork.ConnectUsingSettings(); // K·∫øt n·ªëi v·ªõi v√πng ƒë√£ ch·ªçn
     }
     public override void OnConnectedToMaster()
     {
@@ -64,32 +65,32 @@ public class Roomlist : MonoBehaviourPunCallbacks
     }
     /*  public override void OnRoomListUpdate(List<RoomInfo> roomList)
       {
-          // T?o m?t danh s·ch m?i ?? l?u tr? danh s·ch phÚng ?„ c?p nh?t
+          // T?o m?t danh s√°ch m?i ?? l?u tr? danh s√°ch phÃ£ng ?ƒÉ c?p nh?t
           List<RoomInfo> updatedRoomList = new List<RoomInfo>(roomList);
 
           foreach (var room in roomList)
           {
               Debug.Log("Room Name: " + room.Name);
-              // TÏm ki?m phÚng trong danh s·ch cachedRoomList
+              // TÃÅm ki?m phÃ£ng trong danh s√°ch cachedRoomList
               int index = cachedRoomList.FindIndex(r => r.Name == room.Name);
               if (index != -1)
               {
-                  // N?u phÚng ?„ t?n t?i trong danh s·ch cachedRoomList
+                  // N?u phÃ£ng ?ƒÉ t?n t?i trong danh s√°ch cachedRoomList
                   if (room.RemovedFromList)
                   {
-                      // N?u phÚng ?„ b? xÛa kh?i danh s·ch, lo?i b? nÛ kh?i danh s·ch c?p nh?t
+                      // N?u phÃ£ng ?ƒÉ b? x√≥a kh?i danh s√°ch, lo?i b? n√≥ kh?i danh s√°ch c?p nh?t
                       updatedRoomList.RemoveAt(index);
                   }
                   else
                   {
-                      // N?u khÙng, c?p nh?t thÙng tin c?a phÚng trong danh s·ch c?p nh?t
+                      // N?u kh√¥ng, c?p nh?t th√¥ng tin c?a phÃ£ng trong danh s√°ch c?p nh?t
                       updatedRoomList[index] = room;
                   }
               }
               else
               {
-                  // N?u phÚng khÙng t?n t?i trong danh s·ch cachedRoomList v‡ khÙng b? xÛa kh?i danh s·ch,
-                  // thÍm nÛ v‡o danh s·ch c?p nh?t
+                  // N?u phÃ£ng kh√¥ng t?n t?i trong danh s√°ch cachedRoomList v√† kh√¥ng b? x√≥a kh?i danh s√°ch,
+                  // th√™m n√≥ v√†o danh s√°ch c?p nh?t
                   if (!room.RemovedFromList)
                   {
                       updatedRoomList.Add(room);
@@ -97,10 +98,10 @@ public class Roomlist : MonoBehaviourPunCallbacks
               }
           }
 
-          // C?p nh?t cachedRoomList v?i danh s·ch ?„ c?p nh?t
+          // C?p nh?t cachedRoomList v?i danh s√°ch ?ƒÉ c?p nh?t
           cachedRoomList = updatedRoomList;
 
-          // C?p nh?t giao di?n ng??i d˘ng
+          // C?p nh?t giao di?n ng??i d√πng
           UpdateUI();
       }*/
 
@@ -153,7 +154,7 @@ public class Roomlist : MonoBehaviourPunCallbacks
            GameObject roomItem = Instantiate(roomListItemPrefab, roomListParent);
             Debug.Log("Room Name: " + room.Name);
             roomItem.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = room.Name;
-            roomItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = room.PlayerCount+"/16";
+            roomItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = room.PlayerCount+"/"+room.MaxPlayers;
 
             roomItem.GetComponent<RoomItemButton>().Roomname = room.Name;
         }
