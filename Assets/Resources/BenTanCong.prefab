@@ -514,7 +514,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 8341161198671653776, guid: 36303962ddee1844c9cd4f5a4e4a147d, type: 3}
+  m_Mesh: {fileID: 8341161198671653776, guid: 790415523e2afd44a813203a21027497, type: 3}
   m_Bones:
   - {fileID: 5522813105551292325}
   - {fileID: 5245568306949899318}
@@ -6273,7 +6273,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 758308687150719498}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 36303962ddee1844c9cd4f5a4e4a147d, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 790415523e2afd44a813203a21027497, type: 3}
   m_Controller: {fileID: 9100000, guid: ebae7573d1d3b524cbb5907771350b4d, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
@@ -19221,6 +19221,7 @@ MonoBehaviour:
   damege: 1
   fireRate: 1
   camera: {fileID: 758308687143784894}
+  raycat: {fileID: 0}
   hitVFX: {fileID: 3432958286849152088, guid: 87ee7299dd44ed747af24dbb91bcd33b, type: 3}
   mag: 5
   ammo: 30

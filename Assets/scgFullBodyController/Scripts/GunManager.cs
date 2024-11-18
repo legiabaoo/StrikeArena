@@ -88,6 +88,23 @@ namespace scgFullBodyController
                     }
                 }
             }
+            else if (Input.GetKeyDown(KeyCode.Alpha4) && index != 3 && weapons.Length > 3)
+            {
+                if (!weapons[index].GetComponent<GunController>().firing && !weapons[index].GetComponent<GunController>().swapping
+                    && !weapons[index].GetComponent<GunController>().aiming && weapons[index].GetComponent<GunController>().aimFinished
+                    && !weapons[index].GetComponent<GunController>().reloading && !weapons[index].GetComponent<GunController>().cycling)
+                {
+                    {
+                        index = 3;
+                        Invoke("swapWeapons", swapTime);
+                        foreach (GameObject weapon in weapons)
+                        {
+                            weapon.GetComponent<GunController>().swapping = true;
+                        }
+                        anim.SetBool("putaway", true);
+                    }
+                }
+            }
         }
         void swapWeapons()
         {

@@ -11,7 +11,7 @@ public class Weapon : MonoBehaviour
     public float fireRate;
     public Camera camera;
     private float nextFire;
-
+    public GameObject raycat;
     [Header("Hieu Ung")]
     public GameObject hitVFX;
     [Header("So Dan")]
@@ -118,7 +118,7 @@ public class Weapon : MonoBehaviour
         int shooterTeam = (int)shooterPhotonView.Owner.CustomProperties["team"];
 
         // T?o ray t? camera
-        Ray ray = new Ray(camera.transform.position, camera.transform.forward);
+        Ray ray = new Ray(raycat.transform.position, raycat.transform.forward);
         RaycastHit hit;
 
         // Ki?m tra va ch?m v?i raycast
