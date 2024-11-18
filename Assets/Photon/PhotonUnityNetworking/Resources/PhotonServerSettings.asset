@@ -82,6 +82,9 @@ MonoBehaviour:
   - ShieldDown
   - Explode
   - ApplyThrowForce
+  - ExplodeEffectAndSound
+  - PlayExplosionSound
+  - PlaySmokeSound
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
