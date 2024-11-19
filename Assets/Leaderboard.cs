@@ -8,8 +8,9 @@ public class Leaderboard : MonoBehaviour
 {
     public Transform leaderboardParent; // Parent chứa các mục xếp hạng
     public GameObject leaderboardItemPrefab; // Prefab cho mỗi người chơi
+    public GameObject loading;
 
-    private string apiUrl = "http://localhost:3000/players/ranking"; // URL API bảng xếp hạng
+    private string apiUrl = "https://api-strikearena.onrender.com/players/ranking"; // URL API bảng xếp hạng
     private void Start()
     {
         FetchLeaderboard();
@@ -21,6 +22,7 @@ public class Leaderboard : MonoBehaviour
 
     private IEnumerator GetLeaderboardData()
     {
+        loading.SetActive(true);
         UnityWebRequest request = UnityWebRequest.Get(apiUrl);
         yield return request.SendWebRequest();
 
@@ -53,6 +55,7 @@ public class Leaderboard : MonoBehaviour
         {
             Debug.LogError("Lỗi khi lấy dữ liệu bảng xếp hạng: " + request.error);
         }
+        loading.SetActive(false);
     }
 }
 
