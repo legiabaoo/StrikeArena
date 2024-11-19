@@ -59,7 +59,8 @@ public class RegisterAPI : MonoBehaviour
 
         string jsonStringRequest = JsonConvert.SerializeObject(registerModel);
 
-        var request = new UnityWebRequest("https://api-strikearena.onrender.com/register", "POST");
+        //var request = new UnityWebRequest("https://api-strikearena.onrender.com/register", "POST");
+        var request = new UnityWebRequest("http://localhost:3000/register", "POST");
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonStringRequest);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();

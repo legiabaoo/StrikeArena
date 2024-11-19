@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class MainHall : MonoBehaviour
 {
     public TMP_Text username;
+    public TMP_Text rank;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -21,6 +22,7 @@ public class MainHall : MonoBehaviour
     void Update()
     {
         username.text = PlayerPrefs.GetString("Username");
+        rank.text = PlayerPrefs.GetInt("Rank").ToString();
     }
     public void Play()
     {
