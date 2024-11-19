@@ -63,7 +63,7 @@ namespace scgFullBodyController
         public float magDespawnTime;
         public float cycleTimeBoltAction;
         public float cycleTimeSemiAuto;
-        int bulletsInMag;
+       public int bulletsInMag;
 
         [Header("Timing")]
         public float reloadTime;
@@ -95,7 +95,7 @@ namespace scgFullBodyController
         public AudioClip fireSound;
         public AudioClip reloadSound;
         Coroutine lastRoutine = null;
-
+ 
         void OnEnable()
         {
             if (Weapon == WeaponTypes.Rifle)
@@ -137,10 +137,12 @@ namespace scgFullBodyController
 
         void Update()
         {
+
             if (!photonView.IsMine) return;
             //Input and actions for shooting
             if (Input.GetButtonDown("Fire1") && !firing && reloading == false && bulletsInMag > 0 && !cycling && !swapping)
             {
+
                 firing = true;
                 foreach (ParticleSystem ps in muzzleFlashes)
                 {
@@ -188,6 +190,7 @@ namespace scgFullBodyController
                         gameObject.GetComponent<Animator>().SetBool("cycle", true);
                     }
                 }
+             
             }
             else if (Input.GetButtonUp("Fire1") || bulletsInMag == 0)
             {
@@ -259,7 +262,7 @@ namespace scgFullBodyController
         {
             firing = false;
         }
-
+      
         void LateUpdate()
         {
             if (Input.GetButtonDown("Fire2") && aimFinished && !swapping)

@@ -896,6 +896,7 @@ MonoBehaviour:
   magDespawnTime: 3
   cycleTimeBoltAction: 0
   cycleTimeSemiAuto: 0.1
+  bulletsInMag: 0
   reloadTime: 1.1
   grenadeTime: 2
   fireRate: 0.1
@@ -11812,6 +11813,7 @@ MonoBehaviour:
   magDespawnTime: 3
   cycleTimeBoltAction: 1.2
   cycleTimeSemiAuto: 0
+  bulletsInMag: 0
   reloadTime: 1.5
   grenadeTime: 2
   fireRate: 0.12
@@ -19029,6 +19031,7 @@ MonoBehaviour:
   magDespawnTime: 3
   cycleTimeBoltAction: 0
   cycleTimeSemiAuto: 0
+  bulletsInMag: 0
   reloadTime: 1.5
   grenadeTime: 2
   fireRate: 0.12
@@ -19203,11 +19206,8 @@ MonoBehaviour:
   ammo: 30
   magAmmo: 30
   ammoText: {fileID: 2503448716457891874}
-  recoverPercent: 0.7
-  recoilUp: 1
-  recoilBack: 1
-  recovering: 0
   doxa: 50
+  gun: {fileID: 0}
 --- !u!1 &1879452289008981100
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using TMPro;
 using Photon.Pun.UtilityScripts;
+using scgFullBodyController;
 
 public class Weapon : MonoBehaviour
 {
@@ -22,32 +23,30 @@ public class Weapon : MonoBehaviour
   
     public TextMeshProUGUI ammoText;
 
-    [Header("Do Giat")]
+   /* [Header("Do Giat")]
     [Range(0f, 2f)]
     public float recoverPercent = 0.7f;
-    [Space]
-    public float recoilUp = 1f;
-    public float recoilBack = 0f;
+    [Space]*/
+   /* public float recoilUp = 1f;
+    public float recoilBack = 0f;*/
 
     private Vector3 origianlPosition;
     private Vector3 recoilVeclocity = Vector3.zero;
 
-    private bool recoiling;
-    public bool recovering;
-    private float recoilLength;
-    private float recoverLength;
+ /*   private bool recoiling;*/
+   /* public bool recovering;*/
+  /*  private float recoilLength;
+    private float recoverLength;*/
     public float doxa = 0f;
-
+    public GunController gun;
     // Start is called before the first frame update
     void Start()
     {
+     
+
+    
+
        
-        ammoText.text = ammo + "/" + magAmmo;
-
-        origianlPosition = transform.localPosition;
-
-        recoilLength = 0;
-        recoverLength = 1 / fireRate * recoverPercent;
     }
 
     // Update is called once per frame
@@ -64,12 +63,12 @@ public class Weapon : MonoBehaviour
             nextFire -= Time.deltaTime;
         }
 
-        if (Input.GetButton("Fire1") && nextFire <= 0 && ammo > 0)
+        if (Input.GetButtonDown("Fire5") && nextFire <= 0 && gun.bulletsInMag > 0)
         {
             Debug.Log("ban ne.............");
-         /*   nextFire = 1 / fireRate;
-            ammo--;
-
+            nextFire = 1 / fireRate;
+          /*  ammo--;
+          
             ammoText.text = ammo + "/" + magAmmo;*/
             Fire();
         }
@@ -103,8 +102,8 @@ public class Weapon : MonoBehaviour
 
     public void Fire()
     {
-        recoiling = true;
-        recovering = false;
+ /*       recoiling = true;
+        recovering = false;*/
 
         // L?y PhotonView c?a ng??i b?n (shooter)
         PhotonView shooterPhotonView = GetComponentInParent<PhotonView>();
