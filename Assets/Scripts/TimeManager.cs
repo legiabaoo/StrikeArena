@@ -175,10 +175,12 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("team", out var teamValue) && (int)teamValue == winningTeam)
         {
             win.SetActive(true); // Hiển thị chiến thắng nếu là team thắng
+            PlayerPrefs.SetInt("Result", 1);
         }
         else
         {
             lose.SetActive(true); // Hiển thị thua nếu không phải là team thắng
+            PlayerPrefs.SetInt("Result", -1);
         }
     }
     private void StartBuyPhase()

@@ -97,24 +97,25 @@ public class CameraManager : MonoBehaviourPunCallbacks, IPunObservable
         if (playerObjects.Count == 0) return;
 
         // Tắt camera của đồng đội hiện tại
-        GameObject currentPlayer = playerObjects[currentTeammateIndex];
-        Transform cameraControl = currentPlayer.transform.Find("CameraControl/Main Camera");
-
-        if (cameraControl != null)
+        if (currentTeammateIndex >= 0 && currentTeammateIndex < playerObjects.Count)
         {
-            Camera currentPlayerCamera = cameraControl.GetComponent<Camera>();
-            Canvas currentPlayerCanvas = currentPlayer.GetComponentInChildren<Canvas>();
-
-            if (currentPlayerCamera != null)
+            GameObject currentPlayer = playerObjects[currentTeammateIndex];
+            Transform cameraControl = currentPlayer.transform.Find("CameraControl/Main Camera");
+            if (cameraControl != null)
             {
-                currentPlayerCamera.enabled = false;
-                currentPlayerCamera.GetComponent<AudioListener>().enabled = false;
+                Camera currentPlayerCamera = cameraControl.GetComponent<Camera>();
+                Canvas currentPlayerCanvas = currentPlayer.GetComponentInChildren<Canvas>();
 
-                if (currentPlayerCanvas != null)
-                    currentPlayerCanvas.enabled = false;
+                if (currentPlayerCamera != null)
+                {
+                    currentPlayerCamera.enabled = false;
+                    currentPlayerCamera.GetComponent<AudioListener>().enabled = false;
+
+                    if (currentPlayerCanvas != null)
+                        currentPlayerCanvas.enabled = false;
+                }
             }
         }
-
         // Tăng chỉ mục và đảm bảo vòng lại đầu nếu đạt cuối danh sách
         currentTeammateIndex = (currentTeammateIndex + 1) % playerObjects.Count;
 
