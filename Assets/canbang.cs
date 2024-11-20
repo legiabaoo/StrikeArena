@@ -46,9 +46,29 @@ public class canbang : MonoBehaviour
 
     void UnequipObject()
     {
+        // Tháo súng khỏi người chơi
         PlayerTransform.DetachChildren();
         Gun.transform.eulerAngles = new Vector3(Gun.transform.eulerAngles.x, Gun.transform.eulerAngles.y, Gun.transform.eulerAngles.z - 45);
         Gun.GetComponent<Rigidbody>().isKinematic = false;
+
+        // Tìm Collider của người chơi và của súng
+        Collider playerCollider = PlayerTransform.GetComponent<Collider>();
+        Collider gunCollider = Gun.GetComponent<Collider>();
+
+        // Bỏ qua va chạm giữa người chơi và súng
+        Physics.IgnoreCollision(playerCollider, gunCollider, true);
+
+        // Kích hoạt lại va chạm sau một thời gian ngắn
+        StartCoroutine(ReactivateCollision(playerCollider, gunCollider));
+    }
+
+    IEnumerator ReactivateCollision(Collider playerCollider, Collider gunCollider)
+    {
+        // Đợi một khoảng thời gian ngắn để súng nằm yên
+        yield return new WaitForSeconds(0.5f);
+
+        // Kích hoạt lại va chạm giữa người chơi và súng
+        Physics.IgnoreCollision(playerCollider, gunCollider, false);
     }
 
     void EquipObject()
