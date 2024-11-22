@@ -19,6 +19,7 @@ namespace scgFullBodyController
 
         void Start()
         {
+
             //Initialize each weapon and set state to swapping automatically so gun controller knows to setup weapon positions
             foreach (GameObject weapon in weapons)
             {
@@ -30,7 +31,25 @@ namespace scgFullBodyController
             */
             Invoke("setSwappedWeaponPositions", .567f + .25f);
         }
+        public void AddWeaponToInventory(GameObject newWeapon)
+        {
+            if (weapons == null)
+            {
+                // Nếu mảng chưa khởi tạo, khởi tạo mảng với vũ khí đầu tiên
+                weapons = new GameObject[] { newWeapon };
+            }
+            else
+            {
+                // Chuyển mảng sang List để dễ thêm vũ khí
+                List<GameObject> weaponList = new List<GameObject>(weapons);
+                weaponList.Add(newWeapon);
 
+                // Cập nhật lại mảng
+                weapons = weaponList.ToArray();
+            }
+
+            Debug.Log($"Đã thêm vũ khí {newWeapon.name} vào inventory tại vị trí {weapons.Length - 1}.");
+        }
         void Update()
         {
             if (!GetComponent<PhotonView>().IsMine)

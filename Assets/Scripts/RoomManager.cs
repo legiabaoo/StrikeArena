@@ -48,7 +48,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public bool hasCalledEndGame = false;
     public bool isCountTeam = false;
-
+    public GameObject gunshop;
     health health;
     private void Awake()
     {
@@ -83,6 +83,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             nameUI.SetActive(false);
             connectingUI.SetActive(true);
             thoigian.SetActive(true);
+            gunshop.GetComponent<GunShop>().enabled = true;
         }
         else
         {

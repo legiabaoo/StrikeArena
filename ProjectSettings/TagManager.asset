@@ -19,6 +19,22 @@ TagManager:
   - Spike
   - Side
   - OldPlayer
+  - metal
+  - hud
+  - concrete
+  - gravel
+  - vaultObject
+  - water
+  - Door
+  - grass
+  - hitCollider
+  - AmmoText
+  - nutngam
+  - RightHand
+  - campoint
+  - head
+  - LeftHand
+  - ngontay
   layers:
   - Default
   - TransparentFX

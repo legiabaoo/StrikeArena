@@ -1315,7 +1315,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 4
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1429,7 +1429,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: 
 --- !u!222 &144359070
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2056,7 +2056,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 192313586}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1122015389}
+        m_TargetAssemblyTypeName: GunShop, Assembly-CSharp
+        m_MethodName: BuyGunButton
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &192313586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4487,7 +4499,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &341907115
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4605,6 +4617,7 @@ RectTransform:
   m_Children:
   - {fileID: 1851708099}
   - {fileID: 1579485809}
+  - {fileID: 1837431450}
   m_Father: {fileID: 1646948800}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5196,7 +5209,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 623.3141, y: -906.61993}
+  m_AnchoredPosition: {x: 623.3141, y: -443}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &461156314
@@ -5418,7 +5431,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 463155597}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1122015389}
+        m_TargetAssemblyTypeName: GunShop, Assembly-CSharp
+        m_MethodName: BuyGunButton
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &463155597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7296,7 +7321,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &594325519
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7710,7 +7735,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &655248242
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8198,7 +8223,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 3
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -11637,6 +11662,7 @@ MonoBehaviour:
   TeamXanhThang: {fileID: 0}
   hasCalledEndGame: 0
   isCountTeam: 0
+  gunshop: {fileID: 1122015387}
 --- !u!4 &958552425
 Transform:
   m_ObjectHideFlags: 0
@@ -12357,7 +12383,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -13161,7 +13187,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: 
 --- !u!222 &1105362351
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13370,7 +13396,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1122015387}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43c11dca253e88549b232cefd476b162, type: 3}
   m_Name: 
@@ -13379,9 +13405,10 @@ MonoBehaviour:
   playerMoney: 800
   gunPrice: 100
   gunPrefabs:
-  - {fileID: 4563695519729902279, guid: 19499c100ccf3114bbdf8260e0c865ca, type: 3}
-  - {fileID: 1694150165636238912, guid: dc354c63963ca8f45bfa28d254c1747e, type: 3}
-  - {fileID: 4992266126766368194, guid: 3551801e5b0125f4d9a024c098a8bf87, type: 3}
+  - {fileID: 6282452014608119975, guid: 88eca7b766e7cc143948faa7e701629e, type: 3}
+  - {fileID: 2941964371416499335, guid: 60a006a85b6604e439abc16df1246b1c, type: 3}
+  - {fileID: 5178168762548223058, guid: 7ef5a10bb97a1e84e976dc737e6bc339, type: 3}
+  - {fileID: 2400087836839903555, guid: 3ab8253b04afd584db5dc5de83fcc4b0, type: 3}
   - {fileID: 5766885306629243985, guid: 9bd54ed01c9f45d40b7182a1da63209c, type: 3}
   - {fileID: 2983185108419463013, guid: 3c9672393c1efd14b9d0506977089ad3, type: 3}
   gunPosition: {fileID: 0}
@@ -13746,7 +13773,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1165132104
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14470,7 +14497,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1210529276
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14701,7 +14728,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: 
 --- !u!222 &1244039648
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17549,7 +17576,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1406636491
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19016,7 +19043,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: 
 --- !u!222 &1516218498
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20270,7 +20297,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: 
 --- !u!222 &1590509852
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -23412,7 +23439,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1801017781
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23831,13 +23858,13 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1851708099}
-  m_RootOrder: 0
+  m_Father: {fileID: 346726353}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -631, y: 250}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1837431451
 MonoBehaviour:
@@ -23852,7 +23879,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 0.98853076, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -23861,10 +23888,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
-    m_FontStyle: 0
+    m_FontSize: 20
+    m_FontStyle: 1
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -23872,7 +23899,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: "Ch\u01B0a c\u1EADp nh\u1EADt"
 --- !u!222 &1837431452
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -23930,8 +23957,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1837431450}
+  m_Children: []
   m_Father: {fileID: 346726353}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -24362,7 +24388,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1886670231}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1122015389}
+        m_TargetAssemblyTypeName: GunShop, Assembly-CSharp
+        m_MethodName: BuyGunButton
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1886670231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24632,7 +24670,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: 
 --- !u!222 &1957542645
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -24694,7 +24732,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1968757077
 RectTransform:
   m_ObjectHideFlags: 0

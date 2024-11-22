@@ -1,9 +1,13 @@
-﻿using Photon.Pun;
+﻿using ExitGames.Client.Photon.StructWrapping;
+using Photon.Pun;
 using Photon.Realtime;
+using scgFullBodyController;
+using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 public class GunShop : MonoBehaviourPun
 {
@@ -19,38 +23,94 @@ public class GunShop : MonoBehaviourPun
     public Quaternion[] gunRotations; // M?ng l?u rotation c? ??nh c?a m?i cây súng
     private WeaponSwitcher weaponSwitcher;
     private Text txtTien;
+    private GameObject playerObject; // Người chơi cục bộ
+    private Animator playerAnimator;
+    private Animator playerCamAnim;
+    private GameObject cam;
+    private GameObject campoint;
+    private Transform righthand;
+    private Transform lefthand;
+    private Transform head;
+    private Transform ngontay;
     private void Awake()
     {
         instance = this;
     }
     void Start()
     {
+        StartCoroutine(CheckForPlayerObject());
+
         // Ki?m tra gunPrefabs
         if (gunPrefabs == null || gunPrefabs.Length == 0)
         {
             Debug.LogError("gunPrefabs không ???c gán ho?c tr?ng!");
         }
+
         gunPositions = new Vector3[10]; // 10 cây súng
         gunRotations = new Quaternion[10];
 
         // Ví d? gán v? trí và rotation cho 10 cây súng
-        gunPositions[0] = new Vector3(-669.460022f, -221.089996f, 1f); // V? trí cho súng s? 1
-        gunRotations[0] = Quaternion.Euler(13, -99.3f, 13); // Rotation cho súng s? 1
+        gunPositions[0] = new Vector3(0.03108988f, -0.01033462f, 0.07142594f); // V? trí cho súng s? 1
+        gunRotations[0] = Quaternion.Euler(1 - 9.366f, -75.064f, 25.989f); // Rotation cho súng s? 1
 
-        gunPositions[1] = new Vector3(-669.1f, -221.3f, 1.32f); // V? trí cho súng s? 2
-        gunRotations[1] = Quaternion.Euler(-1.24f, 86.72f, 1.38f); // Rotation cho súng s? 2
+        gunPositions[1] = new Vector3(0.03270616f, 0.006453183f, 0.06735089f); // V? trí cho súng s? 2
+        gunRotations[1] = Quaternion.Euler(188.205f, 102.547f, 206.354f); // Rotation cho súng s? 2
 
 
-        gunPositions[2] = new Vector3(-669.6f, -221.3f, 0.7f); // V? trí cho súng s? 3
-        gunRotations[2] = Quaternion.Euler(-178.8f, 0.86f, 0.9f); // Rotation cho súng s? 3
+        gunPositions[2] = new Vector3(0.03270616f, 0.006453183f, 0.06735089f); // V? trí cho súng s? 3
+        gunRotations[2] = Quaternion.Euler(-8.205f, -77.453f, 26.354f); // Rotation cho súng s? 3
 
-        gunPositions[3] = new Vector3(0.200000003f, -0.129999995f, 0.289999992f); // V? trí cho súng s? 3
-        gunRotations[3] = Quaternion.Euler(-1.06721711e-06f, 354.690002f, 18.2900028f);
+        gunPositions[3] = new Vector3(0.03270616f, 0.006453183f, 0.06735089f); // V? trí cho súng s? 3
+        gunRotations[3] = Quaternion.Euler(-8.205f, -77.453f, 26.354f);
 
-        gunPositions[4] = new Vector3(0.200000003f, -0.129999995f, 0.289999992f); // V? trí cho súng s? 3
-        gunRotations[4] = Quaternion.Euler(-1.06721711e-06f, 354.690002f, 18.2900028f);
+        gunPositions[4] = new Vector3(0.03108988f, -0.01033462f, 0.07142594f); // V? trí cho súng s? 1
+        gunRotations[4] = Quaternion.Euler(1 - 9.366f, -75.064f, 25.989f); // Rotation cho súng s? 1
+
+        gunPositions[5] = new Vector3(0.03108988f, -0.01033462f, 0.07142594f); // V? trí cho súng s? 1
+        gunRotations[5] = Quaternion.Euler(1 - 9.366f, -75.064f, 25.989f); // Rotation cho súng s? 1
+
+        
     }
+    private IEnumerator CheckForPlayerObject()
+    {
+        // Chờ cho đến khi nhân vật được tạo
+        while (playerObject == null)
+        {
+            foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
+            {
+                PhotonView photonView = player.GetComponent<PhotonView>();
+                if (photonView != null && photonView.IsMine)
+                {
+                    playerObject = player;
+                    playerAnimator = playerObject.GetComponent<Animator>();
+                    GameObject cameraObject = GameObject.FindGameObjectWithTag("MainCamera");
+                    if (cameraObject != null)
+                    {
+                        playerCamAnim = cameraObject.GetComponent<Animator>();
+                    }
+                    cam = cameraObject;
+                    GameObject cameraPoint = GameObject.FindGameObjectWithTag("campoint");
+                    campoint = cameraPoint;
+                   GameObject tayphai= GameObject.FindGameObjectWithTag("RightHand");
+                    righthand = tayphai.GetComponent<Transform>();
+                    GameObject taytrai = GameObject.FindGameObjectWithTag("LeftHand");
+                    lefthand = taytrai.GetComponent<Transform>();
+                    GameObject dau = GameObject.FindGameObjectWithTag("head");
+                    head = dau.GetComponent<Transform>();
+                    GameObject tay = GameObject.FindGameObjectWithTag("ngontay");
+                    ngontay = tay.GetComponent<Transform>();
 
+                    break;
+                }
+            }
+            yield return new WaitForSeconds(1f);  // Kiểm tra lại sau 1 giây
+        }
+
+        // Sau khi tìm thấy playerObject, bật script GunShop
+        enabled = true;
+
+        Debug.Log("PlayerObject đã được tìm thấy, bật script GunShop.");
+    }
     void Update()
     {
         //SetMoney(playerMoney);
@@ -125,7 +185,31 @@ public class GunShop : MonoBehaviourPun
                 if (playerObject != null)
                 {
                     // Tìm Main Camera trong cấu trúc con của GameObject này
-                    gunPosition = playerObject.transform.Find("CameraControl/Main Camera/GunPosition");
+                   /* gunPosition = playerObject.transform.Find("CameraControl/Main Camera/GunPosition");*/
+                    // Lấy tất cả Transform con
+                    Transform[] allChildren = playerObject.GetComponentsInChildren<Transform>();
+
+                    // Tìm Transform có tên "mixamorig:RightHand"
+                    Transform rightHandTransform = null;
+                    foreach (Transform child in allChildren)
+                    {
+                        if (child.name == "GunPos")
+                        {
+                            rightHandTransform = child;
+                            break;
+                        }
+                    }
+
+                    if (rightHandTransform != null)
+                    {
+                        Vector3 rightHandPosition = rightHandTransform.position;
+                        Debug.Log("gun position" + rightHandPosition);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Không tìm thấy mixamorig:RightHand!");
+                    }
+                    gunPosition = rightHandTransform;
                     if (gunPosition != null)
                     {
                         gunPositionFound = true;
@@ -193,7 +277,7 @@ public class GunShop : MonoBehaviourPun
         }
         if (gunIndex == 0)
         {
-            Debug.Log("Súng 0");
+            Debug.Log("Súng M500");
             gunPrice = 100;
             if (playerMoney >= gunPrice)
             {
@@ -208,7 +292,7 @@ public class GunShop : MonoBehaviourPun
         }
         else if (gunIndex == 1)
         {
-            Debug.Log("Súng 1");
+            Debug.Log("Súng Ak47");
             gunPrice = 200;
             if (playerMoney >= gunPrice)
             {
@@ -223,7 +307,7 @@ public class GunShop : MonoBehaviourPun
         }
         else if (gunIndex == 2)
         {
-            Debug.Log("Súng 3");
+            Debug.Log("Súng M4A1");
             gunPrice = 300;
             if (playerMoney >= gunPrice)
             {
@@ -237,6 +321,21 @@ public class GunShop : MonoBehaviourPun
             }
         }
         else if (gunIndex == 3)
+        {
+            Debug.Log("Súng ngắm");
+            gunPrice = 300;
+            if (playerMoney >= gunPrice)
+            {
+                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
+                SetMoney(tien);
+                photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
+            }
+            else
+            {
+                Debug.Log("Không ?? ti?n ?? mua súng.");
+            }
+        }
+        else if (gunIndex == 4)
         {
             Debug.Log("bom");
             gunPrice = 5;
@@ -252,7 +351,7 @@ public class GunShop : MonoBehaviourPun
                 Debug.Log("Không ?? ti?n ?? mua súng.");
             }
         }
-        else if (gunIndex == 4)
+        else if (gunIndex == 5)
         {
             Debug.Log("khoi");
             gunPrice = 5;
@@ -268,6 +367,7 @@ public class GunShop : MonoBehaviourPun
                 Debug.Log("Không ?? ti?n ?? mua súng.");
             }
         }
+       
     }
 
 
@@ -284,15 +384,48 @@ public class GunShop : MonoBehaviourPun
             // T?o và ??ng b? cây súng trên t?t c? client
             GameObject gunInstance = PhotonNetwork.Instantiate(gunPrefabs[gunIndex].name, fixedPosition, fixedRotation);
             gunInstance.SetActive(false);
+            GunController gunController = gunInstance.GetComponent<GunController>();
+            if (gunController != null)
+            {
+                // Truyền các giá trị từ Player vào GunController
+                gunController.anim = playerAnimator;
+                gunController.camAnim = playerCamAnim;
+                gunController.mainCam = cam;
+                gunController.shootPointCamera = campoint;
+                gunController.mainHandTransform = righthand;
+            }
+            else
+            {
+                Debug.LogError("Không tìm thấy GunController trên cây súng!");
+            }
+            Adjuster adj = gunInstance.GetComponent<Adjuster>();
+            if (adj != null)
+            {
+                adj.handBone = lefthand;
+                adj.headBone = head;
+                adj.indexFinger = ngontay;
+            }
+            else
+            {
+                Debug.LogError("Không tìm thấy Adjuster trên cây súng!");
+            }
             // Lấy con đầu tiên của gunPosition (game con thứ 1)
             Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(gunIndex) : null;
-
-            // Kiểm tra và xóa game con cũ nếu nó tồn tại
+            GunManager gunManager = playerObject.GetComponent<GunManager>();
+            if (gunManager != null)
+            {
+                gunManager.AddWeaponToInventory(gunInstance);
+            }
+            else
+            {
+                Debug.LogError("Không tìm thấy GunManager trên PlayerObject!");
+            }
+          /*  // Kiểm tra và xóa game con cũ nếu nó tồn tại
             if (oldChild != null)
             {
                 Destroy(oldChild.gameObject); // Hoặc dùng `oldChild.gameObject.SetActive(false);` nếu chỉ muốn ẩn đi
             }
-
+*/
             // Đặt gunInstance làm con của gunPosition
             gunInstance.transform.SetParent(gunPosition, false);
             gunInstance.transform.SetSiblingIndex(gunIndex);

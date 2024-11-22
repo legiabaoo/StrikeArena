@@ -95,7 +95,7 @@ namespace scgFullBodyController
         public AudioClip fireSound;
         public AudioClip reloadSound;
         Coroutine lastRoutine = null;
- 
+        private GameObject playerObject;
         void OnEnable()
         {
             if (Weapon == WeaponTypes.Rifle)
@@ -127,8 +127,52 @@ namespace scgFullBodyController
             //Set the ammo count
             bulletsInMag = bulletsPerMag;
             originalCamPos = mainCam.transform.localPosition;
-        }
+            playerObject = FindLocalPlayer();
 
+            if (playerObject != null)
+            {
+                // Gán Animator cho nhân vật
+                anim = playerObject.GetComponent<Animator>();
+
+                GameObject mainCameraObject = GameObject.Find("Main Camera");
+
+                if (mainCameraObject != null)
+                {
+                    camAnim = mainCameraObject.GetComponent<Animator>();
+                }
+                else
+                {
+                    Debug.LogError("Không tìm thấy Main Camera.");
+                }
+
+            
+                if (anim == null)
+                {
+                    Debug.LogError("Không tìm thấy Animator trên nhân vật.");
+                }
+
+                if (camAnim == null)
+                {
+                    Debug.LogError("Không tìm thấy Animator trên camera.");
+                }
+            }
+            else
+            {
+                Debug.LogError("Không tìm thấy PlayerObject.");
+            }
+        }
+        GameObject FindLocalPlayer()
+        {
+            foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
+            {
+                PhotonView photonView = player.GetComponent<PhotonView>();
+                if (photonView != null && photonView.IsMine)
+                {
+                    return player;
+                }
+            }
+            return null;
+        }
         public void initiliazeOrigPositions()
         {
             originalAimPos = mainHandTransform.localPosition;
