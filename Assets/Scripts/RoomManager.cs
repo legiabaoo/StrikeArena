@@ -49,6 +49,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public bool hasCalledEndGame = false;
     public bool isCountTeam = false;
 
+    public bool isSpike = false;
+
     health health;
     private void Awake()
     {
@@ -99,6 +101,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
         camRoom.SetActive(false);
 
         HandleTeamSelection();
+        //if (countSpike == 0)
+        //{
+        //    TimeManager.instance.isSpawnSpike = false;
+        //    photonView.RPC("CountSpike", RpcTarget.AllBuffered);
+        //}
 
         Debug.Log("Number of players in room: " + PhotonNetwork.CurrentRoom.PlayerCount);
 
@@ -106,6 +113,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
         CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
 
     }
+    //[PunRPC]
+    //public void CountSpike()
+    //{
+    //    countSpike++;
+    //}
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         base.OnPlayerEnteredRoom(newPlayer);
@@ -248,13 +260,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         if (redTeamCount >= 1 && blueTeamCount >= 1)
         {
             TimeManager.instance.startGame = true;
-
         }
-        //else
-        //{
-        //    TimeManager.instance.startGame = false;
-        //}
-
     }
     public void UpdatePlayerStatus(bool isAlive)
     {

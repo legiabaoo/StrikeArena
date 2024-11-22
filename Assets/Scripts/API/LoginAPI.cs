@@ -56,7 +56,7 @@ public class LoginAPI : MonoBehaviour
     }
     public void Lose()
     {
-        int score = PlayerPrefs.GetInt("Rank") - 25;
+        int score = PlayerPrefs.GetInt("Rank")-25;
         StartCoroutine(SetScore(score, PlayerPrefs.GetString("Id")));
     }
     IEnumerator CheckLogin(LoginModel loginModel)
@@ -142,7 +142,8 @@ public class LoginAPI : MonoBehaviour
 
         string jsonStringRequest = JsonConvert.SerializeObject(new { score = scoreValue });
 
-        var request = new UnityWebRequest($"http://localhost:3000/players/{id}/score", "PUT");
+        //var request = new UnityWebRequest($"http://localhost:3000/players/{id}/score", "PUT");
+        var request = new UnityWebRequest($"https://api-strikearena.onrender.com/players/{id}/score", "PUT");
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonStringRequest);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();

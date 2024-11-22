@@ -19,6 +19,11 @@ TagManager:
   - Spike
   - Side
   - OldPlayer
+  - hitCollider
+  - AmmoText
+  - hud
+  - nutngam
+  - Spike0
   layers:
   - Default
   - TransparentFX

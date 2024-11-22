@@ -33457,7 +33457,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 700
+  m_Text: '0
+
+'
 --- !u!1 &7506270439065640441
 GameObject:
   m_ObjectHideFlags: 0
@@ -49334,7 +49336,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8364270333650727275, guid: 8a4af9bcf6e528c429debffe75e1db62, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.05
       objectReference: {fileID: 0}
     - target: {fileID: 8364270333650727275, guid: 8a4af9bcf6e528c429debffe75e1db62, type: 3}
       propertyPath: m_LocalPosition.z

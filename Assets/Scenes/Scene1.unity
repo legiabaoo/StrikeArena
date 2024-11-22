@@ -812,6 +812,7 @@ Transform:
   - {fileID: 307235349}
   - {fileID: 1767537028}
   - {fileID: 379446187}
+  - {fileID: 1539339240}
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9616,6 +9617,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   diemTeamXanh: {fileID: 1725501981}
   diemTeamDo: {fileID: 1718082578}
+  scoreXanh: 0
+  scoreDo: 0
   timeText: {fileID: 40919617}
   startGame: 0
   isGameOver: 0
@@ -9626,6 +9629,8 @@ MonoBehaviour:
   win: {fileID: 1489482454}
   lose: {fileID: 463930438}
   spawnScript: {fileID: 2645702516479466903, guid: 53a49ccedec097643873bfea41158870, type: 3}
+  spawnSpike: {fileID: 1539339240}
+  spike: {fileID: 1244756615232544913, guid: d4fbfcb7e0d82de4a9a7b3a6bd9dfae4, type: 3}
   listshield:
   - {fileID: 2126378727}
   - {fileID: 1562069058}
@@ -9634,6 +9639,8 @@ MonoBehaviour:
   - {fileID: 1207409700}
   - {fileID: 969610083}
   - {fileID: 642178994}
+  countRound: 1
+  haha: 1
 --- !u!114 &782628377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11637,6 +11644,7 @@ MonoBehaviour:
   TeamXanhThang: {fileID: 0}
   hasCalledEndGame: 0
   isCountTeam: 0
+  isSpike: 0
 --- !u!4 &958552425
 Transform:
   m_ObjectHideFlags: 0
@@ -13376,7 +13384,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopUI: {fileID: 119054399}
-  playerMoney: 800
+  playerMoney: 0
   gunPrice: 100
   gunPrefabs:
   - {fileID: 4563695519729902279, guid: 19499c100ccf3114bbdf8260e0c865ca, type: 3}
@@ -19293,6 +19301,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1537108303}
   m_CullTransparentMesh: 1
+--- !u!1 &1539339239
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1539339240}
+  m_Layer: 0
+  m_Name: spikeSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1539339240
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1539339239}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 16, y: -0.5, z: -5.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 47115956}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1540255247
 GameObject:
   m_ObjectHideFlags: 0

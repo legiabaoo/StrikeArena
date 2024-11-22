@@ -9,7 +9,7 @@ public class GunShop : MonoBehaviourPun
 {
     public static GunShop instance;
     public GameObject shopUI;                  // UI c?a hàng
-    public int playerMoney = 800;              // Ti?n c?a ng??i ch?i
+    public int playerMoney ;              // Ti?n c?a ng??i ch?i
     public int gunPrice = 100;                 // Giá c?a m?i súng
     public GameObject[] gunPrefabs;            // M?ng ch?a các prefab súng
 
@@ -53,7 +53,7 @@ public class GunShop : MonoBehaviourPun
 
     void Update()
     {
-        //SetMoney(playerMoney);
+        SetMoney(playerMoney);
         // T́m nhân v?t c?a ng??i ch?i và v? trí g?n súng n?u ch?a t́m th?y
         if (!gunPositionFound && PhotonNetwork.IsConnected)
         {
@@ -157,7 +157,7 @@ public class GunShop : MonoBehaviourPun
                 playerMoney = newMoneyAmount;
 
                 // Tìm đối tượng Text để hiển thị số tiền
-                var txtTienTransform = player.transform.Find("CameraControl/Main Camera/Canvas/Tien");
+                Transform txtTienTransform = player.transform.Find("CameraControl/Main Camera/Canvas/Tien");
                 if (txtTienTransform != null)
                 {
                     Text txtTien = txtTienTransform.GetComponentInChildren<Text>();
@@ -170,11 +170,6 @@ public class GunShop : MonoBehaviourPun
                         Debug.LogWarning("Không tìm thấy thành phần Text trên đối tượng 'Tien'.");
                     }
                 }
-                else
-                {
-                    Debug.LogWarning("Không tìm thấy đối tượng 'Canvas/Tien' trong Main Camera.");
-                }
-                
             }
         }
     }
@@ -197,8 +192,8 @@ public class GunShop : MonoBehaviourPun
             gunPrice = 100;
             if (playerMoney >= gunPrice)
             {
-                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
-                SetMoney(tien);
+                playerMoney -= gunPrice; // Tr? ti?n khi mua
+                //SetMoney(tien);
                 photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
             }
             else
@@ -212,8 +207,8 @@ public class GunShop : MonoBehaviourPun
             gunPrice = 200;
             if (playerMoney >= gunPrice)
             {
-                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
-                SetMoney(tien);
+                playerMoney -= gunPrice; // Tr? ti?n khi mua
+                //SetMoney(tien);
                 photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
             }
             else
@@ -227,8 +222,8 @@ public class GunShop : MonoBehaviourPun
             gunPrice = 300;
             if (playerMoney >= gunPrice)
             {
-                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
-                SetMoney(tien);
+                playerMoney -= gunPrice; // Tr? ti?n khi mua
+                //SetMoney(tien);
                 photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
             }
             else
@@ -242,8 +237,8 @@ public class GunShop : MonoBehaviourPun
             gunPrice = 5;
             if (playerMoney >= gunPrice)
             {
-                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
-                SetMoney(tien);
+                playerMoney -= gunPrice; // Tr? ti?n khi mua
+                //SetMoney(tien);
                 ThrowingTutorial.Instance.totalBom++;
                 photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
             }
@@ -258,8 +253,8 @@ public class GunShop : MonoBehaviourPun
             gunPrice = 5;
             if (playerMoney >= gunPrice)
             {
-                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
-                SetMoney(tien);
+                playerMoney -= gunPrice; // Tr? ti?n khi mua
+                //SetMoney(tien);
                 ThrowingTutorial.Instance.totalSmoke++;
                 photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
             }
