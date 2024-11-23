@@ -6738,10 +6738,12 @@ MonoBehaviour:
   attackPoint: {fileID: 954084048554486352}
   bom: {fileID: 5766885306629243985, guid: 9bd54ed01c9f45d40b7182a1da63209c, type: 3}
   smoke: {fileID: 2983185108419463013, guid: 3c9672393c1efd14b9d0506977089ad3, type: 3}
-  totalBom: 0
-  totalSmoke: 0
+  explosionSound: {fileID: 8300000, guid: 983737e368d97a346a4f34a74e3a44e6, type: 3}
+  smokeSound: {fileID: 8300000, guid: a157428c4416fcf40be1945089d7178d, type: 3}
+  totalBom: 50
+  totalSmoke: 20
   throwCooldown: 0.1
-  throwKey: 111
+  throwKey: 323
   throwForce: 50
   throwUpwardForce: 2
 --- !u!1 &758308687194312139
