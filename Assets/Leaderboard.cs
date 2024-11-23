@@ -10,7 +10,8 @@ public class Leaderboard : MonoBehaviour
     public GameObject leaderboardItemPrefab; // Prefab cho mỗi người chơi
     public GameObject loading;
 
-    private string apiUrl = "https://api-strikearena.onrender.com/players/ranking"; // URL API bảng xếp hạng
+    private string apiUrl = "https://api-strikearena.onrender.com/ranking";
+    //private string apiUrl = "http://localhost:3000/ranking"; // URL API bảng xếp hạng
     private void Start()
     {
         FetchLeaderboard();
