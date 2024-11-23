@@ -71,7 +71,6 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         if (haha != PlayerPrefs.GetInt("PlayerMoney"))
         {
             haha = PlayerPrefs.GetInt("PlayerMoney");
-            Debug.LogError(PlayerPrefs.GetInt("PlayerMoney"));
         }
         if (currentTime == 5 && currentPhase == GamePhase.Buy && !isSpawnSpike && startGame)
         {
