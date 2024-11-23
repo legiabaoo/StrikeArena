@@ -163,12 +163,28 @@ namespace scgFullBodyController
         }
         GameObject FindLocalPlayer()
         {
-            foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
+            //foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
+            //{
+            //    PhotonView photonView = player.GetComponent<PhotonView>();
+            //    if (photonView != null && photonView.IsMine)
+            //    {
+            //        return player;
+            //    }
+            //}
+            foreach (var player in PhotonNetwork.PlayerList)
             {
-                PhotonView photonView = player.GetComponent<PhotonView>();
-                if (photonView != null && photonView.IsMine)
+                if (player.CustomProperties.TryGetValue("viewID", out var viewIDValue) &&
+                    viewIDValue is int viewID)
                 {
-                    return player;
+                    GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
+                    if (playerObject != null)
+                    {
+                        return playerObject;
+                    }
+                    else
+                    {
+                        Debug.Log("player null");
+                    }
                 }
             }
             return null;

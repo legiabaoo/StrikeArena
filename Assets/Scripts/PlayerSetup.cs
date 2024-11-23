@@ -17,6 +17,8 @@ public class PlayerSetup : MonoBehaviour
     private PhotonView photonView;
     [SerializeField]
     private int actorNumber; // Biến này sẽ hiển thị trong Inspector
+    //public Transform gunPosition; // Biến public để kéo thả GunPos
+    //public bool gunPositionFound => gunPosition != null;
 
     void Awake()
     {
@@ -24,17 +26,33 @@ public class PlayerSetup : MonoBehaviour
         cameraPlayer.enabled = false;
         cameraPlayer.GetComponent<AudioListener>().enabled = false;
         cameraPlayer.GetComponent<MouseLook>().enabled = false;
+
     }
     private void Start()
     {
         if (PhotonNetwork.LocalPlayer != null)
         {
             actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+
         }
+        //if (photonView.IsMine) // Chỉ thực hiện trên máy của người chơi cục bộ
+        //{
+        //    GunShop gunShop = FindObjectOfType<GunShop>(); // Tìm GunShop trong Scene
+
+        //    if (gunShop != null)
+        //    {
+        //        gunShop.AssignGunPosition(gunPosition); // Gán gunPosition cho GunShop
+        //    }
+        //    else
+        //    {
+        //        Debug.LogWarning("Không tìm thấy GunShop trong Scene!");
+        //    }
+        //}
     }
 
     public void IsLocalPlayer()
     {
+        //gunPosition.gameObject.SetActive(true);
         movemnet.enabled = true;
         cameraPlayer.enabled = true;
         canvas.gameObject.SetActive(true);
@@ -42,11 +60,29 @@ public class PlayerSetup : MonoBehaviour
         cameraPlayer.GetComponent<MouseLook>().enabled = true;
         gameObject.GetComponentInChildren<Canvas>().enabled = true;
         gameObject.GetComponentInChildren<GunController>().enabled = true;
+        //if (PhotonNetwork.LocalPlayer != null)
+        //{
+        //    actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+
+        //}
+        //if (photonView.IsMine) // Chỉ thực hiện trên máy của người chơi cục bộ
+        //{
+        //    GunShop gunShop = FindObjectOfType<GunShop>(); // Tìm GunShop trong Scene
+
+        //    if (gunShop != null)
+        //    {
+        //        gunShop.AssignGunPosition(gunPosition); // Gán gunPosition cho GunShop
+        //    }
+        //    else
+        //    {
+        //        Debug.LogWarning("Không tìm thấy GunShop trong Scene!");
+        //    }
+        //}
     }
     public void OnPlayerDeath()
     {
         // Tắt nhân vật
-    /*    gameObject.GetComponent<MeshRenderer>().enabled=false;*/
+        /*    gameObject.GetComponent<MeshRenderer>().enabled=false;*/
         // Tìm GameObject con theo tên
         Transform child = transform.Find("Ch15_nonPBR");
 
@@ -72,11 +108,11 @@ public class PlayerSetup : MonoBehaviour
         PhotonView photonView = PhotonView.Find(viewID);
         if (photonView != null)
         {
-            if (photonView.IsMine )
+            if (photonView.IsMine)
             {
                 PhotonNetwork.Destroy(photonView.gameObject);
             }
         }
     }
-    
+
 }
