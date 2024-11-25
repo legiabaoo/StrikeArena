@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Huongdan.unity
     guid: b6e8316e5bb05104ca8f7907bb07fd8b
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/LoginScene.unity
     guid: a7d190bbab97fb440bca80308bd3b047
   - enabled: 1
