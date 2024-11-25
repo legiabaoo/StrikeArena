@@ -293,13 +293,13 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
             scoreXanh++;// Cộng 1 điểm cho đội xanh
             photonView.RPC("UpdateScoreXanh", RpcTarget.All, scoreXanh);
         }
-        if (scoreXanh == 2)
+        if (scoreXanh == 4)
         {
             Debug.Log("Xanh thắng");
             photonView.RPC("DisplayEndGameResult", RpcTarget.All, 1); // Truyền 1 cho team Xanh là đội chiến thắng
             Invoke("BackHomeDelay", 1f);
         }
-        else if (scoreDo == 2)
+        else if (scoreDo == 4)
         {
             Debug.Log("Xanh thắng");
             photonView.RPC("DisplayEndGameResult", RpcTarget.All, 0); // Truyền 1 cho team Xanh là đội chiến thắng

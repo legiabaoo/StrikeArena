@@ -81,16 +81,14 @@ MonoBehaviour:
   damege: 40
   fireRate: 8
   camera: {fileID: 0}
+  raycat: {fileID: 0}
   hitVFX: {fileID: 5112403345868107898, guid: 6f34ef0d986e9db4199cf75805f79753, type: 3}
   mag: 50
   ammo: 48
   magAmmo: 48
   ammoText: {fileID: 2253004510801186867, guid: 531c187e759e9ef4686376519324b760, type: 3}
-  recoverPercent: 0.7
-  recoilUp: 0.07
-  recoilBack: 0.3
-  recovering: 0
   doxa: 100
+  gun: {fileID: 0}
 --- !u!114 &3912620341808715360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
+  ObservedComponentsFoldoutOpen: 0
   Group: 0
   prefixField: -1
   Synchronization: 3

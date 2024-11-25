@@ -84,6 +84,8 @@ MonoBehaviour:
   - RPC_PlayMuzzleFlash
   - RPC_SyncWeapon
   - SetGunParent
+  - <CreateGunForPlayer>g__SetGunParent|29_0
+  - SetGunToPositionRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

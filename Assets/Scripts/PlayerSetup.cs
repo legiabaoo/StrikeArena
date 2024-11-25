@@ -19,6 +19,7 @@ public class PlayerSetup : MonoBehaviour
     private int actorNumber; // Biến này sẽ hiển thị trong Inspector
     //public Transform gunPosition; // Biến public để kéo thả GunPos
     //public bool gunPositionFound => gunPosition != null;
+    public Transform gunPosition;
 
     void Awake()
     {
@@ -26,7 +27,7 @@ public class PlayerSetup : MonoBehaviour
         cameraPlayer.enabled = false;
         cameraPlayer.GetComponent<AudioListener>().enabled = false;
         cameraPlayer.GetComponent<MouseLook>().enabled = false;
-
+        gunPosition = gameObject.transform.Find("Ch15_nonPBR/mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2/mixamorig:RightShoulder/mixamorig:RightArm/mixamorig:RightForeArm/mixamorig:RightHand/GunPos");
     }
     private void Start()
     {
@@ -52,7 +53,7 @@ public class PlayerSetup : MonoBehaviour
 
     public void IsLocalPlayer()
     {
-        //gunPosition.gameObject.SetActive(true);
+        gunPosition.gameObject.SetActive(true);
         movemnet.enabled = true;
         cameraPlayer.enabled = true;
         canvas.gameObject.SetActive(true);
@@ -60,6 +61,7 @@ public class PlayerSetup : MonoBehaviour
         cameraPlayer.GetComponent<MouseLook>().enabled = true;
         gameObject.GetComponentInChildren<Canvas>().enabled = true;
         gameObject.GetComponentInChildren<GunController>().enabled = true;
+        gameObject.GetComponent<GunManager>().enabled = true;
         //if (PhotonNetwork.LocalPlayer != null)
         //{
         //    actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
