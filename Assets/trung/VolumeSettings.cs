@@ -9,14 +9,9 @@ public class VolumeSettings : MonoBehaviour
     [SerializeField] private AudioMixer myMixer;
     [SerializeField] private Slider musicSlider;
     // Start is called before the first frame update
-    void Start()
+   public void chinnhnhac()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+        float amluong = musicSlider.value;
+        myMixer.SetFloat("nhac", Mathf.Log10(amluong)*20);
+    }    
 }
