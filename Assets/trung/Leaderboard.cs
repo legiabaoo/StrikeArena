@@ -8,6 +8,7 @@ using System.Text;
 
 public class Leaderboard : MonoBehaviour
 {
+    public static Leaderboard Intansce;
     public Transform leaderboardParent; // Parent chứa các mục xếp hạng
     public GameObject leaderboardItemPrefab; // Prefab cho mỗi người chơi
     public GameObject loading;
@@ -17,6 +18,10 @@ public class Leaderboard : MonoBehaviour
 
     private string apiUrl = "https://api-strikearena.onrender.com/ranking";
     //private string apiUrl = "http://localhost:3000/ranking"; // URL API bảng xếp hạng
+    private void Awake()
+    {
+        Intansce = this;
+    }
     private void Start()
     {
         FetchLeaderboard();
@@ -36,8 +41,8 @@ public class Leaderboard : MonoBehaviour
 
         //string jsonStringRequest = JsonConvert.SerializeObject();
 
-        var request = new UnityWebRequest($"http://localhost:3000/user/ranking/{id}", "GET");
-        //var request = new UnityWebRequest($"https://api-strikearena.onrender.com/user/ranking/{id}", "PUT");
+        //var request = new UnityWebRequest($"http://localhost:3000/user/ranking/{id}", "GET");
+        var request = new UnityWebRequest($"https://api-strikearena.onrender.com/user/ranking/{id}", "GET");
         //byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonStringRequest);
         //request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
