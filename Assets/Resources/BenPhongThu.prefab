@@ -11260,7 +11260,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 758308687150719498}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9eb5e91500ae844a94d955ca87d613a, type: 3}
   m_Name: 
@@ -11582,6 +11582,7 @@ MonoBehaviour:
   nickname: 
   nickNameText: {fileID: 7700822056192385224}
   actorNumber: 0
+  gunPosition: {fileID: 0}
 --- !u!114 &1296945902638412692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24563,7 +24564,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &388439676252169516
 Transform:
   m_ObjectHideFlags: 0
@@ -65760,7 +65761,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 700
+  m_Text: 0
 --- !u!1 &7506270439065640441
 GameObject:
   m_ObjectHideFlags: 0

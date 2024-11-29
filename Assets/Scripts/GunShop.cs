@@ -13,7 +13,7 @@ public class GunShop : MonoBehaviourPun
 {
     public static GunShop instance;
     public GameObject shopUI;                  // UI c?a hàng
-    public int playerMoney = 800;              // Ti?n c?a ng??i ch?i
+    public int playerMoney ;              // Ti?n c?a ng??i ch?i
     public int gunPrice = 100;                 // Giá c?a m?i súng
     public GameObject[] gunPrefabs;            // M?ng ch?a các prefab súng
 
@@ -36,24 +36,12 @@ public class GunShop : MonoBehaviourPun
     {
         instance = this;
     }
-    //public void AssignGunPosition(Transform playerGunPosition)
-    //{
-    //    gunPosition = playerGunPosition;
 
-    //    if (gunPosition != null)
-    //    {
-    //        Debug.Log($"GunPos đã được gán cho GunShop: {gunPosition.name} tại {gunPosition.position}");
-    //    }
-    //    else
-    //    {
-    //        Debug.LogWarning("GunPos chưa được gán cho GunShop!");
-    //    }
-    //}
     void Start()
     {
         StartCoroutine(CheckForPlayerObject());
 
-      
+
         // Ki?m tra gunPrefabs
         if (gunPrefabs == null || gunPrefabs.Length == 0)
         {
@@ -83,17 +71,18 @@ public class GunShop : MonoBehaviourPun
         gunPositions[5] = new Vector3(0.03108988f, -0.01033462f, 0.07142594f); // V? trí cho súng s? 1
         gunRotations[5] = Quaternion.Euler(1 - 9.366f, -75.064f, 25.989f); // Rotation cho súng s? 1
 
-        
+
     }
-    
+
     void Update()
     {
         StartCoroutine(CheckForPlayerObject());
         //SetMoney(playerMoney);
+        SetMoney(playerMoney);
         // T́m nhân v?t c?a ng??i ch?i và v? trí g?n súng n?u ch?a t́m th?y
         if (!gunPositionFound && PhotonNetwork.IsConnected)
         {
-            
+
             FindPlayerGunPosition();
             Debug.Log("CheckForPlayer1");
         }
@@ -109,12 +98,41 @@ public class GunShop : MonoBehaviourPun
         // Chờ cho đến khi nhân vật được tạo
         while (playerObject == null)
         {
-            foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
+            //foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
+            //{
+            //    PhotonView photonView = player.GetComponent<PhotonView>();
+            //    if (photonView != null && photonView.IsMine)
+            //    {
+            //        playerObject = player;
+            //        playerAnimator = playerObject.GetComponent<Animator>();
+            //        GameObject cameraObject = GameObject.FindGameObjectWithTag("MainCamera");
+            //        if (cameraObject != null)
+            //        {
+            //            playerCamAnim = cameraObject.GetComponent<Animator>();
+            //        }
+            //        cam = cameraObject;
+            //        GameObject cameraPoint = GameObject.FindGameObjectWithTag("campoint");
+            //        campoint = cameraPoint;
+            //        GameObject tayphai = GameObject.FindGameObjectWithTag("RightHand");
+            //        righthand = tayphai.GetComponent<Transform>();
+            //        GameObject taytrai = GameObject.FindGameObjectWithTag("LeftHand");
+            //        lefthand = taytrai.GetComponent<Transform>();
+            //        GameObject dau = GameObject.FindGameObjectWithTag("head");
+            //        head = dau.GetComponent<Transform>();
+            //        GameObject tay = GameObject.FindGameObjectWithTag("ngontay");
+            //        ngontay = tay.GetComponent<Transform>();
+
+            //        break;
+            //    }
+            //}
+            //yield return new WaitForSeconds(1f);  // Kiểm tra lại sau 1 giây
+            foreach (Player player in PhotonNetwork.PlayerList)
             {
-                PhotonView photonView = player.GetComponent<PhotonView>();
-                if (photonView != null && photonView.IsMine)
+                if (player.CustomProperties.TryGetValue("viewID", out var viewIDValue) &&
+                PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("viewID", out var viewIDLocal) &&
+                (int)viewIDValue == (int)viewIDLocal && viewIDLocal is int viewID)
                 {
-                    playerObject = player;
+                    playerObject = PhotonView.Find(viewID)?.gameObject;
                     playerAnimator = playerObject.GetComponent<Animator>();
                     GameObject cameraObject = GameObject.FindGameObjectWithTag("MainCamera");
                     if (cameraObject != null)
@@ -169,10 +187,11 @@ public class GunShop : MonoBehaviourPun
 
     public void FindPlayerGunPosition()
     {
-        foreach (var player in PhotonNetwork.PlayerList)
+        foreach (Player player in PhotonNetwork.PlayerList)
         {
             if (player.CustomProperties.TryGetValue("viewID", out var viewIDValue) &&
-                viewIDValue is int viewID)
+                PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("viewID", out var viewIDLocal) &&
+                (int)viewIDValue == (int)viewIDLocal && viewIDLocal is int viewID)
             {
                 GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
                 if (playerObject != null)
@@ -192,32 +211,11 @@ public class GunShop : MonoBehaviourPun
                 }
                 else
                 {
-                    Debug.LogWarning($"No GameObject found for Player: {player.NickName}");
+                    Debug.LogWarning($"No GameObject found for Player: {player.NickName} (2)");
                 }
             }
         }
     }
-    //public void FindPlayerGunPosition()
-    //{
-    //    GameObject localPlayer = PhotonNetwork.LocalPlayer.TagObject as GameObject;
-
-    //    if (localPlayer != null)
-    //    {
-    //        PlayerSetup playerSetup = localPlayer.GetComponent<PlayerSetup>();
-    //        if (playerSetup != null && playerSetup.gunPositionFound)
-    //        {
-    //            Transform gunPosition = playerSetup.gunPosition;
-    //            Debug.Log($"GunPos found at {gunPosition.position}");
-    //            gunPositionFound = true;
-    //        }
-    //        else
-    //        {
-    //            Debug.LogWarning("GunPos not found for local player!");
-    //        }
-    //    }
-
-    //}
-
 
     public void SetMoney(int newMoneyAmount)
     {
@@ -230,7 +228,7 @@ public class GunShop : MonoBehaviourPun
                 playerMoney = newMoneyAmount;
 
                 // Tìm đối tượng Text để hiển thị số tiền
-                var txtTienTransform = player.transform.Find("CameraControl/Main Camera/Canvas/Tien");
+                Transform txtTienTransform = player.transform.Find("CameraControl/Main Camera/Canvas/Tien");
                 if (txtTienTransform != null)
                 {
                     Text txtTien = txtTienTransform.GetComponentInChildren<Text>();
@@ -243,11 +241,6 @@ public class GunShop : MonoBehaviourPun
                         Debug.LogWarning("Không tìm thấy thành phần Text trên đối tượng 'Tien'.");
                     }
                 }
-                else
-                {
-                    Debug.LogWarning("Không tìm thấy đối tượng 'Canvas/Tien' trong Main Camera.");
-                }
-                
             }
         }
     }
@@ -255,7 +248,6 @@ public class GunShop : MonoBehaviourPun
 
     public void BuyGunButton(int gunIndex)
     {
-        Debug.Log("khong hoat dong");
         if (gunIndex < 0 || gunIndex >= gunPrefabs.Length)
         {
             Debug.LogError("Ch? s? súng không h?p l?: " + gunIndex);
@@ -264,7 +256,7 @@ public class GunShop : MonoBehaviourPun
         if (gunPosition == null)
         {
             Debug.Log("gun pos bi null");
-            return;
+            ResetGunPosition();
         }
         if (gunIndex == 0)
         {
@@ -272,8 +264,8 @@ public class GunShop : MonoBehaviourPun
             gunPrice = 100;
             if (playerMoney >= gunPrice)
             {
-                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
-                SetMoney(tien);
+                playerMoney -= gunPrice; // Tr? ti?n khi mua
+                //SetMoney(tien);
                 photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
             }
             else
@@ -287,9 +279,9 @@ public class GunShop : MonoBehaviourPun
             gunPrice = 200;
             if (playerMoney >= gunPrice)
             {
-                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
-                SetMoney(tien);
-                photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
+                //photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
+                playerMoney -= gunPrice; // Tr? ti?n khi mua
+                CreateGunForPlayer(PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);       
             }
             else
             {
@@ -302,8 +294,8 @@ public class GunShop : MonoBehaviourPun
             gunPrice = 300;
             if (playerMoney >= gunPrice)
             {
-                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
-                SetMoney(tien);
+                playerMoney -= gunPrice; // Tr? ti?n khi mua
+                //SetMoney(tien);
                 photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
             }
             else
@@ -332,8 +324,8 @@ public class GunShop : MonoBehaviourPun
             gunPrice = 5;
             if (playerMoney >= gunPrice)
             {
-                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
-                SetMoney(tien);
+                playerMoney -= gunPrice; // Tr? ti?n khi mua
+                //SetMoney(tien);
                 ThrowingTutorial.Instance.totalBom++;
                 photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
             }
@@ -348,8 +340,8 @@ public class GunShop : MonoBehaviourPun
             gunPrice = 5;
             if (playerMoney >= gunPrice)
             {
-                int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
-                SetMoney(tien);
+                playerMoney -= gunPrice; // Tr? ti?n khi mua
+                //SetMoney(tien);
                 ThrowingTutorial.Instance.totalSmoke++;
                 photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
             }
@@ -358,7 +350,7 @@ public class GunShop : MonoBehaviourPun
                 Debug.Log("Không ?? ti?n ?? mua súng.");
             }
         }
-       
+
     }
 
 
@@ -368,13 +360,11 @@ public class GunShop : MonoBehaviourPun
         // Ki?m tra n?u ?ây là ng??i ch?i hi?n t?i và ch? s? súng h?p l?
         if (PhotonNetwork.LocalPlayer.ActorNumber == playerID && gunIndex >= 0 && gunIndex < gunPrefabs.Length)
         {
-            // L?y v? trí và rotation cho súng t??ng ?ng
-            Vector3 fixedPosition = gunPositions[gunIndex];
-            Quaternion fixedRotation = gunRotations[gunIndex];
-
+            
             // T?o và ??ng b? cây súng trên t?t c? client
-            GameObject gunInstance = PhotonNetwork.Instantiate(gunPrefabs[gunIndex].name, fixedPosition, fixedRotation);
+            GameObject gunInstance = PhotonNetwork.Instantiate(gunPrefabs[gunIndex].name, gunPositions[gunIndex], gunRotations[gunIndex]);
             gunInstance.SetActive(false);
+            gunInstance.GetComponent<Adjuster>().enabled = true;
             GunController gunController = gunInstance.GetComponent<GunController>();
             if (gunController != null)
             {
@@ -400,8 +390,7 @@ public class GunShop : MonoBehaviourPun
             {
                 Debug.LogError("Không tìm thấy Adjuster trên cây súng!");
             }
-            // Lấy con đầu tiên của gunPosition (game con thứ 1)
-            Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(gunIndex) : null;
+
             GunManager gunManager = playerObject.GetComponent<GunManager>();
             if (gunManager != null)
             {
@@ -411,14 +400,14 @@ public class GunShop : MonoBehaviourPun
             {
                 Debug.LogError("Không tìm thấy GunManager trên PlayerObject!");
             }
-            /*  // Kiểm tra và xóa game con cũ nếu nó tồn tại
-              if (oldChild != null)
-              {
-                  Destroy(oldChild.gameObject); // Hoặc dùng `oldChild.gameObject.SetActive(false);` nếu chỉ muốn ẩn đi
-              }
-  */
             // Đặt gunInstance làm con của gunPosition
-            photonView.RPC(nameof(SetGunParent), RpcTarget.AllBuffered, gunInstance.GetComponent<PhotonView>().ViewID);
+            TransferOwnershipToBuyer(gunInstance.GetComponent<PhotonView>().ViewID);
+            if(PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("viewID", out var viewIDValue))
+            {
+                int playerViewID = (int)viewIDValue;
+                photonView.RPC("SetGunToPositionRPC", RpcTarget.AllBuffered, gunInstance.GetComponent<PhotonView>().ViewID, playerViewID);
+            }
+            //SetGunParent(gunInstance.GetComponent<PhotonView>().ViewID);
             gunInstance.transform.SetSiblingIndex(gunIndex);
 
             // Thi?t l?p các thu?c tính cho script Weapon n?u c?n
@@ -438,30 +427,69 @@ public class GunShop : MonoBehaviourPun
                 }
             }
 
-            Debug.Log("Súng số " + gunIndex + " ?ă ???c t?o t?i v? trí: " + fixedPosition + " v?i rotation: " + fixedRotation.eulerAngles);
+            Debug.Log("Súng số " + gunIndex + " ?ă ???c t?o t?i v? trí: " + gunPositions[gunIndex] + " v?i rotation: " + gunRotations[gunIndex].eulerAngles);
         }
     }
-    [PunRPC]
-    void SetGunParent(int gunViewID)
-    {
-        // Lấy GameObject của súng từ ViewID
-        GameObject gunObject = PhotonView.Find(gunViewID)?.gameObject;
-        if (gunObject != null && gunPosition != null)
-        {
-            // Gán Parent và cập nhật vị trí/rotation
-            gunObject.transform.SetParent(gunPosition, false);
+    //[PunRPC]
+    //void SetGunParent(int gunViewID)
+    //{
 
-            // Nếu cần, điều chỉnh lại vị trí hoặc rotation của súng
-         
-          /*  gunObject.SetActive(true); // Hiển thị súng sau khi gán Parent*/
-            Debug.Log($"Gun {gunObject.name} set as child of {gunPosition.name}.");
+    //    GameObject gunObject = PhotonView.Find(gunViewID)?.gameObject;
+    //    if (gunObject != null && gunPosition != null)
+    //    {
+    //        // Gán Parent và cập nhật vị trí/rotation
+    //        gunObject.transform.SetParent(gunPosition, false);
+
+    //        // Nếu cần, điều chỉnh lại vị trí hoặc rotation của súng
+
+    //        /*  gunObject.SetActive(true); // Hiển thị súng sau khi gán Parent*/
+    //        Debug.Log($"Gun {gunObject.name} set as child of {gunPosition.name}.");
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("Failed to set gun parent! Gun or GunPosition is null.");
+    //    }
+    //}
+    [PunRPC]
+    void SetGunToPositionRPC(int gunViewID, int playerViewID)
+    {
+        // Tìm đối tượng súng
+        GameObject gunObject = PhotonView.Find(gunViewID)?.gameObject;
+        GameObject playerObject = PhotonView.Find(playerViewID)?.gameObject;
+        Debug.LogError("gunViewID: "+gunViewID + " playerViewID: " + playerViewID);
+        if (gunObject != null && playerObject != null)
+        {
+            // Lấy vị trí gunPosition của người chơi
+            Transform gunPos = playerObject.transform.Find("Ch15_nonPBR/mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2/mixamorig:RightShoulder/mixamorig:RightArm/mixamorig:RightForeArm/mixamorig:RightHand/GunPos");
+
+            if (gunPos != null)
+            {
+                // Đặt Parent và điều chỉnh vị trí
+                gunObject.transform.SetParent(gunPos, false);
+                
+                Debug.Log($"Gun {gunObject.name} set to position of player {playerObject.name}");
+            }
+            else
+            {
+                Debug.LogWarning("Gun position not found on player object.");
+            }
         }
         else
         {
-            Debug.LogWarning("Failed to set gun parent! Gun or GunPosition is null.");
+            Debug.LogWarning("Gun or Player object not found.");
         }
     }
-
-
-
+    public void TransferOwnershipToBuyer(int gunViewID)
+    {
+        PhotonView gunView = PhotonView.Find(gunViewID);
+        if (gunView != null)
+        {
+            gunView.TransferOwnership(PhotonNetwork.LocalPlayer);
+        }
+        else
+        {
+            Debug.LogWarning("Gun view not found for ownership transfer.");
+        }
+    }
 }
+//}

@@ -11,8 +11,8 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     public static TimeManager instance;
     public TextMeshProUGUI diemTeamXanh;
     public TextMeshProUGUI diemTeamDo;// Text hiển thị điểm của đội xanh
-    private int scoreXanh = 0;// Điểm của đội xanh
-    private int scoreDo = 0;//Diem cua doi do
+    public int scoreXanh = 0;// Điểm của đội xanh
+    public int scoreDo = 0;//Diem cua doi do
     public TextMeshProUGUI timeText;
     private int minutes;
     private int seconds;
@@ -30,20 +30,29 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     public bool isAllDeathBlue = false;
     private bool isSpikeTime = false;
     private bool isTextBuy = false;
+    private bool isSpawnSpike = false;
     public GameObject over;
     public GameObject win;
     public GameObject lose;
     public Spawn spawnScript;
+    public Transform spawnSpike;
+    public GameObject spike;
     public GameObject[] listshield;
+
+    public int countRound = 0;
 
     private enum GamePhase { Buy, Battle, Plant }
     private enum Team { red, blue };
     private Team winner;
     private GamePhase currentPhase;
 
+    public int haha = 1;
+
     private void Awake()
     {
         instance = this;
+        PlayerPrefs.SetInt("PlayerMoney", 0);
+        //photonView.RPC("SetRound", RpcTarget.All);
     }
     private void Start()
     {
@@ -59,6 +68,41 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private void Update()
     {
+        if (haha != PlayerPrefs.GetInt("PlayerMoney"))
+        {
+            haha = PlayerPrefs.GetInt("PlayerMoney");
+        }
+        if (currentTime == 5 && currentPhase == GamePhase.Buy && !isSpawnSpike && startGame)
+        {
+            GameObject spike0 = PhotonNetwork.Instantiate(spike.name, spawnSpike.position, Quaternion.identity);
+            PhotonView spikePhotonView = spike0.GetComponent<PhotonView>();
+            if (spikePhotonView != null)
+            {
+                spikePhotonView.RPC("SetSpike0Tag", RpcTarget.AllBuffered, spikePhotonView.ViewID);
+            }
+            //if (countRound == 1)
+            //{
+            //    GunShop.instance.playerMoney = 800;
+            //    Debug.LogError("Round 1");
+            //}
+            //else if (countRound >= 2)
+            //{
+            //    if (PlayerPrefs.GetInt("WinRound") == 1)
+            //    {
+            //        GunShop.instance.playerMoney = PlayerPrefs.GetInt("PlayerMoney") + 3200;
+            //        Debug.LogError("Round 2.1");
+            //    }
+            //    else if (PlayerPrefs.GetInt("WinRound") == -1)
+            //    {
+            //        GunShop.instance.playerMoney = PlayerPrefs.GetInt("PlayerMoney") + 2200;
+            //        Debug.LogError("Round 2.2");
+            //    }
+            //    Debug.LogError("Round 2");
+            //}
+            photonView.RPC("Money", RpcTarget.AllBuffered);
+            Debug.Log("SpawnSpike");
+            isSpawnSpike = true;
+        }
         if (!isGameOver && startGame)
         {
             if (PhotonNetwork.IsMasterClient)
@@ -80,8 +124,10 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                     }
 
                 }
+
                 // Giảm thời gian còn lại
                 currentTime -= Time.deltaTime;
+
 
                 // Gửi thời gian đến tất cả người chơi
                 photonView.RPC("SyncTime", RpcTarget.All, currentTime);
@@ -139,11 +185,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                     photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "ĐỘI PHÒNG THỦ \n CHIÊN THẮNG");
                     Debug.LogError("B3");
                     EndGame();
-                    //if (scoreXanh == 4)
-                    //{
-                    //    Debug.Log("Xanh thắng");
-                    //    photonView.RPC("DisplayEndGameResult", RpcTarget.All, 1); // Truyền 1 cho team Xanh là đội chiến thắng
-                    //}
+
                 }
                 if (isAllDeathBlue)
                 {
@@ -153,11 +195,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                     photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "ĐỘI TẤN CÔNG \n CHIÊN THẮNG");
                     Debug.LogError("R2");
                     EndGame();
-                    //if (scoreDo == 4)
-                    //{
-                    //    Debug.Log("Xanh thắng");
-                    //    photonView.RPC("DisplayEndGameResult", RpcTarget.All, 0); // Truyền 1 cho team Xanh là đội chiến thắng
-                    //}
+
                 }
             }
 
@@ -167,7 +205,29 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
             timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
     }
+    [PunRPC]
+    public void Money()
+    {
+        if (countRound == 1)
+        {
+            GunShop.instance.playerMoney = 800;
 
+        }
+        else if (countRound >= 2)
+        {
+            if (PlayerPrefs.GetInt("WinRound") == 1)
+            {
+                GunShop.instance.playerMoney = PlayerPrefs.GetInt("PlayerMoney") + 3200;
+ 
+            }
+            else if (PlayerPrefs.GetInt("WinRound") == -1)
+            {
+                GunShop.instance.playerMoney = PlayerPrefs.GetInt("PlayerMoney") + 2200;
+
+            }
+
+        }
+    }
     [PunRPC]
     public void DisplayEndGameResult(int winningTeam)
     {
@@ -183,10 +243,24 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
             PlayerPrefs.SetInt("Result", -1);
         }
     }
+    [PunRPC]
+    public void WinnerRound(int winningTeam)
+    {
+        // Kiểm tra xem người chơi hiện tại thuộc team nào và hiển thị kết quả phù hợp
+        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("team", out var teamValue) && (int)teamValue == winningTeam)
+        {
+            PlayerPrefs.SetInt("WinRound", 1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("WinRound", -1);
+        }
+    }
     private void StartBuyPhase()
     {
         currentPhase = GamePhase.Buy;
         currentTime = buyPhaseTime;
+
     }
 
     private void StartBattlePhase()
@@ -227,6 +301,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         //startGame = true;
         isSpikeTime = false;
         isPlantSpike = false;
+        isSpawnSpike = false;
         //set lai SpikeExists la false
 
 
@@ -276,8 +351,14 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         over.GetComponentInChildren<Text>().text = text;
     }
     [PunRPC]
+    public void SetRound()
+    {
+            countRound++;
+    }
+    [PunRPC]
     public void EndGame()
     {
+        photonView.RPC("SetRound", RpcTarget.All);
         isTextBuy = false;
         isGameOver = true;
         startGame = false;
@@ -287,31 +368,43 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             scoreDo++;
             photonView.RPC("UpdateScoreDo", RpcTarget.All, scoreDo);
+            photonView.RPC("WinnerRound", RpcTarget.All, 0);
+            //WinnerRound(0);
         }
         else if (winner == Team.blue)
         {
             scoreXanh++;// Cộng 1 điểm cho đội xanh
             photonView.RPC("UpdateScoreXanh", RpcTarget.All, scoreXanh);
+            photonView.RPC("WinnerRound", RpcTarget.All, 1);
+            //WinnerRound(1);
         }
-        if (scoreXanh == 2)
+        if (scoreXanh == 4)
         {
+            countRound = 0;
             Debug.Log("Xanh thắng");
             photonView.RPC("DisplayEndGameResult", RpcTarget.All, 1); // Truyền 1 cho team Xanh là đội chiến thắng
             Invoke("BackHomeDelay", 1f);
         }
-        else if (scoreDo == 2)
+        else if (scoreDo == 4)
         {
+            countRound = 0;
             Debug.Log("Xanh thắng");
             photonView.RPC("DisplayEndGameResult", RpcTarget.All, 0); // Truyền 1 cho team Xanh là đội chiến thắng
             Invoke("BackHomeDelay", 1f);
         }
         else
         {
+            photonView.RPC("SetMoneyPrefs", RpcTarget.All);
             PhotonView.Get(this).RPC("onText", RpcTarget.AllBuffered);
             // Đặt lại thời gian sau 3 giây
             Invoke("ResetTimeDelay", 3f);
         }
 
+    }
+    [PunRPC]
+    public void SetMoneyPrefs()
+    {
+        PlayerPrefs.SetInt("PlayerMoney", GunShop.instance.playerMoney);
     }
     public void BackHomeDelay()
     {

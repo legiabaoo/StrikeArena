@@ -17,6 +17,7 @@ public class PlantTheSpike : MonoBehaviour
     private bool canPlantBomb = false;
     private bool isBlinking = false;
     public bool spikeExists = false;
+    private bool isHasSpike = false;
     public bool isLocalPlayer;
     private Vector3 spikePosition;
 
@@ -59,7 +60,7 @@ public class PlantTheSpike : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Alpha4))
         {
-            if (!hasPlacedBomb && canPlantBomb)
+            if (!hasPlacedBomb && canPlantBomb && isHasSpike)
             {
                 progressBar.gameObject.SetActive(true);
                 holdTime += Time.deltaTime;
@@ -98,8 +99,6 @@ public class PlantTheSpike : MonoBehaviour
                 { "SpikeExists", true }
             };
             PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
-            //SpikeManager.instance.photonView.RPC("ReateIsSpikeExists", RpcTarget.AllBuffered, true);
-            //TimeManager.instance.isPlantSpike = true;
             PhotonView.Get(this).RPC("SetIsPlantSpike2", RpcTarget.AllBuffered);
         }
         else
@@ -107,6 +106,7 @@ public class PlantTheSpike : MonoBehaviour
             Debug.LogError("No PhotonView found on Spike prefab!");
         }
     }
+
     [PunRPC]
     public void SetIsPlantSpike2()
     {
@@ -143,6 +143,12 @@ public class PlantTheSpike : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Side")) canPlantBomb = true;
+        if (other.CompareTag("Spike0"))
+        {
+            PhotonView spikePhotonView = other.GetComponent<PhotonView>();
+            spikePhotonView.RPC("RemoveSpike", RpcTarget.AllBuffered, spikePhotonView.ViewID);
+            isHasSpike = true;
+        }
     }
 
     private void OnTriggerExit(Collider other)

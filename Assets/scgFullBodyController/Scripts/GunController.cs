@@ -183,7 +183,7 @@ namespace scgFullBodyController
                     }
                     else
                     {
-                        Debug.Log("player null");
+                        Debug.LogError("player null");
                     }
                 }
             }

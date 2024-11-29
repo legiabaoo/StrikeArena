@@ -20,12 +20,11 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
-    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMipmapLimit: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -37,9 +36,9 @@ TextureImporter:
     filterMode: 0
     aniso: 1
     mipBias: 0
-    wrapU: 1
-    wrapV: 1
-    wrapW: 1
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -64,7 +63,6 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
-  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -77,7 +75,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -90,7 +87,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -103,7 +99,42 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -1464,72 +1495,73 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Sprite sheet Gray_0: 420496247
-      Sprite sheet Gray_1: -181262712
-      Sprite sheet Gray_10: -774241845
-      Sprite sheet Gray_11: 1115782917
-      Sprite sheet Gray_12: 1119936759
-      Sprite sheet Gray_13: -1918118078
-      Sprite sheet Gray_14: 1821610246
-      Sprite sheet Gray_15: -887980939
-      Sprite sheet Gray_16: 733771692
-      Sprite sheet Gray_17: -1857384247
-      Sprite sheet Gray_18: -1470065636
-      Sprite sheet Gray_19: -883558151
-      Sprite sheet Gray_2: -877521868
-      Sprite sheet Gray_20: 2090408130
-      Sprite sheet Gray_21: 2069779815
-      Sprite sheet Gray_22: -185177505
-      Sprite sheet Gray_23: -833049111
       Sprite sheet Gray_24: -1060479
+      Sprite sheet Gray_10: -774241845
+      Sprite sheet Gray_53: 1380604054
+      Sprite sheet Gray_19: -883558151
+      Sprite sheet Gray_62: 749993512
+      Sprite sheet Gray_59: 832832456
+      Sprite sheet Gray_40: 1562770003
       Sprite sheet Gray_25: -698346515
-      Sprite sheet Gray_26: 378680884
-      Sprite sheet Gray_27: 960522755
-      Sprite sheet Gray_28: 151544889
-      Sprite sheet Gray_29: -52647007
-      Sprite sheet Gray_3: -1194235337
-      Sprite sheet Gray_30: 1071816874
-      Sprite sheet Gray_31: 375665337
-      Sprite sheet Gray_32: -1453509758
-      Sprite sheet Gray_33: 467177759
-      Sprite sheet Gray_34: 1495205858
-      Sprite sheet Gray_35: 835582182
       Sprite sheet Gray_36: -1235426039
+      Sprite sheet Gray_27: 960522755
+      Sprite sheet Gray_13: -1918118078
+      Sprite sheet Gray_22: -185177505
       Sprite sheet Gray_37: 1606563159
       Sprite sheet Gray_38: 567064417
-      Sprite sheet Gray_39: -1526216838
-      Sprite sheet Gray_4: -527991351
-      Sprite sheet Gray_40: 1562770003
-      Sprite sheet Gray_41: -934541344
-      Sprite sheet Gray_42: 1526336044
-      Sprite sheet Gray_43: -832645499
-      Sprite sheet Gray_44: 1368746945
-      Sprite sheet Gray_45: 1549195146
-      Sprite sheet Gray_46: -1981501511
-      Sprite sheet Gray_47: -22194582
-      Sprite sheet Gray_48: -2034303110
-      Sprite sheet Gray_49: -461066117
-      Sprite sheet Gray_5: 1209680060
-      Sprite sheet Gray_50: -1587081700
-      Sprite sheet Gray_51: 206768290
-      Sprite sheet Gray_52: 1140091985
-      Sprite sheet Gray_53: 1380604054
-      Sprite sheet Gray_54: -669650672
-      Sprite sheet Gray_55: -1172213205
-      Sprite sheet Gray_56: -2078592416
-      Sprite sheet Gray_57: 884578040
-      Sprite sheet Gray_58: -903602618
-      Sprite sheet Gray_59: 832832456
-      Sprite sheet Gray_6: -962654680
-      Sprite sheet Gray_60: 973503724
-      Sprite sheet Gray_61: -18232064
-      Sprite sheet Gray_62: 749993512
-      Sprite sheet Gray_63: -1574337139
       Sprite sheet Gray_7: 1423637597
+      Sprite sheet Gray_55: -1172213205
+      Sprite sheet Gray_39: -1526216838
+      Sprite sheet Gray_16: 733771692
+      Sprite sheet Gray_18: -1470065636
+      Sprite sheet Gray_12: 1119936759
+      Sprite sheet Gray_21: 2069779815
+      Sprite sheet Gray_23: -833049111
+      Sprite sheet Gray_4: -527991351
+      Sprite sheet Gray_54: -669650672
+      Sprite sheet Gray_29: -52647007
       Sprite sheet Gray_8: -743387305
+      Sprite sheet Gray_31: 375665337
+      Sprite sheet Gray_43: -832645499
+      Sprite sheet Gray_56: -2078592416
+      Sprite sheet Gray_51: 206768290
+      Sprite sheet Gray_58: -903602618
+      Sprite sheet Gray_5: 1209680060
+      Sprite sheet Gray_52: 1140091985
+      Sprite sheet Gray_45: 1549195146
+      Sprite sheet Gray_15: -887980939
+      Sprite sheet Gray_35: 835582182
+      Sprite sheet Gray_61: -18232064
+      Sprite sheet Gray_32: -1453509758
+      Sprite sheet Gray_47: -22194582
+      Sprite sheet Gray_49: -461066117
+      Sprite sheet Gray_28: 151544889
       Sprite sheet Gray_9: -784301084
-  mipmapLimitGroupName: 
+      Sprite sheet Gray_17: -1857384247
+      Sprite sheet Gray_6: -962654680
+      Sprite sheet Gray_14: 1821610246
+      Sprite sheet Gray_26: 378680884
+      Sprite sheet Gray_48: -2034303110
+      Sprite sheet Gray_46: -1981501511
+      Sprite sheet Gray_44: 1368746945
+      Sprite sheet Gray_11: 1115782917
+      Sprite sheet Gray_60: 973503724
+      Sprite sheet Gray_57: 884578040
+      Sprite sheet Gray_63: -1574337139
+      Sprite sheet Gray_30: 1071816874
+      Sprite sheet Gray_20: 2090408130
+      Sprite sheet Gray_41: -934541344
+      Sprite sheet Gray_33: 467177759
+      Sprite sheet Gray_34: 1495205858
+      Sprite sheet Gray_3: -1194235337
+      Sprite sheet Gray_1: -181262712
+      Sprite sheet Gray_0: 420496247
+      Sprite sheet Gray_42: 1526336044
+      Sprite sheet Gray_50: -1587081700
+      Sprite sheet Gray_2: -877521868
+  spritePackingTag: 
   pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

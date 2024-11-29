@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Roomlist : MonoBehaviourPunCallbacks
 {
@@ -104,7 +105,10 @@ public class Roomlist : MonoBehaviourPunCallbacks
           // C?p nh?t giao di?n ng??i dùng
           UpdateUI();
       }*/
-
+    public void LoadSceen1()
+    {
+        SceneManager.LoadScene("LoginScene");
+    }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
 
