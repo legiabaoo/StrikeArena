@@ -13,6 +13,7 @@ public class LoginAPI : MonoBehaviour
     public TMP_InputField edtPassword;
     public TMP_Text txtMessage;
     public TMP_Text txtUsername;
+    public GameObject Loading;
     private void Awake()
     {
         instance = this;
@@ -55,16 +56,16 @@ public class LoginAPI : MonoBehaviour
     }
     public void Lose()
     {
-        int score = PlayerPrefs.GetInt("Rank") - 25;
+        int score = PlayerPrefs.GetInt("Rank")-25;
         StartCoroutine(SetScore(score, PlayerPrefs.GetString("Id")));
     }
     IEnumerator CheckLogin(LoginModel loginModel)
     {
-        
+        Loading.SetActive(true);
         string jsonStringRequest = JsonConvert.SerializeObject(loginModel);
 
-        //var request = new UnityWebRequest("https://api-strikearena.onrender.com/login", "POST");
-        var request = new UnityWebRequest("http://localhost:3000/login", "POST");
+        var request = new UnityWebRequest("https://api-strikearena.onrender.com/login", "POST");
+        //var request = new UnityWebRequest("http://localhost:3000/login", "POST");
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonStringRequest);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -96,6 +97,7 @@ public class LoginAPI : MonoBehaviour
                 txtMessage.text = "";
             }
         }
+        Loading.SetActive(false);
         request.Dispose();
     }
     IEnumerator SetStatus(int statusValue, string id)
@@ -140,7 +142,8 @@ public class LoginAPI : MonoBehaviour
 
         string jsonStringRequest = JsonConvert.SerializeObject(new { score = scoreValue });
 
-        var request = new UnityWebRequest($"http://localhost:3000/players/{id}/score", "PUT");
+        //var request = new UnityWebRequest($"http://localhost:3000/players/{id}/score", "PUT");
+        var request = new UnityWebRequest($"https://api-strikearena.onrender.com/players/{id}/score", "PUT");
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonStringRequest);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();

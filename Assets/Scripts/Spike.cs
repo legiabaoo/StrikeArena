@@ -25,6 +25,22 @@ public class Spike : MonoBehaviour
             Debug.LogError("Spike object not found with the given ViewID: " + spikeViewID);
         }
     }
+    [PunRPC]
+    public void SetSpike0Tag(int spikeViewID)
+    {
+        PhotonView spikeView = PhotonView.Find(spikeViewID);
+
+        if (spikeView != null)
+        {
+            GameObject spike = spikeView.gameObject;
+            spike.tag = "Spike0"; // Đặt tag cho Spike trên tất cả các máy
+            Debug.Log("Tag set successfully on all clients");
+        }
+        else
+        {
+            Debug.LogError("Spike object not found with the given ViewID: " + spikeViewID);
+        }
+    }
     //Gỡ spike 
     [PunRPC]
     private void RemoveSpike(int spikeViewID)
