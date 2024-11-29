@@ -91,6 +91,9 @@ MonoBehaviour:
   - SetRound
   - SetSpike0Tag
   - WinnerRound
+  - ExplodeEffectAndSound
+  - PlayExplosionSound
+  - PlaySmokeSound
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
