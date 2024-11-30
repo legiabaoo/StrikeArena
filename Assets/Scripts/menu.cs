@@ -15,7 +15,7 @@ public class menu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && PhotonNetwork.InRoom)
         {
           
             ToggleOut();
