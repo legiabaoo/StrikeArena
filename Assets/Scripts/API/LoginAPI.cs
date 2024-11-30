@@ -95,6 +95,7 @@ public class LoginAPI : MonoBehaviour
                 edtEmail.text = "";
                 edtPassword.text = "";
                 txtMessage.text = "";
+                //Leaderboard.Intansce.UserScore();
             }
         }
         Loading.SetActive(false);
