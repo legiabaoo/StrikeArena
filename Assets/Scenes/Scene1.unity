@@ -8634,7 +8634,7 @@ RectTransform:
   m_Children:
   - {fileID: 405190556}
   m_Father: {fileID: 1420784092}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -13447,7 +13447,7 @@ MonoBehaviour:
   - {fileID: 6282452014608119975, guid: 88eca7b766e7cc143948faa7e701629e, type: 3}
   - {fileID: 2941964371416499335, guid: 60a006a85b6604e439abc16df1246b1c, type: 3}
   - {fileID: 5178168762548223058, guid: 7ef5a10bb97a1e84e976dc737e6bc339, type: 3}
-  - {fileID: 2400087836839903555, guid: 3ab8253b04afd584db5dc5de83fcc4b0, type: 3}
+  - {fileID: 4623999650837974649, guid: 3d6f1b77217fdd44e8e9e6e5f7272164, type: 3}
   - {fileID: 5766885306629243985, guid: 9bd54ed01c9f45d40b7182a1da63209c, type: 3}
   - {fileID: 2983185108419463013, guid: 3c9672393c1efd14b9d0506977089ad3, type: 3}
   gunPosition: {fileID: 0}
@@ -14304,7 +14304,7 @@ RectTransform:
   m_Children:
   - {fileID: 2088050383}
   m_Father: {fileID: 1420784092}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

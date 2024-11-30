@@ -21,6 +21,16 @@ namespace scgFullBodyController
         // Start is called before the first frame update
         void Start()
         {
+            GameObject cameraControlObject = GameObject.Find("CameraControl");
+            if (cameraControlObject != null)
+            {
+                camControl = cameraControlObject.GetComponent<CameraController>();
+            }
+            else
+            {
+                Debug.LogError("CameraControl object not found!");
+            }
+            
             originalCamSensitivity = camControl.Sensitivity;
 
             DepthOfField tmp;

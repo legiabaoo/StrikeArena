@@ -2135,6 +2135,10 @@ PrefabInstance:
       value: itemleaderboard
       objectReference: {fileID: 0}
     - target: {fileID: 4390923698125087021, guid: 6ea3e09737f5b4e4a978f97f04b2fd8e, type: 3}
+      propertyPath: m_text
+      value: null
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390923698125087021, guid: 6ea3e09737f5b4e4a978f97f04b2fd8e, type: 3}
       propertyPath: m_fontSize
       value: 6
       objectReference: {fileID: 0}
@@ -2207,6 +2211,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4390923698617266411, guid: 6ea3e09737f5b4e4a978f97f04b2fd8e, type: 3}
+      propertyPath: m_text
+      value: null
+      objectReference: {fileID: 0}
+    - target: {fileID: 4390923698617266411, guid: 6ea3e09737f5b4e4a978f97f04b2fd8e, type: 3}
       propertyPath: m_fontSize
       value: 6
       objectReference: {fileID: 0}
@@ -2245,6 +2253,10 @@ PrefabInstance:
     - target: {fileID: 4390923698617266411, guid: 6ea3e09737f5b4e4a978f97f04b2fd8e, type: 3}
       propertyPath: m_HorizontalAlignment
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7177817992933150169, guid: 6ea3e09737f5b4e4a978f97f04b2fd8e, type: 3}
+      propertyPath: m_text
+      value: null
       objectReference: {fileID: 0}
     - target: {fileID: 7177817992933150169, guid: 6ea3e09737f5b4e4a978f97f04b2fd8e, type: 3}
       propertyPath: m_fontSize
@@ -12108,6 +12120,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1739804633}
         m_TargetAssemblyTypeName: Leaderboard, Assembly-CSharp
         m_MethodName: FetchLeaderboard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1739804633}
+        m_TargetAssemblyTypeName: Leaderboard, Assembly-CSharp
+        m_MethodName: UserScore
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

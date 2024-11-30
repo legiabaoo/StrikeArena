@@ -63,7 +63,7 @@ namespace scgFullBodyController
         public float magDespawnTime;
         public float cycleTimeBoltAction;
         public float cycleTimeSemiAuto;
-       public int bulletsInMag;
+        public int bulletsInMag;
 
         [Header("Timing")]
         public float reloadTime;
@@ -145,7 +145,7 @@ namespace scgFullBodyController
                     Debug.LogError("Không tìm thấy Main Camera.");
                 }
 
-            
+
                 if (anim == null)
                 {
                     Debug.LogError("Không tìm thấy Animator trên nhân vật.");
@@ -163,30 +163,30 @@ namespace scgFullBodyController
         }
         GameObject FindLocalPlayer()
         {
-            //foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
-            //{
-            //    PhotonView photonView = player.GetComponent<PhotonView>();
-            //    if (photonView != null && photonView.IsMine)
-            //    {
-            //        return player;
-            //    }
-            //}
-            foreach (var player in PhotonNetwork.PlayerList)
+            foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
             {
-                if (player.CustomProperties.TryGetValue("viewID", out var viewIDValue) &&
-                    viewIDValue is int viewID)
+                PhotonView photonView = player.GetComponent<PhotonView>();
+                if (photonView != null && photonView.IsMine)
                 {
-                    GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
-                    if (playerObject != null)
-                    {
-                        return playerObject;
-                    }
-                    else
-                    {
-                        Debug.LogError("player null");
-                    }
+                    return player;
                 }
             }
+            //foreach (var player in PhotonNetwork.PlayerList)
+            //{
+            //    if (player.CustomProperties.TryGetValue("viewID", out var viewIDValue) &&
+            //        viewIDValue is int viewID)
+            //    {
+            //        GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
+            //        if (playerObject != null)
+            //        {
+            //            return playerObject;
+            //        }
+            //        else
+            //        {
+            //            Debug.LogError("player null");
+            //        }
+            //    }
+            //}
             return null;
         }
         public void initiliazeOrigPositions()
@@ -212,8 +212,8 @@ namespace scgFullBodyController
                 // Gửi thông báo tới các client khác để phát hiệu ứng
                 GetComponent<PhotonView>().RPC("RPC_PlayMuzzleFlash", RpcTarget.Others);
                 gameObject.GetComponent<AudioSource>().PlayOneShot(fireSound);
-              /*  spawnBullet();
-                weapon.Fire(Damage);*/
+                /*  spawnBullet();
+                  weapon.Fire(Damage);*/
                 bulletsInMag--;
 
                 if (shootType == ShootTypes.FullAuto)
@@ -250,7 +250,7 @@ namespace scgFullBodyController
                         gameObject.GetComponent<Animator>().SetBool("cycle", true);
                     }
                 }
-             
+
             }
             else if (Input.GetButtonUp("Fire1") || bulletsInMag == 0)
             {
@@ -322,9 +322,14 @@ namespace scgFullBodyController
         {
             firing = false;
         }
-      
+
         void LateUpdate()
         {
+            PhotonView photonView = GetComponent<PhotonView>();
+            if (photonView == null || !photonView.IsMine)
+            {
+                return;
+            }
             if (Input.GetButtonDown("Fire2") && aimFinished && !swapping)
             {
                 originalAimOffsetRot = holdingHandOffsetRot;
@@ -426,8 +431,8 @@ namespace scgFullBodyController
 
                     // Gửi thông báo tới các client khác để phát hiệu ứng
                     GetComponent<PhotonView>().RPC("RPC_PlayMuzzleFlash", RpcTarget.Others);
-                /*    spawnBullet();
-                    weapon.Fire(Damage);*/
+                    /*    spawnBullet();
+                        weapon.Fire(Damage);*/
                     spawnShell();
                     bulletsInMag--;
                 }
@@ -511,7 +516,7 @@ namespace scgFullBodyController
             tempShell.transform.Rotate(Vector3.left * 90);
 
             //Add forward force based on where ejection point is pointing (blue axis)
-            Rigidbody tempRigidBody;    
+            Rigidbody tempRigidBody;
             tempRigidBody = tempShell.GetComponent<Rigidbody>();
             tempRigidBody.AddForce(ejectionPoint.transform.forward * shellVelocity);
 
