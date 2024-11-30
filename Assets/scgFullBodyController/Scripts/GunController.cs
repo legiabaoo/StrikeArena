@@ -163,31 +163,33 @@ namespace scgFullBodyController
         }
         GameObject FindLocalPlayer()
         {
-            //foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
-            //{
-            //    PhotonView photonView = player.GetComponent<PhotonView>();
-            //    if (photonView != null && photonView.IsMine)
-            //    {
-            //        return player;
-            //    }
-            //}
-            foreach (var player in PhotonNetwork.PlayerList)
+            foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
             {
-                if (player.CustomProperties.TryGetValue("viewID", out var viewIDValue) &&
-                    viewIDValue is int viewID)
+                PhotonView photonView = player.GetComponent<PhotonView>();
+                if (photonView != null && photonView.IsMine)
                 {
-                    GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
-                    if (playerObject != null)
-                    {
-                        return playerObject;
-                    }
-                    else
-                    {
-                        Debug.LogError("player null");
-                    }
+                    return player;
                 }
             }
+            Debug.LogError("Không tìm thấy nhân vật của người chơi cục bộ.");
             return null;
+            /* foreach (var player in PhotonNetwork.PlayerList)
+             {
+                 if (player.CustomProperties.TryGetValue("viewID", out var viewIDValue) &&
+                     viewIDValue is int viewID)
+                 {
+                     GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
+                     if (playerObject != null)
+                     {
+                         return playerObject;
+                     }
+                     else
+                     {
+                         Debug.LogError("player null");
+                     }
+                 }
+             }
+             return null;*/
         }
         public void initiliazeOrigPositions()
         {
@@ -325,6 +327,9 @@ namespace scgFullBodyController
       
         void LateUpdate()
         {
+            PhotonView photonView = GetComponent<PhotonView>();
+            if (photonView == null || !photonView.IsMine)
+                return;
             if (Input.GetButtonDown("Fire2") && aimFinished && !swapping)
             {
                 originalAimOffsetRot = holdingHandOffsetRot;
