@@ -20,7 +20,7 @@ public class PlayerSetup : MonoBehaviour
     //public Transform gunPosition; // Biến public để kéo thả GunPos
     //public bool gunPositionFound => gunPosition != null;
     public Transform gunPosition;
-
+    public Camera minimap;
     void Awake()
     {
         photonView = GetComponent<PhotonView>(); // Gán photonView ở đây
@@ -56,12 +56,14 @@ public class PlayerSetup : MonoBehaviour
         gunPosition.gameObject.SetActive(true);
         movemnet.enabled = true;
         cameraPlayer.enabled = true;
+        minimap.enabled = true;
         canvas.gameObject.SetActive(true);
         cameraPlayer.GetComponent<AudioListener>().enabled = true;
         cameraPlayer.GetComponent<MouseLook>().enabled = true;
         gameObject.GetComponentInChildren<Canvas>().enabled = true;
         gameObject.GetComponentInChildren<GunController>().enabled = true;
         gameObject.GetComponent<GunManager>().enabled = true;
+
         //if (PhotonNetwork.LocalPlayer != null)
         //{
         //    actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;

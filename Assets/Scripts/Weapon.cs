@@ -63,7 +63,7 @@ public class Weapon : MonoBehaviour
             nextFire -= Time.deltaTime;
         }
 
-        if (Input.GetButtonDown("Fire5") && nextFire <= 0 && gun.bulletsInMag > 0)
+        if (Input.GetButtonDown("Fire1") && nextFire <= 0 && gun.bulletsInMag > 0)
         {
             Debug.Log("ban ne.............");
             nextFire = 1 / fireRate;
@@ -144,17 +144,24 @@ public class Weapon : MonoBehaviour
                 // Ki?m tra n?u khác team m?i cho phép gây sát th??ng
                 if (shooterTeam != targetTeam)
                 {
+                  int finalDamage = damege; // Giá tr? sát th??ng m?c ??nh
+                    if (hit.collider.CompareTag("head")) // Ki?m tra tag "head"
+                    {
+                        finalDamage *= 4; // Nhân sát th??ng lên 4 l?n
+                        Debug.Log("trung dau nè....");
+                    }
+
                     // Gây sát th??ng cho m?c tiêu
-                    PhotonNetwork.LocalPlayer.AddScore(damege);
+                    PhotonNetwork.LocalPlayer.AddScore(finalDamage);
                     if (damege >= targetHealth.healths)
                     {
                         RoomManager.instance.kills++;
                         RoomManager.instance.SetHashes();
                         PhotonNetwork.LocalPlayer.AddScore(100);
                     }
-                    Debug.LogWarning(damege);
+                    Debug.LogWarning(finalDamage);
                     // G?i RPC ?? c?p nh?t sát th??ng lên t?t c? các client
-                    targetPhotonView.RPC("TakeDamage", RpcTarget.All, damege);
+                    targetPhotonView.RPC("TakeDamage", RpcTarget.All, finalDamage);
                 }
                 else
                 {

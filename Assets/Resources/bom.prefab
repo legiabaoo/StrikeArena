@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1938289304088586547}
   - component: {fileID: 2127687806140918359}
   - component: {fileID: 6620376979905060665}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Grenade00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 3322655307735197631}
   - component: {fileID: 1340635491248445965}
   - component: {fileID: 8648588130787282174}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Grenade04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 4687597299519228996}
   - component: {fileID: 6274513106517354566}
   - component: {fileID: 5966049440560716342}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Grenade03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,7 +261,7 @@ GameObject:
   - component: {fileID: 3202204505300173608}
   - component: {fileID: 1141958506790103245}
   - component: {fileID: 6990306596690393429}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Grenade02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -359,7 +359,7 @@ GameObject:
   - component: {fileID: 6579365093718706114}
   - component: {fileID: -3555107433565092670}
   - component: {fileID: 8210496473087245997}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: bom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -475,7 +475,7 @@ GameObject:
   - component: {fileID: 7411621198841941158}
   - component: {fileID: 368043825154612287}
   - component: {fileID: 682192888734290675}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Grenade01
   m_TagString: Untagged
   m_Icon: {fileID: 0}

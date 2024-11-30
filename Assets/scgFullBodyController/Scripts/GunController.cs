@@ -188,6 +188,23 @@ namespace scgFullBodyController
             //    }
             //}
             return null;
+            /* foreach (var player in PhotonNetwork.PlayerList)
+             {
+                 if (player.CustomProperties.TryGetValue("viewID", out var viewIDValue) &&
+                     viewIDValue is int viewID)
+                 {
+                     GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
+                     if (playerObject != null)
+                     {
+                         return playerObject;
+                     }
+                     else
+                     {
+                         Debug.LogError("player null");
+                     }
+                 }
+             }
+             return null;*/
         }
         public void initiliazeOrigPositions()
         {
