@@ -24,7 +24,7 @@ public class menu : MonoBehaviour
     }
     public void thoatgame()
     {
-
+        Application.Quit();
         
     }
     void ToggleOut()
