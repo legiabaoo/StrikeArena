@@ -117,8 +117,8 @@ public class RegisterAPI : MonoBehaviour
         Loading.SetActive(true);
         string jsonStringRequest = JsonConvert.SerializeObject(registerModel);
 
-        //var request = new UnityWebRequest("https://api-strikearena.onrender.com/confirm-mail", "POST");
-        var request = new UnityWebRequest("http://localhost:3000/confirm-mail", "POST");
+        var request = new UnityWebRequest("https://api-strikearena.onrender.com/confirm-mail", "POST");
+        //var request = new UnityWebRequest("http://localhost:3000/confirm-mail", "POST");
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonStringRequest);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();

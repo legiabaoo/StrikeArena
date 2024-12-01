@@ -19,7 +19,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
 
     // Thời gian cho hai giai đoạn
     private float buyPhaseTime = 5f; // Thời gian 30 giây cho mua vũ khí
-    private float battlePhaseTime = 100f; // Thời gian 1 phút 40 giây cho chiến đấu
+    private float battlePhaseTime = 10000f; // Thời gian 1 phút 40 giây cho chiến đấu
     private float plantPhaseTime = 20f;
     private float currentTime;
 
