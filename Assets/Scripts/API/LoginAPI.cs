@@ -35,6 +35,10 @@ public class LoginAPI : MonoBehaviour
         {
             Lose();
             PlayerPrefs.SetInt("Result", 0);
+        }else if(PlayerPrefs.GetInt("Result") == -2)
+        {
+            OutGame();
+            PlayerPrefs.SetInt("Result", 0);
         }
     }
     
@@ -57,6 +61,11 @@ public class LoginAPI : MonoBehaviour
     public void Lose()
     {
         int score = PlayerPrefs.GetInt("Rank")-25;
+        StartCoroutine(SetScore(score, PlayerPrefs.GetString("Id")));
+    }
+    public void OutGame()
+    {
+        int score = PlayerPrefs.GetInt("Rank") - 45;
         StartCoroutine(SetScore(score, PlayerPrefs.GetString("Id")));
     }
     IEnumerator CheckLogin(LoginModel loginModel)

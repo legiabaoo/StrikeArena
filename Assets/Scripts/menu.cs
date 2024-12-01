@@ -48,7 +48,9 @@ public class menu : MonoBehaviour
         {
             PhotonNetwork.LeaveRoom(); 
         }
+        PlayerPrefs.SetInt("Result", -2);
         SceneManager.LoadScene("LoginScene");
+
     }
     public void Huy()
     {
