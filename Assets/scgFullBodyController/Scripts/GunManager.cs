@@ -42,7 +42,32 @@ namespace scgFullBodyController
             {
                 // Chuyển mảng sang List để dễ thêm vũ khí
                 List<GameObject> weaponList = new List<GameObject>(weapons);
-                weaponList.Add(newWeapon);
+
+                if (newWeapon.name.ToString() == "M500(Clone)")
+                {
+                    Debug.LogError("Vi tri 1");
+                    // Xóa vũ khí ở vị trí 0 nếu danh sách không rỗng
+                    if (weaponList.Count > 0)
+                    {
+                        Debug.LogError("Xoa 1");
+                        weaponList.RemoveAt(0);
+                    }
+                    Invoke("swapWeapons", swapTime);
+                    // Thêm M500 vào vị trí đầu tiên
+                    weaponList.Insert(0, newWeapon);
+                }
+                else if(newWeapon.name.ToString() == "AK47 1(Clone)" || newWeapon.name.ToString() == "M4A1(Clone)" || newWeapon.name.ToString() == "Sniper(Clone)")
+                {
+                    Debug.LogError("Vi tri 2");
+                    // Xóa vũ khí ở vị trí 0 nếu danh sách không rỗng
+                    if (weaponList.Count > 1)
+                    {
+                        Debug.LogError("Xoa 2");
+                        weaponList.RemoveAt(1); 
+                    }
+                    Invoke("swapWeapons", swapTime);
+                    weaponList.Insert(1, newWeapon);
+                }
 
                 // Cập nhật lại mảng
                 weapons = weaponList.ToArray();
@@ -50,6 +75,7 @@ namespace scgFullBodyController
 
             Debug.Log($"Đã thêm vũ khí {newWeapon.name} vào inventory tại vị trí {weapons.Length - 1}.");
         }
+
         void Update()
         {
             if (!GetComponent<PhotonView>().IsMine)

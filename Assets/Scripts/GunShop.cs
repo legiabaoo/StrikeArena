@@ -32,6 +32,7 @@ public class GunShop : MonoBehaviourPun
     private Transform lefthand;
     private Transform head;
     private Transform ngontay;
+    public bool isGunShop= true;
     private void Awake()
     {
         instance = this;
@@ -88,7 +89,9 @@ public class GunShop : MonoBehaviourPun
         }
 
         // M? UI c?a hàng khi nh?n phím B
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B) 
+            //&& isGunShop
+            )
         {
             ToggleShopUI();
         }
@@ -352,7 +355,7 @@ public class GunShop : MonoBehaviourPun
         }
 
     }
-
+    
 
     [PunRPC]
     void CreateGunForPlayer(int playerID, int gunIndex)
@@ -406,9 +409,37 @@ public class GunShop : MonoBehaviourPun
             {
                 int playerViewID = (int)viewIDValue;
                 photonView.RPC("SetGunToPositionRPC", RpcTarget.AllBuffered, gunInstance.GetComponent<PhotonView>().ViewID, playerViewID);
+
             }
-            //SetGunParent(gunInstance.GetComponent<PhotonView>().ViewID);
-            gunInstance.transform.SetSiblingIndex(gunIndex);
+            if (gunIndex == 0)
+            {
+                Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(0) : null;
+
+                // Kiểm tra và xóa game con cũ nếu nó tồn tại
+                if (oldChild != null)
+                {
+                    Destroy(oldChild.gameObject); // Hoặc dùng `oldChild.gameObject.SetActive(false);` nếu chỉ muốn ẩn đi
+                }
+
+                // Đặt gunInstance làm con của gunPosition
+                gunInstance.transform.SetParent(gunPosition, false);
+                gunInstance.transform.SetSiblingIndex(0);
+            }
+            else 
+            {
+                Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(1) : null;
+
+                // Kiểm tra và xóa game con cũ nếu nó tồn tại
+                if (oldChild != null)
+                {
+                    Destroy(oldChild.gameObject); // Hoặc dùng `oldChild.gameObject.SetActive(false);` nếu chỉ muốn ẩn đi
+                }
+
+                // Đặt gunInstance làm con của gunPosition
+                gunInstance.transform.SetParent(gunPosition, false);
+                gunInstance.transform.SetSiblingIndex(1);
+            }
+            
 
             // Thi?t l?p các thu?c tính cho script Weapon n?u c?n
             Weapon weaponScript = gunInstance.GetComponent<Weapon>();
