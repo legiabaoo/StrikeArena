@@ -18,7 +18,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     private int seconds;
 
     // Thời gian cho hai giai đoạn
-    private float buyPhaseTime = 5f; // Thời gian 30 giây cho mua vũ khí
+    private float buyPhaseTime = 15f; // Thời gian 30 giây cho mua vũ khí
     private float battlePhaseTime = 10000f; // Thời gian 1 phút 40 giây cho chiến đấu
     private float plantPhaseTime = 20f;
     private float currentTime;
@@ -137,6 +137,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                 {
                     if (currentPhase == GamePhase.Buy)
                     {
+                        GunShop.instance.isGunShop = false;
                         Color color = Color.green;
                         string colorString = $"{color.r},{color.g},{color.b},{color.a}";
                         photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "BẮT ĐẦU CHIẾN ĐẤU");
@@ -260,11 +261,12 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         currentPhase = GamePhase.Buy;
         currentTime = buyPhaseTime;
-
+        GunShop.instance.isGunShop = true;
     }
 
     private void StartBattlePhase()
     {
+        
         RoomManager.instance.hasCalledEndGame = false;
         currentPhase = GamePhase.Battle;
         currentTime = battlePhaseTime;

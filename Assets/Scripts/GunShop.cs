@@ -32,6 +32,7 @@ public class GunShop : MonoBehaviourPun
     private Transform lefthand;
     private Transform head;
     private Transform ngontay;
+    public bool isGunShop= true;
     private void Awake()
     {
         instance = this;
@@ -88,7 +89,7 @@ public class GunShop : MonoBehaviourPun
         }
 
         // M? UI c?a hàng khi nh?n phím B
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B) && isGunShop)
         {
             ToggleShopUI();
         }
