@@ -69,8 +69,7 @@ public class PlayerSetup : MonoBehaviour
             Camera spinerCamera = spinerCameraTransform.GetComponentInChildren<Camera>();
             if (spinerCamera != null)
             {
-                spinerCamera.enabled = true; // Bật Camera
-                Debug.LogError("SpinerCamera enabled successfully.");
+                spinerCamera.enabled = true; // Bật Camera 
             }
             else
             {
