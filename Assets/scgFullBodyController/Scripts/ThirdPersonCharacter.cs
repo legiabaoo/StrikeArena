@@ -177,7 +177,7 @@ namespace scgFullBodyController
             }
             else
             {
-                m_Animator.SetFloat("animSpeed", 1);
+                m_Animator.SetFloat("animSpeed", 0);
                 m_Animator.SetFloat("Forward", m_ForwardAmount, 0.1f, Time.deltaTime);
             }
 

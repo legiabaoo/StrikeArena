@@ -2322,7 +2322,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7070443751900977279}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: -87.354004, y: -90.00101, z: 90.00101}
+  m_LocalEulerAnglesHint: {x: -8.362959, y: -90.00008, z: 90.00008}
 --- !u!33 &4756113829901902162
 MeshFilter:
   m_ObjectHideFlags: 0
