@@ -2,11 +2,13 @@
 //2021
 //Sniper scope controller
 
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
+using Photon.Pun;
 
 namespace scgFullBodyController
 {
@@ -24,6 +26,7 @@ namespace scgFullBodyController
             GameObject cameraControlObject = GameObject.Find("CameraControl");
             if (cameraControlObject != null)
             {
+                Debug.LogError("Cam !=nul");
                 camControl = cameraControlObject.GetComponent<CameraController>();
             }
             else

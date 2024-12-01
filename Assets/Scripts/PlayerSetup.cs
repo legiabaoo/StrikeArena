@@ -21,6 +21,7 @@ public class PlayerSetup : MonoBehaviour
     //public bool gunPositionFound => gunPosition != null;
     public Transform gunPosition;
     public Camera minimap;
+    Transform spinerCameraTransform ;
     void Awake()
     {
         photonView = GetComponent<PhotonView>(); // Gán photonView ở đây
@@ -28,6 +29,7 @@ public class PlayerSetup : MonoBehaviour
         cameraPlayer.GetComponent<AudioListener>().enabled = false;
         cameraPlayer.GetComponent<MouseLook>().enabled = false;
         gunPosition = gameObject.transform.Find("Ch15_nonPBR/mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2/mixamorig:RightShoulder/mixamorig:RightArm/mixamorig:RightForeArm/mixamorig:RightHand/GunPos");
+        spinerCameraTransform = gameObject.transform.Find("CameraControl/Main Camera/sniperCamera");
     }
     private void Start()
     {
@@ -62,6 +64,23 @@ public class PlayerSetup : MonoBehaviour
         cameraPlayer.GetComponent<MouseLook>().enabled = true;
         gameObject.GetComponentInChildren<Canvas>().enabled = true;
         gameObject.GetComponentInChildren<GunController>().enabled = true;
+        if (spinerCameraTransform != null)
+        {
+            Camera spinerCamera = spinerCameraTransform.GetComponentInChildren<Camera>();
+            if (spinerCamera != null)
+            {
+                spinerCamera.enabled = true; // Bật Camera
+                Debug.LogError("SpinerCamera enabled successfully.");
+            }
+            else
+            {
+                Debug.LogError("Camera component not found on spinerCamera!");
+            }
+        }
+        else
+        {
+            Debug.LogError("spinerCamera not found in hierarchy!");
+        }
         gameObject.GetComponent<GunManager>().enabled = true;
 
         //if (PhotonNetwork.LocalPlayer != null)

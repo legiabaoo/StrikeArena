@@ -1,11 +1,5 @@
-﻿//SlapChickenGames
-//2021
-//Main weapon controller supporting multiple firing types
-
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using Photon.Pun;
 namespace scgFullBodyController
 {

@@ -5871,7 +5871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53044dadef16b4140aa56f729474ea72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damege: 98
+  damege: 100
   fireRate: 8
   camera: {fileID: 0}
   raycat: {fileID: 5589994993345889250}
