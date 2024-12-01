@@ -80,25 +80,6 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
             {
                 spikePhotonView.RPC("SetSpike0Tag", RpcTarget.AllBuffered, spikePhotonView.ViewID);
             }
-            //if (countRound == 1)
-            //{
-            //    GunShop.instance.playerMoney = 800;
-            //    Debug.LogError("Round 1");
-            //}
-            //else if (countRound >= 2)
-            //{
-            //    if (PlayerPrefs.GetInt("WinRound") == 1)
-            //    {
-            //        GunShop.instance.playerMoney = PlayerPrefs.GetInt("PlayerMoney") + 3200;
-            //        Debug.LogError("Round 2.1");
-            //    }
-            //    else if (PlayerPrefs.GetInt("WinRound") == -1)
-            //    {
-            //        GunShop.instance.playerMoney = PlayerPrefs.GetInt("PlayerMoney") + 2200;
-            //        Debug.LogError("Round 2.2");
-            //    }
-            //    Debug.LogError("Round 2");
-            //}
             photonView.RPC("Money", RpcTarget.AllBuffered);
             Debug.Log("SpawnSpike");
             isSpawnSpike = true;
@@ -211,8 +192,8 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (countRound == 1)
         {
-            GunShop.instance.playerMoney = 800;
-
+            GunShop.instance.playerMoney = 8000;
+            //GunShop.instance.playerMoney = 800;
         }
         else if (countRound >= 2)
         {
