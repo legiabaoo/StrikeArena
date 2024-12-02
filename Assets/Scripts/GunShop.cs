@@ -118,14 +118,18 @@ public class GunShop : MonoBehaviourPun
                     cam = cameraObject;
                     GameObject cameraPoint = GameObject.FindGameObjectWithTag("campoint");
                     campoint = cameraPoint;
-                    GameObject tayphai = GameObject.FindGameObjectWithTag("RightHand");
-                    righthand = tayphai.GetComponent<Transform>();
-                    GameObject taytrai = GameObject.FindGameObjectWithTag("LeftHand");
-                    lefthand = taytrai.GetComponent<Transform>();
-                    GameObject dau = GameObject.FindGameObjectWithTag("head");
-                    head = dau.GetComponent<Transform>();
-                    GameObject tay = GameObject.FindGameObjectWithTag("ngontay");
-                    ngontay = tay.GetComponent<Transform>();
+                    //GameObject tayphai = GameObject.FindGameObjectWithTag("RightHand");
+                    //righthand = tayphai.GetComponent<Transform>();
+                    //GameObject taytrai = GameObject.FindGameObjectWithTag("LeftHand");
+                    //lefthand = taytrai.GetComponent<Transform>();
+                    //GameObject dau = GameObject.FindGameObjectWithTag("head");
+                    //head = dau.GetComponent<Transform>();
+                    //GameObject tay = GameObject.FindGameObjectWithTag("ngontay");
+                    //ngontay = tay.GetComponent<Transform>();
+                    head = playerObject.transform.Find("Ch15_nonPBR/mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2/mixamorig:Neck/mixamorig:Head")?.transform;
+                    righthand = playerObject.transform.Find("Ch15_nonPBR/mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2/mixamorig:RightShoulder/mixamorig:RightArm/mixamorig:RightForeArm/mixamorig:RightHand")?.transform;
+                    lefthand = playerObject.transform.Find("Ch15_nonPBR/mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2/mixamorig:LeftShoulder/mixamorig:LeftArm/mixamorig:LeftForeArm/mixamorig:LeftHand")?.transform;
+                    ngontay = playerObject.transform.Find("Ch15_nonPBR/mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2/mixamorig:RightShoulder/mixamorig:RightArm/mixamorig:RightForeArm/mixamorig:RightHand/mixamorig:RightHandIndex1")?.transform;
 
                     break;
                 }

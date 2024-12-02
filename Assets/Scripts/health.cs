@@ -13,7 +13,7 @@ public class health : MonoBehaviour
     public TMP_Text healthText;
 
     private HealthBar healthBar; // Tham chiếu đến thanh sức khỏe của người chơi
-
+    public BloodOverlay blood;
     void Start()
     {
         healthText.text = healths.ToString();
@@ -26,6 +26,7 @@ public class health : MonoBehaviour
             {
                 healthBar.SetPlayerHealth(healths); // Gán sức khỏe ban đầu
             }
+            blood = FindObjectOfType<BloodOverlay>();
         }
         RoomManager.instance.UpdatePlayerStatus(true);
     }
@@ -42,6 +43,7 @@ public class health : MonoBehaviour
         if (isLocalPlayer && healthBar != null)
         {
             healthBar.UpdateHealth(healths); // Cập nhật thanh sức khỏe của người chơi
+            blood.ShowBloodEffect();
         }
 
         if (healths <= 0)
