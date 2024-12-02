@@ -26,7 +26,6 @@ namespace scgFullBodyController
             GameObject cameraControlObject = GameObject.Find("CameraControl");
             if (cameraControlObject != null)
             {
-                Debug.LogError("Cam !=nul");
                 camControl = cameraControlObject.GetComponent<CameraController>();
             }
             else
