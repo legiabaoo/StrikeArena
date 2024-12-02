@@ -13,14 +13,18 @@ public class health : MonoBehaviour
     public TMP_Text healthText;
 
     private HealthBar healthBar; // Tham chiếu đến thanh sức khỏe của người chơi
-    public BloodOverlay blood;
+    [HideInInspector] public BloodOverlay blood;
+ 
+    menu menu;
     void Start()
     {
-        healthText.text = healths.ToString();
 
+        menu = FindObjectOfType<menu>();
+     
         // Lấy thanh sức khỏe từ prefab hoặc tạo mới nếu cần
         if (isLocalPlayer)
         {
+            menu.manchet.SetActive(false);
             healthBar = FindObjectOfType<HealthBar>();
             if (healthBar != null)
             {
@@ -29,7 +33,9 @@ public class health : MonoBehaviour
             blood = FindObjectOfType<BloodOverlay>();
         }
         RoomManager.instance.UpdatePlayerStatus(true);
+       
     }
+    
 
     [PunRPC]
     public void TakeDamage(int damage)
@@ -50,9 +56,11 @@ public class health : MonoBehaviour
         {
             if (isLocalPlayer)
             {
+            
                 //RoomManager.instance.HandleTeamSelection();
                 RoomManager.instance.deaths++;
                 RoomManager.instance.SetHashes();
+                menu.manchet.SetActive(true);
             }
             OnPlayerDeath();
         }
@@ -65,6 +73,7 @@ public class health : MonoBehaviour
         // Chuyển camera sang đồng đội
         if (isLocalPlayer)
         {
+            
             GameObject currentPlayerObject = gameObject; // Lấy GameObject của người chơi
             Camera currentCamera = GetComponentInChildren<Camera>();
 
