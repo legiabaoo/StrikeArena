@@ -18,8 +18,7 @@ namespace scgFullBodyController
 
         public enum WeaponTypes { Rifle, Pistol };
         public enum ShootTypes { SemiAuto, FullAuto, BoltAction };
-
-        [Header("WeaponType")]
+       
         public WeaponTypes Weapon;
 
         [Header("ShootType")]

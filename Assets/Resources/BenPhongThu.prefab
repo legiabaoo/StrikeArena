@@ -5608,7 +5608,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 758308686437749669}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0.1887, y: 0.1117, z: -0.2181}
+  m_LocalPosition: {x: 0.28, y: 0.094, z: -0.193}
   m_LocalScale: {x: 2.3309262, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6063,13 +6063,13 @@ MonoBehaviour:
   damege: 10
   fireRate: 8
   camera: {fileID: 758308687143784894}
-  raycat: {fileID: 758308686437749669}
+  raycat: {fileID: 758308687143784883}
   hitVFX: {fileID: 3432958286849152088, guid: 87ee7299dd44ed747af24dbb91bcd33b, type: 3}
   mag: 5
   ammo: 30
   magAmmo: 30
   ammoText: {fileID: 2503448716457891874}
-  doxa: 120
+  doxa: 300
   gun: {fileID: 758308686651600180}
 --- !u!1 &758308686669415469
 GameObject:
@@ -23607,7 +23607,7 @@ RectTransform:
   m_GameObject: {fileID: 1456105635163891194}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4488877823924491000}
@@ -23619,7 +23619,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 185, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1577348062329965188

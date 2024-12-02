@@ -10190,7 +10190,7 @@ MonoBehaviour:
   ammo: 30
   magAmmo: 30
   ammoText: {fileID: 0}
-  doxa: 50
+  doxa: 300
   gun: {fileID: 6187405189196333343}
 --- !u!1 &7742087404358483466
 GameObject:

@@ -14976,8 +14976,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53044dadef16b4140aa56f729474ea72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damege: 22
-  fireRate: 10
+  damege: 25
+  fireRate: 8
   camera: {fileID: 0}
   raycat: {fileID: 6088911627053043428}
   hitVFX: {fileID: 3432958286849152088, guid: 87ee7299dd44ed747af24dbb91bcd33b, type: 3}
@@ -14985,7 +14985,7 @@ MonoBehaviour:
   ammo: 30
   magAmmo: 30
   ammoText: {fileID: 0}
-  doxa: 70
+  doxa: 300
   gun: {fileID: 5178168762548223059}
 --- !u!33 &2974400973721947598
 MeshFilter:

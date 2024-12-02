@@ -377,6 +377,7 @@ public class GunShop : MonoBehaviourPun
                 gunController.mainCam = cam;
                 gunController.shootPointCamera = campoint;
                 gunController.mainHandTransform = righthand;
+                
             }
             else
             {

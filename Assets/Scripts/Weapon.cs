@@ -39,6 +39,7 @@ public class Weapon : MonoBehaviour
     private float recoverLength;*/
     public float doxa = 0f;
     public GunController gun;
+    public 
     // Start is called before the first frame update
     void Start()
     {
@@ -62,31 +63,64 @@ public class Weapon : MonoBehaviour
         {
             nextFire -= Time.deltaTime;
         }
+        GunController.ShootTypes shootType = gun.shootType;
 
-        if (Input.GetButtonDown("Fire1") && nextFire <= 0 && gun.bulletsInMag > 0)
+
+        if (shootType == GunController.ShootTypes.SemiAuto  )
         {
-            Debug.Log("ban ne.............");
-            nextFire = 1 / fireRate;
-          /*  ammo--;
-          
-            ammoText.text = ammo + "/" + magAmmo;*/
-            Fire();
+            if (Input.GetButtonDown("Fire1") && nextFire <= 0 && gun.bulletsInMag > 0)
+            {
+                Debug.Log("sung luc va ngam");
+                nextFire = 1 / fireRate;
+                /*  ammo--;
+
+                  ammoText.text = ammo + "/" + magAmmo;*/
+                Fire();
+            }
+        }
+        if (shootType == GunController.ShootTypes.FullAuto)
+        {
+            if (Input.GetButton("Fire1") && nextFire <= 0 && gun.bulletsInMag > 0)
+            {
+                Debug.Log("sungtruongdangban");
+                nextFire = 1 / fireRate;
+                /*  ammo--;
+
+                  ammoText.text = ammo + "/" + magAmmo;*/
+                Fire();
+            }
+        }
+        if (shootType == GunController.ShootTypes.BoltAction)
+        {
+            if (Input.GetButtonDown("Fire1") && nextFire <= 0 && gun.bulletsInMag > 0)
+            {
+                Debug.Log("sung luc va ngam");
+                nextFire = 1 / fireRate;
+                /*  ammo--;
+
+                  ammoText.text = ammo + "/" + magAmmo;*/
+                Fire();
+            }
         }
 
-       /* if (Input.GetKeyDown(KeyCode.R) && mag > 0)
-        {
-            Reload();
-        }*/
 
-      /*  if (recoiling)
-        {
-            Recoil();
-        }
 
-        if (recovering)
-        {
-            Recovering();
-        }*/
+
+
+        /* if (Input.GetKeyDown(KeyCode.R) && mag > 0)
+         {
+             Reload();
+         }*/
+
+        /*  if (recoiling)
+          {
+              Recoil();
+          }
+
+          if (recovering)
+          {
+              Recovering();
+          }*/
     }
 
 /*    void Reload()
@@ -147,7 +181,7 @@ public class Weapon : MonoBehaviour
                   int finalDamage = damege; // Giá tr? sát th??ng m?c ??nh
                     if (hit.collider.CompareTag("head")) // Ki?m tra tag "head"
                     {
-                        finalDamage *= 4; // Nhân sát th??ng lên 4 l?n
+                        finalDamage *= 3; // Nhân sát th??ng lên 4 l?n
                         Debug.Log("trung dau nè....");
                     }
 
