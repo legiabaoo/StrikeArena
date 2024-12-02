@@ -938,7 +938,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapons:
-  - {fileID: 0}
+  - {fileID: 1835437602643227335}
   anim: {fileID: 758308687141290316}
   oRot: {fileID: 5308396501109853700}
   swapTime: 0.5
@@ -7406,7 +7406,7 @@ MonoBehaviour:
   pistolLayerWeight: 0.4
   rifleLayerWeightReloading: 0.6
   pistolLayerWeightReloading: 0.4
-  mainCam: {fileID: 0}
+  mainCam: {fileID: 758308687143784883}
   bulletsPerMag: 11
   totalBullets: 121
   muzzleFlashes:
@@ -7463,7 +7463,7 @@ MonoBehaviour:
   headOffsetRot: {x: 0, y: -26.7, z: -51.7}
   indexFingerOffsetRot: {x: 20, y: 0, z: 0}
   adjustIndexFinger: 1
-  indexFinger: {fileID: 0}
+  indexFinger: {fileID: 8528493184360347260}
   isAi: 0
 --- !u!82 &8076278763251450142
 AudioSource:

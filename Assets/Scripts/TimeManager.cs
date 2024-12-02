@@ -192,7 +192,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (countRound == 1)
         {
-            GunShop.instance.playerMoney = 8000;
+            GunShop.instance.playerMoney = 800;
             //GunShop.instance.playerMoney = 800;
         }
         else if (countRound >= 2)
