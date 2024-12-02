@@ -33,6 +33,9 @@ public class GunShop : MonoBehaviourPun
     private Transform head;
     private Transform ngontay;
     public bool isGunShop= true;
+    public bool isGunBig = false;
+    public Image[] backgroundGun;
+    public Button[] btnGun;
     private void Awake()
     {
         instance = this;
@@ -78,7 +81,6 @@ public class GunShop : MonoBehaviourPun
     void Update()
     {
         StartCoroutine(CheckForPlayerObject());
-        //SetMoney(playerMoney);
         SetMoney(playerMoney);
         // T́m nhân v?t c?a ng??i ch?i và v? trí g?n súng n?u ch?a t́m th?y
         if (!gunPositionFound && PhotonNetwork.IsConnected)
@@ -98,37 +100,8 @@ public class GunShop : MonoBehaviourPun
     }
     private IEnumerator CheckForPlayerObject()
     {
-        // Chờ cho đến khi nhân vật được tạo
         while (playerObject == null)
         {
-            //foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
-            //{
-            //    PhotonView photonView = player.GetComponent<PhotonView>();
-            //    if (photonView != null && photonView.IsMine)
-            //    {
-            //        playerObject = player;
-            //        playerAnimator = playerObject.GetComponent<Animator>();
-            //        GameObject cameraObject = GameObject.FindGameObjectWithTag("MainCamera");
-            //        if (cameraObject != null)
-            //        {
-            //            playerCamAnim = cameraObject.GetComponent<Animator>();
-            //        }
-            //        cam = cameraObject;
-            //        GameObject cameraPoint = GameObject.FindGameObjectWithTag("campoint");
-            //        campoint = cameraPoint;
-            //        GameObject tayphai = GameObject.FindGameObjectWithTag("RightHand");
-            //        righthand = tayphai.GetComponent<Transform>();
-            //        GameObject taytrai = GameObject.FindGameObjectWithTag("LeftHand");
-            //        lefthand = taytrai.GetComponent<Transform>();
-            //        GameObject dau = GameObject.FindGameObjectWithTag("head");
-            //        head = dau.GetComponent<Transform>();
-            //        GameObject tay = GameObject.FindGameObjectWithTag("ngontay");
-            //        ngontay = tay.GetComponent<Transform>();
-
-            //        break;
-            //    }
-            //}
-            //yield return new WaitForSeconds(1f);  // Kiểm tra lại sau 1 giây
             foreach (Player player in PhotonNetwork.PlayerList)
             {
                 if (player.CustomProperties.TryGetValue("viewID", out var viewIDValue) &&
@@ -264,6 +237,9 @@ public class GunShop : MonoBehaviourPun
         if (gunIndex == 0)
         {
             Debug.Log("Súng M500");
+            ColorUtility.TryParseHtmlString("#575757", out Color newColor);
+            backgroundGun[0].color = newColor;
+            btnGun[0].interactable = false;
             gunPrice = 100;
             if (playerMoney >= gunPrice)
             {
@@ -279,7 +255,25 @@ public class GunShop : MonoBehaviourPun
         else if (gunIndex == 1)
         {
             Debug.Log("Súng Ak47");
-            gunPrice = 200;
+            for(int i =1; i < backgroundGun.Length; i++)
+            {
+                ColorUtility.TryParseHtmlString("#FFFFFF", out Color newColor1);
+                backgroundGun[i].color = newColor1;
+                btnGun[i].interactable = true;
+            }
+            ColorUtility.TryParseHtmlString("#575757", out Color newColor);
+            backgroundGun[1].color = newColor;
+            btnGun[1].interactable = false;
+            if (!isGunBig)
+            {
+                gunPrice = 200;
+                isGunBig = true;
+            }
+            else if(isGunBig)
+            {
+                gunPrice = 0;
+            }
+            
             if (playerMoney >= gunPrice)
             {
                 //photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
@@ -294,7 +288,24 @@ public class GunShop : MonoBehaviourPun
         else if (gunIndex == 2)
         {
             Debug.Log("Súng M4A1");
-            gunPrice = 300;
+            for (int i = 1; i < backgroundGun.Length; i++)
+            {
+                ColorUtility.TryParseHtmlString("#FFFFFF", out Color newColor1);
+                backgroundGun[i].color = newColor1;
+                btnGun[i].interactable = true;
+            }
+            ColorUtility.TryParseHtmlString("#575757", out Color newColor);
+            backgroundGun[2].color = newColor;
+            btnGun[2].interactable = false;
+            if (!isGunBig)
+            {
+                gunPrice = 200;
+                isGunBig = true;
+            }
+            else if (isGunBig)
+            {
+                gunPrice = 0;
+            }
             if (playerMoney >= gunPrice)
             {
                 playerMoney -= gunPrice; // Tr? ti?n khi mua
@@ -309,7 +320,24 @@ public class GunShop : MonoBehaviourPun
         else if (gunIndex == 3)
         {
             Debug.Log("Súng ngắm");
-            gunPrice = 300;
+            for (int i = 1; i < backgroundGun.Length; i++)
+            {
+                ColorUtility.TryParseHtmlString("#FFFFFF", out Color newColor1);
+                backgroundGun[i].color = newColor1;
+                btnGun[i].interactable = true;
+            }
+            ColorUtility.TryParseHtmlString("#575757", out Color newColor);
+            backgroundGun[3].color = newColor;
+            btnGun[3].interactable = false;
+            if (!isGunBig)
+            {
+                gunPrice = 200;
+                isGunBig = true;
+            }
+            else if (isGunBig)
+            {
+                gunPrice = 0;
+            }
             if (playerMoney >= gunPrice)
             {
                 int tien = playerMoney - gunPrice; // Tr? ti?n khi mua
