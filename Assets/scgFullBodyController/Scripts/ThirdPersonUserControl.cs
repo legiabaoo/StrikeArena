@@ -1,4 +1,4 @@
-//SlapChickenGames
+﻿//SlapChickenGames
 //2021
 //Modified user control code also from unity standard assets
 
@@ -15,7 +15,7 @@ namespace scgFullBodyController
 
         private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
         private Transform m_Cam;                  // A reference to the main camera in the scenes transform
-        private Vector3 m_CamForward;             // The current forward direction of the camera
+        public Vector3 m_CamForward;             // The current forward direction of the camera
         private Vector3 m_Move;
         private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
         public float sprintSpeed;
@@ -195,20 +195,54 @@ namespace scgFullBodyController
             collidingObj.GetComponent<Collider>().enabled = true;
         }
         // Fixed update is called in sync with physics
+        //private void FixedUpdate()
+        //{
+        //    // calculate camera relative direction to move:
+        //    m_CamForward = Vector3.Scale(m_Cam.forward, new Vector3(1, 0, 1)).normalized;
+        //    m_Move = verticalInput * m_CamForward * walkSpeed;
+
+        //    if (sprint) m_Move *= sprintSpeed;
+
+        //    // pass all parameters to the character control script
+        //    m_Character.Move(m_Move, crouch, m_Jump, slide, vaulting);
+
+        //    m_Character.HandleGroundMovement(crouch, m_Jump, slide);
+        //    m_Jump = false;
+        //}
         private void FixedUpdate()
         {
-            // calculate camera relative direction to move:
+            // Kiểm tra và gán lại camera nếu bị mất tham chiếu
+            if (m_Cam == null)
+            {
+                Debug.LogWarning("Camera reference lost. Reassigning the main camera.");
+                Camera mainCamera = Camera.main;
+                if (mainCamera != null)
+                {
+                    m_Cam = mainCamera.transform;
+                }
+                else
+                {
+                    Debug.LogError("No main camera found in the scene! Skipping movement logic.");
+                    return; // Thoát khỏi FixedUpdate nếu không có camera
+                }
+            }
+
+            // Tính toán hướng di chuyển dựa trên camera
             m_CamForward = Vector3.Scale(m_Cam.forward, new Vector3(1, 0, 1)).normalized;
             m_Move = verticalInput * m_CamForward * walkSpeed;
 
-            if (sprint) m_Move *= sprintSpeed;
+            // Tăng tốc nếu đang chạy nước rút
+            if (sprint)
+                m_Move *= sprintSpeed;
 
-            // pass all parameters to the character control script
+            // Truyền các tham số điều khiển đến script của nhân vật
             m_Character.Move(m_Move, crouch, m_Jump, slide, vaulting);
-
             m_Character.HandleGroundMovement(crouch, m_Jump, slide);
+
+            // Đặt lại cờ nhảy
             m_Jump = false;
         }
+
 
         void slideCancel()
         {
