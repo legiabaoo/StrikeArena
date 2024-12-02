@@ -177,6 +177,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         GameObject currentPlayerObject = gameObject;
         CameraManager.instance.RespawnPlayerCamera(currentPlayerObject);
         GunShop.instance.ResetGunPosition();
+        GunShop.instance.isGunBig = false;
     }
 
     private Transform GetAvailableSpawnPoint(Transform[] spawnPoints)
@@ -234,7 +235,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public void CountPlayersInTeams()
     {
         int redTeamCount = 0;
-        int blueTeamCount = 1;
+        int blueTeamCount = 0;
 
         // L?y danh sách t?t c? ng??i ch?i trong pḥng
         Player[] players = PhotonNetwork.PlayerList;
@@ -258,7 +259,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 }
             }
         }
-        if (redTeamCount >= 1 && blueTeamCount >= 1)
+        if (redTeamCount >= 2 && blueTeamCount >= 2)
         {
             TimeManager.instance.startGame = true;
         }
