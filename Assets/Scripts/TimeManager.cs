@@ -30,7 +30,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     public bool isAllDeathBlue = false;
     private bool isSpikeTime = false;
     private bool isTextBuy = false;
-    private bool isSpawnSpike = false;
+    public bool isSpawnSpike = false;
     public GameObject over;
     public GameObject win;
     public GameObject lose;
@@ -72,7 +72,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             haha = PlayerPrefs.GetInt("PlayerMoney");
         }
-        if (currentTime == 5 && currentPhase == GamePhase.Buy && !isSpawnSpike && startGame)
+        if (currentTime == 15 && currentPhase == GamePhase.Buy && !isSpawnSpike && startGame)
         {
             GameObject spike0 = PhotonNetwork.Instantiate(spike.name, spawnSpike.position, Quaternion.identity);
             PhotonView spikePhotonView = spike0.GetComponent<PhotonView>();
