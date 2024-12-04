@@ -193,9 +193,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 835e077b3c009ce469c79066bb15c2c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amThanhDatBom: {fileID: 8300000, guid: 1a95e477a2564aa4a9d59ed2e2461e82, type: 3}
-  amThanhGoBom: {fileID: 8300000, guid: 5fafda3eb9ac24741bafd75ed0969b94, type: 3}
-  amThanhVolume: 1
 --- !u!82 &9181533521892453531
 AudioSource:
   m_ObjectHideFlags: 0

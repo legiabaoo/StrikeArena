@@ -208,8 +208,8 @@ MonoBehaviour:
   aimFinished: 1
   swapping: 0
   aimPosSet: 0
-  fireSound: {fileID: 8300000, guid: e17de642f33488e429523b58a3d7da45, type: 3}
-  reloadSound: {fileID: 8300000, guid: 7ec4f80dbb84a2a49a3ccad93242118b, type: 3}
+  fireSound: {fileID: 8300000, guid: 0f43928f4fa72ed49b0ab45ce3b33644, type: 3}
+  reloadSound: {fileID: 8300000, guid: e3299966ba2757743b200616e1573a19, type: 3}
 --- !u!114 &7647066688723541794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,7 +360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53044dadef16b4140aa56f729474ea72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damege: 28
+  damege: 32
   fireRate: 8
   camera: {fileID: 0}
   raycat: {fileID: 5390164102272204434}
@@ -369,7 +369,7 @@ MonoBehaviour:
   ammo: 30
   magAmmo: 30
   ammoText: {fileID: 0}
-  doxa: 70
+  doxa: 300
   gun: {fileID: 6148033888694548371}
 --- !u!33 &1165379259969800126
 MeshFilter:
