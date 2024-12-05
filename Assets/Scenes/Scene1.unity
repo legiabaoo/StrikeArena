@@ -10129,6 +10129,7 @@ MonoBehaviour:
   isPlantSpike: 0
   isAllDeathRed: 0
   isAllDeathBlue: 0
+  isSpawnSpike: 0
   over: {fileID: 1261418956}
   win: {fileID: 1489482454}
   lose: {fileID: 463930438}
@@ -14326,6 +14327,7 @@ MonoBehaviour:
   - {fileID: 192313585}
   - {fileID: 1886670230}
   - {fileID: 463155596}
+  isShopGun: 0
 --- !u!4 &1122015390
 Transform:
   m_ObjectHideFlags: 0

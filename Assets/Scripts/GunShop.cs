@@ -13,7 +13,7 @@ public class GunShop : MonoBehaviourPun
 {
     public static GunShop instance;
     public GameObject shopUI;                  // UI c?a hàng
-    public int playerMoney ;              // Ti?n c?a ng??i ch?i
+    public int playerMoney;              // Ti?n c?a ng??i ch?i
     public int gunPrice = 100;                 // Giá c?a m?i súng
     public GameObject[] gunPrefabs;            // M?ng ch?a các prefab súng
 
@@ -32,10 +32,11 @@ public class GunShop : MonoBehaviourPun
     private Transform lefthand;
     private Transform head;
     private Transform ngontay;
-    public bool isGunShop= true;
+    public bool isGunShop = true;
     public bool isGunBig = false;
     public Image[] backgroundGun;
     public Button[] btnGun;
+    public bool isShopGun = false;
     private void Awake()
     {
         instance = this;
@@ -91,11 +92,19 @@ public class GunShop : MonoBehaviourPun
         }
 
         // M? UI c?a hàng khi nh?n phím B
-        if (Input.GetKeyDown(KeyCode.B) 
-            //&& isGunShop
+        if (Input.GetKeyDown(KeyCode.B)
+            && isGunShop
             )
         {
             ToggleShopUI();
+
+        }
+        if (!isGunShop)
+        {
+            shopUI.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            isShopGun = false;
         }
     }
     private IEnumerator CheckForPlayerObject()
@@ -156,11 +165,13 @@ public class GunShop : MonoBehaviourPun
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            isShopGun = true;
         }
         else
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            isShopGun = false;
         }
     }
 
@@ -259,7 +270,7 @@ public class GunShop : MonoBehaviourPun
         else if (gunIndex == 1)
         {
             Debug.Log("Súng Ak47");
-            for(int i =1; i < backgroundGun.Length; i++)
+            for (int i = 1; i < backgroundGun.Length; i++)
             {
                 ColorUtility.TryParseHtmlString("#FFFFFF", out Color newColor1);
                 backgroundGun[i].color = newColor1;
@@ -273,16 +284,16 @@ public class GunShop : MonoBehaviourPun
                 gunPrice = 200;
                 isGunBig = true;
             }
-            else if(isGunBig)
+            else if (isGunBig)
             {
                 gunPrice = 0;
             }
-            
+
             if (playerMoney >= gunPrice)
             {
                 //photonView.RPC("CreateGunForPlayer", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
                 playerMoney -= gunPrice; // Tr? ti?n khi mua
-                CreateGunForPlayer(PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);       
+                CreateGunForPlayer(PhotonNetwork.LocalPlayer.ActorNumber, gunIndex);
             }
             else
             {
@@ -387,7 +398,7 @@ public class GunShop : MonoBehaviourPun
         }
 
     }
-    
+
 
     [PunRPC]
     void CreateGunForPlayer(int playerID, int gunIndex)
@@ -395,7 +406,7 @@ public class GunShop : MonoBehaviourPun
         // Ki?m tra n?u ?ây là ng??i ch?i hi?n t?i và ch? s? súng h?p l?
         if (PhotonNetwork.LocalPlayer.ActorNumber == playerID && gunIndex >= 0 && gunIndex < gunPrefabs.Length)
         {
-            
+
             // T?o và ??ng b? cây súng trên t?t c? client
             GameObject gunInstance = PhotonNetwork.Instantiate(gunPrefabs[gunIndex].name, gunPositions[gunIndex], gunRotations[gunIndex]);
             gunInstance.SetActive(false);
@@ -437,7 +448,7 @@ public class GunShop : MonoBehaviourPun
             }
             // Đặt gunInstance làm con của gunPosition
             TransferOwnershipToBuyer(gunInstance.GetComponent<PhotonView>().ViewID);
-            if(PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("viewID", out var viewIDValue))
+            if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("viewID", out var viewIDValue))
             {
                 int playerViewID = (int)viewIDValue;
                 photonView.RPC("SetGunToPositionRPC", RpcTarget.AllBuffered, gunInstance.GetComponent<PhotonView>().ViewID, playerViewID);
@@ -457,7 +468,7 @@ public class GunShop : MonoBehaviourPun
                 gunInstance.transform.SetParent(gunPosition, false);
                 gunInstance.transform.SetSiblingIndex(0);
             }
-            else 
+            else
             {
                 Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(1) : null;
 
@@ -471,7 +482,7 @@ public class GunShop : MonoBehaviourPun
                 gunInstance.transform.SetParent(gunPosition, false);
                 gunInstance.transform.SetSiblingIndex(1);
             }
-            
+
 
             // Thi?t l?p các thu?c tính cho script Weapon n?u c?n
             Weapon weaponScript = gunInstance.GetComponent<Weapon>();
@@ -519,7 +530,7 @@ public class GunShop : MonoBehaviourPun
         // Tìm đối tượng súng
         GameObject gunObject = PhotonView.Find(gunViewID)?.gameObject;
         GameObject playerObject = PhotonView.Find(playerViewID)?.gameObject;
-        Debug.LogError("gunViewID: "+gunViewID + " playerViewID: " + playerViewID);
+        Debug.LogError("gunViewID: " + gunViewID + " playerViewID: " + playerViewID);
         if (gunObject != null && playerObject != null)
         {
             // Lấy vị trí gunPosition của người chơi
@@ -529,7 +540,7 @@ public class GunShop : MonoBehaviourPun
             {
                 // Đặt Parent và điều chỉnh vị trí
                 gunObject.transform.SetParent(gunPos, false);
-                
+
                 Debug.Log($"Gun {gunObject.name} set to position of player {playerObject.name}");
             }
             else

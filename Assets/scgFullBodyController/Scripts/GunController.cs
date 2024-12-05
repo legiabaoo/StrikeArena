@@ -211,7 +211,7 @@ namespace scgFullBodyController
 
             if (!photonView.IsMine) return;
             //Input and actions for shooting
-            if (Input.GetButtonDown("Fire1") && !firing && reloading == false && bulletsInMag > 0 && !cycling && !swapping)
+            if (Input.GetButtonDown("Fire1") && !GunShop.instance.isShopGun && !firing && reloading == false && bulletsInMag > 0 && !cycling && !swapping)
             {
 
                 firing = true;
