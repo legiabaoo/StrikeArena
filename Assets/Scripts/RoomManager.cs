@@ -235,7 +235,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public void CountPlayersInTeams()
     {
         int redTeamCount = 0;
-        int blueTeamCount = 0;
+        int blueTeamCount = 1;
 
         // L?y danh sách t?t c? ng??i ch?i trong pḥng
         Player[] players = PhotonNetwork.PlayerList;
@@ -259,7 +259,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 }
             }
         }
-        if (redTeamCount >= 2 && blueTeamCount >= 2)
+        if (redTeamCount >= 1 && blueTeamCount >= 1)
         {
             TimeManager.instance.startGame = true;
         }

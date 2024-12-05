@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
 {
+    public GameObject explosionEffect; // Hiệu ứng nổ
+
     public static TimeManager instance;
     public TextMeshProUGUI diemTeamXanh;
     public TextMeshProUGUI diemTeamDo;// Text hiển thị điểm của đội xanh
@@ -18,9 +20,9 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     private int seconds;
 
     // Thời gian cho hai giai đoạn
-    private float buyPhaseTime = 15f; // Thời gian 30 giây cho mua vũ khí
-    private float battlePhaseTime = 10000f; // Thời gian 1 phút 40 giây cho chiến đấu
-    private float plantPhaseTime = 20f;
+    private float buyPhaseTime = 30f; // Thời gian 30 giây cho mua vũ khí
+    private float battlePhaseTime = 100f; // Thời gian 1 phút 40 giây cho chiến đấu
+    private float plantPhaseTime = 40f;
     private float currentTime;
 
     public bool startGame = false;
@@ -72,7 +74,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             haha = PlayerPrefs.GetInt("PlayerMoney");
         }
-        if (currentTime == 5 && currentPhase == GamePhase.Buy && !isSpawnSpike && startGame)
+        if (currentTime == 15 && currentPhase == GamePhase.Buy && !isSpawnSpike && startGame)
         {
             GameObject spike0 = PhotonNetwork.Instantiate(spike.name, spawnSpike.position, Quaternion.identity);
             PhotonView spikePhotonView = spike0.GetComponent<PhotonView>();
@@ -137,6 +139,9 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                     }
                     else if (currentPhase == GamePhase.Plant)
                     {
+                        // Kích hoạt nổ bom
+                        photonView.RPC("TriggerExplosion", RpcTarget.All);
+
                         Color color = Color.red;
                         string colorString = $"{color.r},{color.g},{color.b},{color.a}";
                         photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "ĐỘI TẤN CÔNG \n CHIÊN THẮNG");
@@ -433,4 +438,27 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
             currentTime = (float)stream.ReceiveNext();
         }
     }
+    [PunRPC]
+    public void TriggerExplosion()
+    {
+        // Tìm trái bom trong scene
+        GameObject spike = GameObject.FindWithTag("Spike");
+        if (spike != null)
+        {
+            // Lấy vị trí của trái bom
+            Vector3 bombPosition = spike.transform.position;
+
+            // Hủy trái bom
+            Destroy(spike);
+
+            // Tạo hiệu ứng nổ tại vị trí trái bom
+            if (explosionEffect != null)
+            {
+                Instantiate(explosionEffect, bombPosition, Quaternion.identity);
+            }
+
+            Debug.Log("Bom đã nổ!");
+        }
+    }
+
 }
