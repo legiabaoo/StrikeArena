@@ -1093,6 +1093,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 521b611700410be45810047f0a74e899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Cam: {fileID: 0}
   m_CamForward: {x: 0, y: 0, z: 0}
   sprintSpeed: 1.4
   walkSpeed: 0.8

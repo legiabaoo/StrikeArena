@@ -18,8 +18,8 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     private int seconds;
 
     // Thời gian cho hai giai đoạn
-    private float buyPhaseTime = 15f; // Thời gian 30 giây cho mua vũ khí
-    private float battlePhaseTime = 10000f; // Thời gian 1 phút 40 giây cho chiến đấu
+    private float buyPhaseTime = 10f; // Thời gian 30 giây cho mua vũ khí
+    private float battlePhaseTime = 5f; // Thời gian 1 phút 40 giây cho chiến đấu
     private float plantPhaseTime = 20f;
     private float currentTime;
 
@@ -30,7 +30,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     public bool isAllDeathBlue = false;
     private bool isSpikeTime = false;
     private bool isTextBuy = false;
-    private bool isSpawnSpike = false;
+    public bool isSpawnSpike = false;
     public GameObject over;
     public GameObject win;
     public GameObject lose;
@@ -72,7 +72,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             haha = PlayerPrefs.GetInt("PlayerMoney");
         }
-        if (currentTime == 5 && currentPhase == GamePhase.Buy && !isSpawnSpike && startGame)
+        if (currentTime == 15 && currentPhase == GamePhase.Buy && !isSpawnSpike && startGame)
         {
             GameObject spike0 = PhotonNetwork.Instantiate(spike.name, spawnSpike.position, Quaternion.identity);
             PhotonView spikePhotonView = spike0.GetComponent<PhotonView>();
@@ -118,7 +118,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                 {
                     if (currentPhase == GamePhase.Buy)
                     {
-                        GunShop.instance.isGunShop = false;
+                        photonView.RPC("setIsGunShop", RpcTarget.AllBuffered, false);
                         Color color = Color.green;
                         string colorString = $"{color.r},{color.g},{color.b},{color.a}";
                         photonView.RPC("SetNotify", RpcTarget.AllBuffered, colorString, "BẮT ĐẦU CHIẾN ĐẤU");
@@ -200,7 +200,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
             if (PlayerPrefs.GetInt("WinRound") == 1)
             {
                 GunShop.instance.playerMoney = PlayerPrefs.GetInt("PlayerMoney") + 3200;
- 
+
             }
             else if (PlayerPrefs.GetInt("WinRound") == -1)
             {
@@ -242,12 +242,16 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         currentPhase = GamePhase.Buy;
         currentTime = buyPhaseTime;
-        GunShop.instance.isGunShop = true;
+        photonView.RPC("setIsGunShop", RpcTarget.AllBuffered, true);
     }
-
+    [PunRPC]
+    public void setIsGunShop(bool isGunShop)
+    {
+        GunShop.instance.isGunShop = isGunShop;
+    }
     private void StartBattlePhase()
     {
-        
+
         RoomManager.instance.hasCalledEndGame = false;
         currentPhase = GamePhase.Battle;
         currentTime = battlePhaseTime;
@@ -274,6 +278,12 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     public void ResetTime()
     {
+        for (int i = 0; i < GunShop.instance.btnGun.Length; i++)
+        {
+            GunShop.instance.btnGun[i].interactable = true;
+            GunShop.instance.backgroundGun[i].color = Color.white;
+        }
+
         RoomManager.instance.HandleTeamSelection();
         RoomManager.instance.RemovePlayerInstances();
         GunShop.instance.playerMoney = 800;
@@ -336,7 +346,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     public void SetRound()
     {
-            countRound++;
+        countRound++;
     }
     [PunRPC]
     public void EndGame()

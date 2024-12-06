@@ -14,7 +14,7 @@ namespace scgFullBodyController
         //IMPORTANT, this script needs to be on the root transform
 
         private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
-        private Transform m_Cam;                  // A reference to the main camera in the scenes transform
+        public Transform m_Cam;                  // A reference to the main camera in the scenes transform
         public Vector3 m_CamForward;             // The current forward direction of the camera
         private Vector3 m_Move;
         private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
@@ -218,7 +218,7 @@ namespace scgFullBodyController
                 Camera mainCamera = Camera.main;
                 if (mainCamera != null)
                 {
-                    m_Cam = mainCamera.transform;
+                    m_Cam = Camera.main.transform;
                 }
                 else
                 {

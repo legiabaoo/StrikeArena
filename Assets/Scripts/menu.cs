@@ -18,7 +18,6 @@ public class menu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape) && PhotonNetwork.InRoom)
         {
-          
             ToggleOut();
         }
       
@@ -27,6 +26,11 @@ public class menu : MonoBehaviour
     {
         Application.Quit();
         
+    }
+    public void Cancel()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
     void ToggleOut()
     {
