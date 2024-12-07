@@ -7,10 +7,12 @@ using UnityEngine;
 public class health : MonoBehaviour
 {
     public int healths;
+    public int armor;
     public bool isLocalPlayer;
 
     [Header("UI")]
     public TMP_Text healthText;
+    public TMP_Text armorText;  // Hiển thị giáp
 
     private HealthBar healthBar; // Tham chiếu đến thanh sức khỏe của người chơi
     [HideInInspector] public BloodOverlay blood;
@@ -19,8 +21,15 @@ public class health : MonoBehaviour
     void Start()
     {
 
-        menu = FindObjectOfType<menu>();
-     
+        menu = FindObjectOfType<menu>(); 
+
+
+        if (healthText != null)
+            healthText.text = healths.ToString();
+
+        if (armorText != null)
+            armorText.text = armor.ToString();
+
         // Lấy thanh sức khỏe từ prefab hoặc tạo mới nếu cần
         if (isLocalPlayer)
         {
@@ -35,20 +44,39 @@ public class health : MonoBehaviour
         RoomManager.instance.UpdatePlayerStatus(true);
        
     }
-    
+
 
     [PunRPC]
     public void TakeDamage(int damage)
     {
-        healths -= damage;
-        if (healths < 0) healths = 0; // Đảm bảo sức khỏe không âm
+        if (armor > 0)
+        {
+            int remainingDamage = damage - armor; // Phần sát thương còn lại sau khi trừ giáp
+            armor -= damage; // Trừ giáp trước
+            if (armor < 0) armor = 0; // Đảm bảo giáp không âm
+
+            if (remainingDamage > 0)
+            {
+                healths -= remainingDamage; // Phần sát thương dư sẽ trừ vào máu
+            }
+        }
+        else
+        {
+            healths -= damage; // Nếu không còn giáp, trừ trực tiếp vào máu
+        }
+
+        if (healths < 0) healths = 0; // Đảm bảo máu không âm
 
         // Cập nhật giao diện người dùng
-        healthText.text = healths.ToString();
+        if (healthText != null)
+            healthText.text = healths.ToString();
+
+        if (armorText != null)
+            armorText.text = armor.ToString();
 
         if (isLocalPlayer && healthBar != null)
         {
-            healthBar.UpdateHealth(healths); // Cập nhật thanh sức khỏe của người chơi
+            healthBar.UpdateHealth(healths); // Cập nhật thanh sức khỏe
             blood.ShowBloodEffect();
         }
 
@@ -56,8 +84,6 @@ public class health : MonoBehaviour
         {
             if (isLocalPlayer)
             {
-            
-                //RoomManager.instance.HandleTeamSelection();
                 RoomManager.instance.deaths++;
                 RoomManager.instance.SetHashes();
                 menu.manchet.SetActive(true);
@@ -65,6 +91,7 @@ public class health : MonoBehaviour
             OnPlayerDeath();
         }
     }
+
     private void OnPlayerDeath()
     {
         // Gọi phương thức trên PlayerSetup để xử lý khi chết
