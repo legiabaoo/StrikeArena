@@ -51,6 +51,8 @@ public class GunShop : MonoBehaviourPun
 
     void Start()
     {
+        lucMacDinhHien.SetActive(true);
+
         StartCoroutine(CheckForPlayerObject());
 
 

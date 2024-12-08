@@ -26,7 +26,7 @@ public class Dropdown : MonoBehaviour
         // In ra giá tr? hi?n t?i (ch? s? và tên)
         Debug.Log("Ch? s?: " + index + ", Giá tr?: " + selectedOption);
         int redTeamCount = 0;
-        int blueTeamCount = 1;
+        int blueTeamCount = 0;
 
         // L?y danh sách t?t c? ng??i ch?i trong ph?ng
         Player[] players = PhotonNetwork.PlayerList;

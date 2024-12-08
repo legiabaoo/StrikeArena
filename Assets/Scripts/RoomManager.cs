@@ -237,7 +237,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public void CountPlayersInTeams()
     {
         int redTeamCount = 0;
-        int blueTeamCount = 1;
+        int blueTeamCount = 0;
 
         // L?y danh sách t?t c? ng??i ch?i trong pḥng
         Player[] players = PhotonNetwork.PlayerList;
