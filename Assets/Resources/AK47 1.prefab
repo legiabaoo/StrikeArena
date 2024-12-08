@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 5833742734506880694}
   m_Layer: 10
   m_Name: AK47 1
-  m_TagString: Untagged
+  m_TagString: ak
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

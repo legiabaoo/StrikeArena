@@ -37,6 +37,13 @@ public class GunShop : MonoBehaviourPun
     public Image[] backgroundGun;
     public Button[] btnGun;
     public bool isShopGun = false;
+    public GameObject lucMacDinhHien;
+    public GameObject IconM500Hien;
+    public GameObject IconM4A1Hien;
+    public GameObject IconM60Hien;
+    public GameObject IconM500An;
+    public GameObject IconAk47Hien;
+    public GameObject IconAk47An;
     private void Awake()
     {
         instance = this;
@@ -251,6 +258,10 @@ public class GunShop : MonoBehaviourPun
         }
         if (gunIndex == 0)
         {
+            lucMacDinhHien.SetActive(false);
+            IconM500Hien.SetActive(true);
+         
+          
             Debug.Log("Súng M500");
             ColorUtility.TryParseHtmlString("#575757", out Color newColor);
             backgroundGun[0].color = newColor;
@@ -269,6 +280,9 @@ public class GunShop : MonoBehaviourPun
         }
         else if (gunIndex == 1)
         {
+            IconAk47Hien.SetActive(true);
+            IconM60Hien.SetActive(false);
+            IconM4A1Hien.SetActive(false);
             Debug.Log("Súng Ak47");
             for (int i = 1; i < backgroundGun.Length; i++)
             {
@@ -302,6 +316,10 @@ public class GunShop : MonoBehaviourPun
         }
         else if (gunIndex == 2)
         {
+            IconAk47Hien.SetActive(false);
+            IconM4A1Hien.SetActive(true);
+            IconM60Hien.SetActive(false);
+
             Debug.Log("Súng M4A1");
             for (int i = 1; i < backgroundGun.Length; i++)
             {
@@ -334,6 +352,9 @@ public class GunShop : MonoBehaviourPun
         }
         else if (gunIndex == 3)
         {
+            IconAk47Hien.SetActive(false);
+            IconM4A1Hien.SetActive(false);
+            IconM60Hien.SetActive(true);
             Debug.Log("Súng ngắm");
             for (int i = 1; i < backgroundGun.Length; i++)
             {

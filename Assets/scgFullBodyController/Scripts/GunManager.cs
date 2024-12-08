@@ -91,6 +91,7 @@ namespace scgFullBodyController
                     && !weapons[index].GetComponent<GunController>().reloading && !weapons[index].GetComponent<GunController>().cycling)
                 {
                     index = 0;
+                    
                     Invoke("swapWeapons", swapTime);
                     foreach (GameObject weapon in weapons)
                     {
