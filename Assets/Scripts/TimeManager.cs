@@ -76,7 +76,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             haha = PlayerPrefs.GetInt("PlayerMoney");
         }
-        if (currentTime == 15 && currentPhase == GamePhase.Buy && !isSpawnSpike && startGame)
+        if (currentTime == 30 && currentPhase == GamePhase.Buy && !isSpawnSpike && startGame)
         {
             GameObject spike0 = PhotonNetwork.Instantiate(spike.name, spawnSpike.position, Quaternion.identity);
             PhotonView spikePhotonView = spike0.GetComponent<PhotonView>();
