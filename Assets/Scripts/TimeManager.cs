@@ -43,7 +43,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     public GameObject spike;
     public GameObject[] listshield;
 
-    public int countRound = 0;
+    public int countRound = 1;
 
     private enum GamePhase { Buy, Battle, Plant }
     private enum Team { red, blue };
@@ -297,7 +297,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         GunShop.instance.IconM60Hien.SetActive(false);
         RoomManager.instance.HandleTeamSelection();
         RoomManager.instance.RemovePlayerInstances();
-        GunShop.instance.playerMoney = 800;
+        //GunShop.instance.playerMoney = 800;
         //if (isGameOver)
         //{
         photonView.RPC("ShieldDown", RpcTarget.AllBuffered, true);
