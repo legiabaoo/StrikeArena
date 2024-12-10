@@ -40,6 +40,10 @@ TagManager:
   - hud
   - nutngam
   - Spike0
+  - hp
+  - speed
+  - ak
+  - m500
   layers:
   - Default
   - TransparentFX

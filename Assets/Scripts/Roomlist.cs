@@ -19,8 +19,13 @@ public class Roomlist : MonoBehaviourPunCallbacks
 
     public TMP_InputField roomNameInputField;
     private List<RoomInfo> cachedRoomList = new List<RoomInfo>();
-
-
+    public GameObject taoPhong;
+    public GameObject chondoi;
+    public GameObject thongbao;
+    private void Update()
+    {
+        roomNameInputField.onValueChanged.AddListener(thongbaoUI);
+    }
     public void OnCreateRoomButtonClicked()
     {
         string roomName = roomNameInputField.text;
@@ -31,11 +36,22 @@ public class Roomlist : MonoBehaviourPunCallbacks
             // G?i ph??ng th?c trong RoomManager ?? t?o pḥng
            
             Debug.Log("Tao phong thanh cong");
+           chondoi.SetActive(true);
+            taoPhong.SetActive(false);
         }
         else
         {
+            thongbao.SetActive(true);
             Debug.LogError("Tên phong không hop li");
+            return;
         }
+    }
+    public void thongbaoUI( string inputText) {
+        if (!string.IsNullOrEmpty(inputText))
+        {
+            thongbao.SetActive(false);
+        }
+       
     }
     public void ChangRoomToCreateName(string _roomName)
     {

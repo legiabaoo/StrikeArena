@@ -50,7 +50,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public bool isCountTeam = false;
     public GameObject gunshop;
     public bool isSpike = false;
-
+ 
     health health;
     private void Awake()
     {
@@ -72,6 +72,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     }
     public void JoinRoomButtonPressed()
     {
+
         Debug.Log("Kết nối ...");
 
         if (!PhotonNetwork.IsConnected)
@@ -133,6 +134,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         // Lấy các điểm spawn tương ứng với team
         Transform[] teamSpawnPoints = selectedTeam == 0 ? attackSpawnPoints : defenseSpawnPoints;
         GameObject teamPrefab = selectedTeam == 0 ? attackTeamPrefab : defenseTeamPrefab;
+        
 
         Transform spawnPoint;
 
@@ -235,7 +237,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public void CountPlayersInTeams()
     {
         int redTeamCount = 0;
-        int blueTeamCount = 1;
+        int blueTeamCount = 0;
 
         // L?y danh sách t?t c? ng??i ch?i trong pḥng
         Player[] players = PhotonNetwork.PlayerList;
@@ -259,9 +261,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 }
             }
         }
-        if (redTeamCount >= 2 && blueTeamCount >= 2)
+   
+        if (redTeamCount >= 1 && blueTeamCount >= 1)
         {
             TimeManager.instance.startGame = true;
+
         }
     }
     public void UpdatePlayerStatus(bool isAlive)
