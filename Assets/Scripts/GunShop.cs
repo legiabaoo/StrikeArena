@@ -128,14 +128,15 @@ public class GunShop : MonoBehaviourPun
                 {
                     playerObject = PhotonView.Find(viewID)?.gameObject;
                     playerAnimator = playerObject.GetComponent<Animator>();
-                    GameObject cameraObject = GameObject.FindGameObjectWithTag("MainCamera");
+                    GameObject cameraObject = playerObject.transform.Find("CameraControl/Main Camera")?.transform.gameObject;
                     if (cameraObject != null)
                     {
                         playerCamAnim = cameraObject.GetComponent<Animator>();
                     }
                     cam = cameraObject;
                     GameObject cameraPoint = GameObject.FindGameObjectWithTag("campoint");
-                    campoint = cameraPoint;
+                    //campoint = cameraPoint;
+                    campoint = playerObject.transform.Find("CameraControl/Main Camera/camShootPoint")?.transform.gameObject;
                     //GameObject tayphai = GameObject.FindGameObjectWithTag("RightHand");
                     //righthand = tayphai.GetComponent<Transform>();
                     //GameObject taytrai = GameObject.FindGameObjectWithTag("LeftHand");

@@ -290,7 +290,11 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
             GunShop.instance.btnGun[i].interactable = true;
             GunShop.instance.backgroundGun[i].color = Color.white;
         }
-
+        GunShop.instance.lucMacDinhHien.SetActive(true);
+        GunShop.instance.IconM4A1Hien.SetActive(false);
+        GunShop.instance.IconAk47Hien.SetActive(false);
+        GunShop.instance.IconM500Hien.SetActive(false);
+        GunShop.instance.IconM60Hien.SetActive(false);
         RoomManager.instance.HandleTeamSelection();
         RoomManager.instance.RemovePlayerInstances();
         GunShop.instance.playerMoney = 800;
