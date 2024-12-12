@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using Photon.Pun;
 using Photon.Realtime;
+using static Photon.Pun.UtilityScripts.PunTeams;
 
 public class Dropdown : MonoBehaviour
 {
@@ -11,12 +12,15 @@ public class Dropdown : MonoBehaviour
     public GameObject thongBao;
     public GameObject batdauao;
     public GameObject batdauthat;
+
+
     void Start()
     {
         // L?ng nghe s? thay ??i giá tr? c?a dropdown
         teamDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
     }
-
+   
+        
     // Hàm này s? ch?y m?i khi giá tr? c?a dropdown thay ??i
     void OnDropdownValueChanged(int index)
     {

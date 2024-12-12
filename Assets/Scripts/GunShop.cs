@@ -260,6 +260,7 @@ public class GunShop : MonoBehaviourPun
         }
         if (gunIndex == 0)
         {
+
             lucMacDinhHien.SetActive(false);
             IconM500Hien.SetActive(true);
          

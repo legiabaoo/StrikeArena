@@ -51,7 +51,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     private GamePhase currentPhase;
 
     public int haha = 1;
-
+    private GunShop gunShop;
     private void Awake()
     {
         instance = this;
@@ -60,6 +60,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     }
     private void Start()
     {
+        gunShop = GetComponent<GunShop>();
         //if (PhotonNetwork.IsMasterClient)
         //{
         //    photonView.RPC("SyncTime", RpcTarget.All, currentTime);
@@ -294,6 +295,15 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         RoomManager.instance.HandleTeamSelection();
         RoomManager.instance.RemovePlayerInstances();
         GunShop.instance.playerMoney = 800;
+        if (!gunShop.IconAk47Hien.activeInHierarchy)
+        {
+            gunShop.IconAk47Hien.SetActive(true); // Bật GameObject trước khi thao tác
+        }
+        gunShop.IconAk47Hien.SetActive(false);
+
+       /* gunShop.IconM4A1Hien.SetActive(false);
+        gunShop.IconM500Hien.SetActive(false);
+        gunShop.IconM60Hien.SetActive(false);*/
         //if (isGameOver)
         //{
         photonView.RPC("ShieldDown", RpcTarget.AllBuffered, true);

@@ -22,6 +22,8 @@ public class Roomlist : MonoBehaviourPunCallbacks
     public GameObject taoPhong;
     public GameObject chondoi;
     public GameObject thongbao;
+    public GameObject thongbao1;
+    public RoomItemButton roomItem;
     private void Update()
     {
         roomNameInputField.onValueChanged.AddListener(thongbaoUI);
@@ -29,15 +31,27 @@ public class Roomlist : MonoBehaviourPunCallbacks
     public void OnCreateRoomButtonClicked()
     {
         string roomName = roomNameInputField.text;
+        foreach (var room in cachedRoomList)
+        {
+            if (room.Name == roomName)
+            {
+                Debug.Log("Phong da ton tai");
+                thongbao1.SetActive(true);
 
+                return;
+               
+            }
+        }
+       
         // Ki?m tra xem tên pḥng có h?p l? không
         if (!string.IsNullOrEmpty(roomName))
         {
             // G?i ph??ng th?c trong RoomManager ?? t?o pḥng
-           
+        
             Debug.Log("Tao phong thanh cong");
            chondoi.SetActive(true);
             taoPhong.SetActive(false);
+           
         }
         else
         {
@@ -50,6 +64,7 @@ public class Roomlist : MonoBehaviourPunCallbacks
         if (!string.IsNullOrEmpty(inputText))
         {
             thongbao.SetActive(false);
+            thongbao1.SetActive(false);
         }
        
     }
@@ -125,9 +140,10 @@ public class Roomlist : MonoBehaviourPunCallbacks
     {
         SceneManager.LoadScene("LoginScene");
     }
+   
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-
+      
         if (cachedRoomList.Count <= 0)
         {
             cachedRoomList = roomList;
@@ -158,7 +174,10 @@ public class Roomlist : MonoBehaviourPunCallbacks
                 }
             }
         }
+       
+        
         UpdateUI();
+        
     }
 
     private void UpdateUI()
@@ -171,18 +190,20 @@ public class Roomlist : MonoBehaviourPunCallbacks
         }
         foreach(var room in cachedRoomList)
         {
-           GameObject roomItem = Instantiate(roomListItemPrefab, roomListParent);
+           GameObject roomItem = Instantiate(roomListItemPrefab, roomListParent); 
             Debug.Log("Room Name: " + room.Name);
             roomItem.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = room.Name;
-            roomItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = room.PlayerCount+"/"+room.MaxPlayers;
+            roomItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = room.PlayerCount+"/"+"4";
 
             roomItem.GetComponent<RoomItemButton>().Roomname = room.Name;
         }
     }
+   
     public void JoinRoomByName(string _name)
     {
         roomManager.roomNameToJoin = _name;
         roomManagerGameobject.SetActive(true);
         gameObject.SetActive(false);
+       
     }
 }
