@@ -50,7 +50,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public bool isCountTeam = false;
     public GameObject gunshop;
     public bool isSpike = false;
- 
+    public Roomlist roomlist;
+    ItemSpawn spawnItem;
     health health;
     private void Awake()
     {
@@ -62,10 +63,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
             Debug.Log(PlayerPrefs.GetString("Username"));
         }
     }
+  
     void Update()
     {
         CountPlayersInTeams();
     }
+  
     public void ChangeNickname(string _name)
     {
         nickname = _name;
@@ -76,7 +79,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
     }
     public void JoinRoomButtonPressed()
     {
-
+        byte maxPlayers = roomlist.GetSelectedMaxPlayers();
+        Debug.Log(maxPlayers);
         Debug.Log("Kết nối ...");
 
         if (!PhotonNetwork.IsConnected)
@@ -86,7 +90,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsConnected)
         {
-            PhotonNetwork.JoinOrCreateRoom(roomNameToJoin, null, null);
+           
+          
+            RoomOptions roomOptions = new RoomOptions();
+            roomOptions.MaxPlayers = maxPlayers;
+            PhotonNetwork.JoinOrCreateRoom(roomNameToJoin, roomOptions, TypedLobby.Default);
             nameUI.SetActive(false);
             connectingUI.SetActive(true);
             thoigian.SetActive(true);
@@ -268,7 +276,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         if (redTeamCount >= 2 && blueTeamCount >= 2)
         {
+
             TimeManager.instance.startGame = true;
+            StartCoroutine(spawnItem.SpawnLoop());
 
         }
     }

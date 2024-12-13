@@ -15,11 +15,10 @@ public class ItemSpawn : MonoBehaviour
     private void Start()
     {
         
-            StartCoroutine(SpawnLoop());
         
     }
-
-    private IEnumerator SpawnLoop()
+  
+    public IEnumerator SpawnLoop()
     {
         while (true)
         {
