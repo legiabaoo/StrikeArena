@@ -425,8 +425,9 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     }
     public void BackHomeDelay()
     {
+        PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+        PhotonNetwork.LeaveRoom();
         photonView.RPC("BackHome", RpcTarget.All);
-
     }
     [PunRPC]
     private void BackHome()
