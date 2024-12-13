@@ -42,6 +42,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     public Transform spawnSpike;
     public GameObject spike;
     public GameObject[] listshield;
+    public GameObject[] chest;
 
     public int countRound = 1;
 
@@ -122,6 +123,12 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
                 {
                     if (currentPhase == GamePhase.Buy)
                     {
+                        for (int i = 0; i < chest.Length; i++)
+                        {
+                            UseChest useChest = chest[i].GetComponent<UseChest>();
+                            useChest.isUsed = true;
+                        }
+
                         photonView.RPC("setIsGunShop", RpcTarget.AllBuffered, false);
                         Color color = Color.green;
                         string colorString = $"{color.r},{color.g},{color.b},{color.a}";
@@ -289,6 +296,12 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             GunShop.instance.btnGun[i].interactable = true;
             GunShop.instance.backgroundGun[i].color = Color.white;
+        }
+        for (int i = 0; i < chest.Length; i++)
+        {
+            UseChest useChest = chest[i].GetComponent<UseChest>();
+            useChest.isUsed = false;
+            useChest.OB.GetComponent<Animator>().SetBool("open", false);
         }
         GunShop.instance.lucMacDinhHien.SetActive(true);
         GunShop.instance.IconM4A1Hien.SetActive(false);

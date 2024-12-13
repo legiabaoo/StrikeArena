@@ -7,19 +7,21 @@ using Photon.Realtime;
 
 public class UseChest : MonoBehaviourPunCallbacks
 {
-    private GameObject OB;
+    public static UseChest Instance;
+    public GameObject OB;
     public GameObject handUI;
     public int soLuongGiap = 30; // Số lượng giáp cộng thêm
     public int cost = 50; // Chi phí mở rương
-    private bool isUsed = false;
+    public bool isUsed = false;
     private bool inReach;
-
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         OB = this.gameObject;
         handUI.SetActive(false);
-
-        
     }
 
     void OnTriggerEnter(Collider other)
