@@ -24,18 +24,29 @@ public class CanvasManage : MonoBehaviour
         {
             login.SetActive(false);
             mainHall.SetActive(true);
+            register.SetActive(false);
         }
         else if (PlayerPrefs.GetInt("login") == 0)
         {
             login.SetActive(true);
+            register.SetActive(false);
             mainHall.SetActive(false);
+        }
+        else if (PlayerPrefs.GetInt("login") == 2)
+        {
+            register.SetActive(true);
+            mainHall.SetActive(false);
+            login.SetActive(false);
         }
     }
     public void logout()
     {
         PlayerPrefs.SetInt("login", 0);
     }
-
+    public void btnRegister()
+    {
+        PlayerPrefs.SetInt("login", 2);
+    }
     public void ToggleContentType()
     {
         if (isPasswordMode)
