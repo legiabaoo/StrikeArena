@@ -35606,6 +35606,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2001153578}
+  - component: {fileID: 2001153580}
   m_Layer: 0
   m_Name: Spawn
   m_TagString: Untagged
@@ -51813,6 +51814,33 @@ MonoBehaviour:
   - {fileID: 1799087307}
   - {fileID: 1014221168}
   - {fileID: 1557964809}
+  spawnInterval: 5
+  maxObjects: 10
+--- !u!114 &2001153580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1371790172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96fa730b2ed6e1f479498da4756bf366, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hpPrefab: {fileID: 2670699173504897682}
+  speedPrefab: {fileID: 3536366977168526386}
+  spawnPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   spawnInterval: 5
   maxObjects: 10
 --- !u!1 &2005663737
