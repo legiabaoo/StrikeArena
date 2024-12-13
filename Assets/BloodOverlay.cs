@@ -8,12 +8,12 @@ public class BloodOverlay : MonoBehaviour
     public float displayTime = 0.5f;  // Th?i gian hi?n th? ?nh máu
     private bool isActive = false;  // Ki?m tra tr?ng thái ?nh máu
 
-    // Start is called before the first frame update
+ 
     void Start()
     {
         if (bloodOverlay != null)
         {
-            bloodOverlay.SetActive(false); // ??m b?o ?nh máu t?t khi b?t ??u
+            bloodOverlay.SetActive(false); // ??m b?o ?nh máu b? t?t khi b?t ??u
         }
     }
 
