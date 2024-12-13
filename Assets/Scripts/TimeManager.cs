@@ -413,6 +413,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     public void BackHomeDelay()
     {
         photonView.RPC("BackHome", RpcTarget.All);
+
     }
     [PunRPC]
     private void BackHome()

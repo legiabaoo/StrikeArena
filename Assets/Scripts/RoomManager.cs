@@ -266,7 +266,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             }
         }
 
-        if (redTeamCount >= 2 && blueTeamCount >= 2)
+        if (redTeamCount >= 1 && blueTeamCount >= 1)
         {
             TimeManager.instance.startGame = true;
 
