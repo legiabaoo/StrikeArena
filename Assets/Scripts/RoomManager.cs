@@ -70,6 +70,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         nickname = _name;
     }
+   public void ThamGiaPhong()
+    {
+        PhotonNetwork.JoinRoom(roomNameToJoin);
+    }
     public void JoinRoomButtonPressed()
     {
 
@@ -261,8 +265,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 }
             }
         }
-   
-        if (redTeamCount >= 1 && blueTeamCount >= 1)
+
+        if (redTeamCount >= 2 && blueTeamCount >= 2)
         {
             TimeManager.instance.startGame = true;
 
