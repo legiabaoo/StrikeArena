@@ -7,6 +7,7 @@ public class menu : MonoBehaviour
 {
     public GameObject thoattran;
     public GameObject manchet;
+    PhotonView photonView;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +19,7 @@ public class menu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape) && PhotonNetwork.InRoom)
         {
+           
             ToggleOut();
         }
       
@@ -51,6 +53,7 @@ public class menu : MonoBehaviour
     {
         if (PhotonNetwork.InRoom)
         {
+            PhotonNetwork.LocalPlayer.CustomProperties.Clear();
             PhotonNetwork.LeaveRoom(); 
         }
         PlayerPrefs.SetInt("Result", -2);

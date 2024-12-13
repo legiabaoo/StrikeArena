@@ -169,6 +169,16 @@ namespace scgFullBodyController
                 }
             }
         }
+        [PunRPC]
+        void RPC_SetWeaponActive(int weaponIndex, bool isActive)
+        {
+            // Kiểm tra xem weaponIndex có hợp lệ không
+            if (weaponIndex >= 0 && weaponIndex < weapons.Length)
+            {
+                weapons[weaponIndex].SetActive(isActive);
+            }
+        }
+
         void swapWeapons()
         {
             if (!GetComponent<PhotonView>().IsMine) return;
@@ -179,11 +189,13 @@ namespace scgFullBodyController
                 if (i != index)
                 {
                     weapons[i].SetActive(false);
+                    GetComponent<PhotonView>().RPC("RPC_SetWeaponActive", RpcTarget.Others, index, false);
                 }
             }
 
             // Set desired weapon to active
             weapons[index].SetActive(true);
+            GetComponent<PhotonView>().RPC("RPC_SetWeaponActive", RpcTarget.Others, index, true);
             Invoke("setSwappedWeaponPositions", .567f + .25f);
 
             // Initialize the correct spine rotation on the spine bone's orientation script
@@ -201,36 +213,9 @@ namespace scgFullBodyController
             anim.SetBool("putaway", false);
 
             // Gửi thông tin đổi súng đến các client khác
-            GetComponent<PhotonView>().RPC("RPC_SyncWeapon", RpcTarget.Others, index);
+          
         }
-        [PunRPC]
-        void RPC_SyncWeapon(int weaponIndex)
-        {
-            index = weaponIndex; // Cập nhật chỉ số súng
-            for (int i = 0; i < weapons.Length; i++)
-            {
-                if (i != index)
-                {
-                    weapons[i].SetActive(false);
-                }
-            }
-
-            weapons[index].SetActive(true); // Bật súng được chọn
-
-            // Đồng bộ hóa trạng thái của các spine bone (nếu cần)
-            if (weapons[index].GetComponent<GunController>().Weapon == GunController.WeaponTypes.Rifle)
-            {
-                oRot.rifle = true;
-                oRot.pistol = false;
-            }
-            else if (weapons[index].GetComponent<GunController>().Weapon == GunController.WeaponTypes.Pistol)
-            {
-                oRot.rifle = false;
-                oRot.pistol = true;
-            }
-
-            anim.SetBool("putaway", false);
-        }
+     
 
         void setSwappedWeaponPositions()
         {

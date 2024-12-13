@@ -33477,6 +33477,8 @@ MonoBehaviour:
   taoPhong: {fileID: 1296754361}
   chondoi: {fileID: 958552423}
   thongbao: {fileID: 492877145}
+  thongbao1: {fileID: 0}
+  roomItem: {fileID: 0}
 --- !u!82 &1296754364
 AudioSource:
   m_ObjectHideFlags: 0
