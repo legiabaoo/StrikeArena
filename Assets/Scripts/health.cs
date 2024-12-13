@@ -16,12 +16,12 @@ public class health : MonoBehaviour
 
     private HealthBar healthBar; // Tham chiếu đến thanh sức khỏe của người chơi
     [HideInInspector] public BloodOverlay blood;
- 
+
     menu menu;
     void Start()
     {
 
-        menu = FindObjectOfType<menu>(); 
+        menu = FindObjectOfType<menu>();
 
 
         if (healthText != null)
@@ -42,7 +42,7 @@ public class health : MonoBehaviour
             blood = FindObjectOfType<BloodOverlay>();
         }
         RoomManager.instance.UpdatePlayerStatus(true);
-       
+
     }
 
 
@@ -100,21 +100,52 @@ public class health : MonoBehaviour
         // Chuyển camera sang đồng đội
         if (isLocalPlayer)
         {
-            
+
             GameObject currentPlayerObject = gameObject; // Lấy GameObject của người chơi
             Camera currentCamera = GetComponentInChildren<Camera>();
 
             if (currentCamera != null)
             {
-                
+
                 CameraManager.instance.SwitchToTeammateCamera(currentPlayerObject);
 
-            }else if(currentCamera == null)
+            }
+            else if (currentCamera == null)
             {
                 Debug.Log("Camera bi null");
             }
             RoomManager.instance.UpdatePlayerStatus(false);
         }
     }
+    public void Heal(int amount)
+    {
+        healths += amount;
+        if (healths > 100) // Giới hạn máu tối đa, tùy thuộc vào game của bạn
+        {
+            healths = 100;
+        }
+
+        // Cập nhật giao diện người dùng
+        if (healthText != null)
+            healthText.text = healths.ToString();
+
+        if (isLocalPlayer && healthBar != null)
+        {
+            healthBar.UpdateHealth(healths); // Cập nhật thanh máu
+        }
+    }
+    public void AddArmor(int amount)
+    {
+        armor += amount;
+        if (armor > 100) // Giới hạn giáp tối đa, tùy thuộc vào game của bạn
+        {
+            armor = 100;
+        }
+
+        // Cập nhật giao diện người dùng
+        if (armorText != null)
+            armorText.text = armor.ToString();
+    }
+
 
 }

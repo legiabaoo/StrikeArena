@@ -54,16 +54,14 @@ public class ItemEffect : MonoBehaviour
     // Coroutine để tăng tốc cho người chơi
     private IEnumerator SpeedBoostCoroutine(ThirdPersonUserControl playerControl)
     {
-        float originalSpeed = playerControl.walkSpeed; // Lưu tốc độ ban đầu
         playerControl.walkSpeed *= speedMultiplier;    // Tăng tốc độ
 
         yield return new WaitForSeconds(speedBoostDuration); // Chờ hết thời gian hiệu ứng
 
         // Phục hồi tốc độ ban đầu nếu chưa bị thay đổi bởi logic khác
-        if (playerControl.walkSpeed == originalSpeed * speedMultiplier)
-        {
-            playerControl.walkSpeed = originalSpeed;
-        }
+       
+            playerControl.walkSpeed = 0.8f;
+        
     }
 
 }

@@ -9,15 +9,15 @@ using Unity.VisualScripting;
 
 public class Leaderboard : MonoBehaviour
 {
-    public static Leaderboard Intansce;
-    public Transform leaderboardParent; // Parent chứa các mục xếp hạng
-    public GameObject leaderboardItemPrefab; // Prefab cho mỗi người chơi
-    public GameObject loading;
-    public TMP_Text ranking;
-    public TMP_Text score;
-    public TMP_Text name;
+    public static Leaderboard Intansce; // Singleton để truy cập dễ dàng đến Leaderboard
+    public Transform leaderboardParent; // Parent chứa các mục xếp hạng trong giao diện
+    public GameObject leaderboardItemPrefab; // Prefab để hiển thị thông tin từng người chơi
+    public GameObject loading; // GameObject để hiển thị trạng thái loading
+    public TMP_Text ranking; // TextMeshPro để hiển thị xếp hạng cá nhân
+    public TMP_Text score; // TextMeshPro để hiển thị điểm cá nhân
+    public TMP_Text name; // TextMeshPro để hiển thị tên cá nhân
 
-    private string apiUrl = "https://api-strikearena.onrender.com/ranking";
+    private string apiUrl = "https://api-strikearena.onrender.com/ranking"; // URL API để lấy dữ liệu xếp hạng
     //private string apiUrl = "http://localhost:3000/ranking"; // URL API bảng xếp hạng
     private void Awake()
     {
