@@ -27,13 +27,13 @@ public class BloodOverlay : MonoBehaviour
         if (isActive) return; // Tránh kích ho?t hi?u ?ng nhi?u l?n cùng lúc
         StartCoroutine(ActivateBloodOverlay());
     }
-
+    // Coroutine x? lý b?t và t?t hi?u ?ng máu
     private IEnumerator ActivateBloodOverlay()
     {
         isActive = true;
-        bloodOverlay.SetActive(true); // B?t ?nh máu
-        yield return new WaitForSeconds(displayTime); // Ch? 1 giây (ho?c th?i gian b?n ??t)
+        bloodOverlay.SetActive(true); // B?t ?nh máu trên màn hình
+        yield return new WaitForSeconds(displayTime);  // Ch? th?i gian hi?n th? ???c ch? ??nh
         bloodOverlay.SetActive(false); // T?t ?nh máu
-        isActive = false;
+        isActive = false; // ??t l?i tr?ng thái hi?u ?ng
     }
 }
