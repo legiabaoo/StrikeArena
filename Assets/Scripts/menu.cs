@@ -51,6 +51,7 @@ public class menu : MonoBehaviour
     {
         if (PhotonNetwork.InRoom)
         {
+            PhotonNetwork.LocalPlayer.CustomProperties.Clear();
             PhotonNetwork.LeaveRoom(); 
         }
         PlayerPrefs.SetInt("Result", -2);
