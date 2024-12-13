@@ -13,8 +13,6 @@ public class UseChest : MonoBehaviourPunCallbacks
     private bool isUsed = false;
     private bool inReach;
 
-    [Header("UI")]
-    public Text moneyText;
 
     private int playerMoney = 100;
 
@@ -23,8 +21,7 @@ public class UseChest : MonoBehaviourPunCallbacks
         OB = this.gameObject;
         handUI.SetActive(false);
 
-        // Cập nhật UI tiền ban đầu
-        UpdateMoneyUI(playerMoney);
+        
     }
 
     void OnTriggerEnter(Collider other)
@@ -60,14 +57,7 @@ public class UseChest : MonoBehaviourPunCallbacks
         }
     }
 
-    // Cập nhật UI tiền
-    void UpdateMoneyUI(int newMoney)
-    {
-        if (moneyText != null)
-        {
-            moneyText.text = "Money: " + newMoney.ToString(); // Cập nhật UI Text
-        }
-    }
+  
 
     // Phương thức mở rương và chỉ cập nhật giáp cho người nhặt rương
     void OpenChest()
@@ -86,7 +76,7 @@ public class UseChest : MonoBehaviourPunCallbacks
                 // Trừ tiền cho người chơi
                 playerMoney -= cost;
                 // Cập nhật lại UI tiền sau khi trừ
-                UpdateMoneyUI(playerMoney);
+        
                 Debug.Log("Mở rương thành công! Số tiền còn lại: " + playerMoney);
 
                 // Đánh dấu rương đã được mở
