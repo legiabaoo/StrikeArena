@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Photon.Realtime;
 
 public class UseChest : MonoBehaviourPunCallbacks
 {
@@ -12,9 +13,6 @@ public class UseChest : MonoBehaviourPunCallbacks
     public int cost = 50; // Chi phí mở rương
     private bool isUsed = false;
     private bool inReach;
-
-
-    private int playerMoney = 100;
 
     private void Start()
     {
@@ -46,7 +44,7 @@ public class UseChest : MonoBehaviourPunCallbacks
     {
         if (inReach && !isUsed && Input.GetKey(KeyCode.E))
         {
-            if (playerMoney >= cost)
+            if (GunShop.instance.playerMoney >= cost)
             {
                 OpenChest();
             }
@@ -62,28 +60,55 @@ public class UseChest : MonoBehaviourPunCallbacks
     // Phương thức mở rương và chỉ cập nhật giáp cho người nhặt rương
     void OpenChest()
     {
-        health playerHealth = FindObjectOfType<health>();
-        playerHealth.AddArmor(soLuongGiap);
-        // Thực hiện kiểm tra chỉ người chơi nhặt rương thực sự nhận giáp
-        if (PhotonNetwork.LocalPlayer != null)
+
+        foreach (Player player in PhotonNetwork.PlayerList)
         {
-            // Lấy player từ PhotonNetwork
-
-            if (playerHealth != null)
+            if (
+                player.CustomProperties.TryGetValue("viewID", out var viewIDValue) &&
+                viewIDValue is int viewID )
             {
-                // Cộng giáp cho người chơi local
+                GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
+                health playerHealth = playerObject.GetComponent<health>();
+                playerHealth.AddArmor(soLuongGiap);
+                if (playerHealth != null)
+                {
+                    // Cộng giáp cho người chơi local
 
-                // Trừ tiền cho người chơi
-                playerMoney -= cost;
-                // Cập nhật lại UI tiền sau khi trừ
-        
-                Debug.Log("Mở rương thành công! Số tiền còn lại: " + playerMoney);
+                    // Trừ tiền cho người chơi
+                    GunShop.instance.playerMoney -= cost;
+                    // Cập nhật lại UI tiền sau khi trừ
 
-                // Đánh dấu rương đã được mở
-                isUsed = true;
-                handUI.SetActive(false);
-                OB.GetComponent<Animator>().SetBool("open", true); // Chạy animation mở rương
+                    Debug.Log("Mở rương thành công! ");
+
+                    // Đánh dấu rương đã được mở
+                    isUsed = true;
+                    handUI.SetActive(false);
+                    OB.GetComponent<Animator>().SetBool("open", true); // Chạy animation mở rương
+                }
             }
         }
+
+        // Thực hiện kiểm tra chỉ người chơi nhặt rương thực sự nhận giáp
+        //if (PhotonNetwork.LocalPlayer != null)
+        //{
+        //    // Lấy player từ PhotonNetwork
+        //    health playerHealth = FindObjectOfType<health>();
+        //    playerHealth.AddArmor(soLuongGiap);
+        //    if (playerHealth != null)
+        //    {
+        //        // Cộng giáp cho người chơi local
+
+        //        // Trừ tiền cho người chơi
+        //        playerMoney -= cost;
+        //        // Cập nhật lại UI tiền sau khi trừ
+        
+        //        Debug.Log("Mở rương thành công! Số tiền còn lại: " + playerMoney);
+
+        //        // Đánh dấu rương đã được mở
+        //        isUsed = true;
+        //        handUI.SetActive(false);
+        //        OB.GetComponent<Animator>().SetBool("open", true); // Chạy animation mở rương
+        //    }
+        //}
     }
 }
