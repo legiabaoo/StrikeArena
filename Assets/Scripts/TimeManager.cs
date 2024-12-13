@@ -43,7 +43,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     public GameObject spike;
     public GameObject[] listshield;
 
-    public int countRound = 0;
+    public int countRound = 1;
 
     private enum GamePhase { Buy, Battle, Plant }
     private enum Team { red, blue };
@@ -51,7 +51,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     private GamePhase currentPhase;
 
     public int haha = 1;
-    private GunShop gunShop;
+
     private void Awake()
     {
         instance = this;
@@ -60,7 +60,6 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
     }
     private void Start()
     {
-        gunShop = GetComponent<GunShop>();
         //if (PhotonNetwork.IsMasterClient)
         //{
         //    photonView.RPC("SyncTime", RpcTarget.All, currentTime);
@@ -77,7 +76,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             haha = PlayerPrefs.GetInt("PlayerMoney");
         }
-        if (currentTime == 15 && currentPhase == GamePhase.Buy && !isSpawnSpike && startGame)
+        if (currentTime == 30 && currentPhase == GamePhase.Buy && !isSpawnSpike && startGame)
         {
             GameObject spike0 = PhotonNetwork.Instantiate(spike.name, spawnSpike.position, Quaternion.identity);
             PhotonView spikePhotonView = spike0.GetComponent<PhotonView>();
@@ -291,19 +290,14 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
             GunShop.instance.btnGun[i].interactable = true;
             GunShop.instance.backgroundGun[i].color = Color.white;
         }
-
+        GunShop.instance.lucMacDinhHien.SetActive(true);
+        GunShop.instance.IconM4A1Hien.SetActive(false);
+        GunShop.instance.IconAk47Hien.SetActive(false);
+        GunShop.instance.IconM500Hien.SetActive(false);
+        GunShop.instance.IconM60Hien.SetActive(false);
         RoomManager.instance.HandleTeamSelection();
         RoomManager.instance.RemovePlayerInstances();
-        GunShop.instance.playerMoney = 800;
-        if (!gunShop.IconAk47Hien.activeInHierarchy)
-        {
-            gunShop.IconAk47Hien.SetActive(true); // Bật GameObject trước khi thao tác
-        }
-        gunShop.IconAk47Hien.SetActive(false);
-
-       /* gunShop.IconM4A1Hien.SetActive(false);
-        gunShop.IconM500Hien.SetActive(false);
-        gunShop.IconM60Hien.SetActive(false);*/
+        //GunShop.instance.playerMoney = 800;
         //if (isGameOver)
         //{
         photonView.RPC("ShieldDown", RpcTarget.AllBuffered, true);
