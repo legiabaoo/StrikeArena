@@ -99,6 +99,7 @@ MonoBehaviour:
   - SetGunVisibility
   - SyncWeaponInventory
   - RPC_SetWeaponActive
+  - SendChatMessage
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
