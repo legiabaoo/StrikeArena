@@ -28,4 +28,5 @@ public class MainHall : MonoBehaviour
     {
         SceneManager.LoadScene("Scene1");
     }
+   
 }

@@ -423,7 +423,19 @@ public class GunShop : MonoBehaviourPun
         }
 
     }
-
+    [PunRPC]
+    void SetGunVisibility(int gunViewID, bool isVisible)
+    {
+        PhotonView gunView = PhotonView.Find(gunViewID);
+        if (gunView != null)
+        {
+            gunView.gameObject.SetActive(isVisible);
+        }
+        else
+        {
+            Debug.LogError($"Không tìm thấy PhotonView với ID: {gunViewID}");
+        }
+    }
 
     [PunRPC]
     void CreateGunForPlayer(int playerID, int gunIndex)
@@ -435,6 +447,8 @@ public class GunShop : MonoBehaviourPun
             // T?o và ??ng b? cây súng trên t?t c? client
             GameObject gunInstance = PhotonNetwork.Instantiate(gunPrefabs[gunIndex].name, gunPositions[gunIndex], gunRotations[gunIndex]);
             gunInstance.SetActive(false);
+            PhotonView gunView = gunInstance.GetComponent<PhotonView>();
+            photonView.RPC("SetGunVisibility", RpcTarget.AllBuffered, gunView.ViewID, false);
             gunInstance.GetComponent<Adjuster>().enabled = true;
             GunController gunController = gunInstance.GetComponent<GunController>();
             if (gunController != null)
