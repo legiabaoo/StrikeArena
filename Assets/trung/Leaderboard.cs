@@ -13,29 +13,29 @@ public class Leaderboard : MonoBehaviour
     public Transform leaderboardParent; // Parent chứa các mục xếp hạng trong giao diện
     public GameObject leaderboardItemPrefab; // Prefab để hiển thị thông tin từng người chơi
     public GameObject loading; // GameObject để hiển thị trạng thái loading
-    public TMP_Text ranking; // TextMeshPro để hiển thị xếp hạng cá nhân
-    public TMP_Text score; // TextMeshPro để hiển thị điểm cá nhân
-    public TMP_Text name; // TextMeshPro để hiển thị tên cá nhân
+    public TMP_Text ranking;
+    public TMP_Text score;
+    public TMP_Text name;
 
     private string apiUrl = "https://api-strikearena.onrender.com/ranking"; // URL API để lấy dữ liệu xếp hạng
     //private string apiUrl = "http://localhost:3000/ranking"; // URL API bảng xếp hạng
     private void Awake()
     {
-        Intansce = this;
+        Intansce = this;// Gán giá trị singleton khi đối tượng khởi tạo
     }
     private void Start()
     {
-        FetchLeaderboard();
-        UserScore();
+        FetchLeaderboard();// Gọi hàm để lấy dữ liệu bảng xếp hạng khi khởi động
+        UserScore();// Gọi hàm để hiển thị điểm cá nhân của người dùng
     }
     public void FetchLeaderboard()
     {
-        StartCoroutine(GetLeaderboardData());
+        StartCoroutine(GetLeaderboardData()); // Kích hoạt Coroutine để lấy dữ liệu bảng xếp hạng
     }
     public void UserScore()
     {
-        string id = PlayerPrefs.GetString("Id");
-        StartCoroutine(SetScore(id));
+        string id = PlayerPrefs.GetString("Id");// Lấy ID của người dùng từ PlayerPrefs
+        StartCoroutine(SetScore(id));// Kích hoạt Coroutine để lấy điểm cá nhân từ API
     }
     IEnumerator SetScore(string id)
     {
@@ -47,17 +47,17 @@ public class Leaderboard : MonoBehaviour
         //byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonStringRequest);
         //request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
-        request.SetRequestHeader("Content-Type", "application/json");
-        yield return request.SendWebRequest();
+        request.SetRequestHeader("Content-Type", "application/json");// Thiết lập header cho yêu cầu
+        yield return request.SendWebRequest(); // Gửi yêu cầu và chờ phản hồi
 
-        if (request.result != UnityWebRequest.Result.Success)
+        if (request.result != UnityWebRequest.Result.Success) // Kiểm tra nếu có lỗi
         {
-            Debug.Log(request.error);
+            Debug.Log(request.error);// Log lỗi nếu yêu cầu thất bại
         }
         else
         {
-            var jsonString = request.downloadHandler.text.ToString();
-            LoginCallBackModel message = JsonConvert.DeserializeObject<LoginCallBackModel>(jsonString);
+            var jsonString = request.downloadHandler.text.ToString();// Lấy dữ liệu JSON từ phản hồi
+            LoginCallBackModel message = JsonConvert.DeserializeObject<LoginCallBackModel>(jsonString); 
             ranking.text = "#" + message.rank.ToString();
             score.text = message.score.ToString();
             name.text = message.username;
@@ -89,39 +89,39 @@ public class Leaderboard : MonoBehaviour
                 GameObject item = Instantiate(leaderboardItemPrefab, leaderboardParent);
                 if (i == 0)
                 {
-                    item.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "#" + (i + 1); // Thứ hạng
+                    item.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "#" + (i + 1); 
                     item.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.red;
-                    item.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = players[i].username; // Tên
+                    item.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = players[i].username; 
                     item.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = Color.red;
-                    item.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = players[i].score.ToString(); // Điểm
+                    item.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = players[i].score.ToString();
                     item.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.red;
                 }
                 else if (i == 1)
                 {
                     UnityEngine.ColorUtility.TryParseHtmlString("#FFA400", out Color newColor);
-                    item.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "#" + (i + 1); // Thứ hạng
+                    item.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "#" + (i + 1); 
                     item.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = newColor;
-                    item.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = players[i].username; // Tên
+                    item.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = players[i].username; 
                     item.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = newColor;
-                    item.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = players[i].score.ToString(); // Điểm
+                    item.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = players[i].score.ToString(); 
                     item.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = newColor;
 
                 }
                 else if (i == 2)
                 {
-                    item.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "#" + (i + 1); // Thứ hạng
+                    item.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "#" + (i + 1); 
                     item.transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.yellow;
-                    item.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = players[i].username; // Tên
+                    item.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = players[i].username; 
                     item.transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = Color.yellow;
-                    item.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = players[i].score.ToString(); // Điểm
+                    item.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = players[i].score.ToString(); 
                     item.transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = Color.yellow;
                 }
                 else
                 {
                     // Gán dữ liệu vào TextMeshPro
-                    item.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "#" + (i + 1); // Thứ hạng
-                    item.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = players[i].username; // Tên
-                    item.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = players[i].score.ToString(); // Điểm
+                    item.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "#" + (i + 1); 
+                    item.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = players[i].username; 
+                    item.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = players[i].score.ToString(); 
                 }
 
             }
