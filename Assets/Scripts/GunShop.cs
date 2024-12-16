@@ -261,11 +261,8 @@ public class GunShop : MonoBehaviourPun
         }
         if (gunIndex == 0)
         {
-            
             lucMacDinhHien.SetActive(false);
             IconM500Hien.SetActive(true);
-         
-          
             Debug.Log("Súng M500");
             ColorUtility.TryParseHtmlString("#575757", out Color newColor);
             backgroundGun[0].color = newColor;
