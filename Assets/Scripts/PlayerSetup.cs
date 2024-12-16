@@ -101,6 +101,7 @@ public class PlayerSetup : MonoBehaviour
         //    }
         //}
     }
+    
     public void OnPlayerDeath()
     {
         // Tắt nhân vật

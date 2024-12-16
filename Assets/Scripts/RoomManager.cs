@@ -50,7 +50,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public bool isCountTeam = false;
     public GameObject gunshop;
     public bool isSpike = false;
- 
+    public GameObject _player;
+
+
     health health;
     private void Awake()
     {
@@ -162,7 +164,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
 
         // Tạo nhân vật tại điểm spawn và đồng bộ hóa với tất cả người chơi
-        GameObject _player = PhotonNetwork.Instantiate(teamPrefab.name, spawnPoint.position, spawnPoint.rotation);
+         _player = PhotonNetwork.Instantiate(teamPrefab.name, spawnPoint.position, spawnPoint.rotation);
         int playerViewID = _player.GetComponent<PhotonView>().ViewID;
         // Thiết lập thuộc tính cho người chơi hiện tại
         Hashtable hash = new Hashtable

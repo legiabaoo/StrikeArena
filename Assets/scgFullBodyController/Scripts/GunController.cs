@@ -107,8 +107,8 @@ namespace scgFullBodyController
             }
 
             //Reset adjuster to sync up every time gun is loaded
-            gameObject.GetComponent<Adjuster>().enabled = false;
-            gameObject.GetComponent<Adjuster>().enabled = true;
+            //gameObject.GetComponent<Adjuster>().enabled = false;
+            //gameObject.GetComponent<Adjuster>().enabled = true;
 
             originalCamFov = mainCam.GetComponent<Camera>().fieldOfView;
             originalCamClipPlane = mainCam.GetComponent<Camera>().nearClipPlane;

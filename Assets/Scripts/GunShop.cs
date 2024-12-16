@@ -261,7 +261,7 @@ public class GunShop : MonoBehaviourPun
         }
         if (gunIndex == 0)
         {
-
+            
             lucMacDinhHien.SetActive(false);
             IconM500Hien.SetActive(true);
          
@@ -435,7 +435,9 @@ public class GunShop : MonoBehaviourPun
             // T?o và ??ng b? cây súng trên t?t c? client
             GameObject gunInstance = PhotonNetwork.Instantiate(gunPrefabs[gunIndex].name, gunPositions[gunIndex], gunRotations[gunIndex]);
             gunInstance.SetActive(false);
-            gunInstance.GetComponent<Adjuster>().enabled = true;
+            //gunInstance.GetComponent<Adjuster>().enabled = true;
+            gunInstance.GetComponent<Adjuster>().enabled=true;
+            gunInstance.GetComponent<GunController>().enabled=true;
             GunController gunController = gunInstance.GetComponent<GunController>();
             if (gunController != null)
             {
@@ -462,16 +464,37 @@ public class GunShop : MonoBehaviourPun
             {
                 Debug.LogError("Không tìm thấy Adjuster trên cây súng!");
             }
-
             GunManager gunManager = playerObject.GetComponent<GunManager>();
             if (gunManager != null)
             {
-                gunManager.AddWeaponToInventory(gunInstance);
+                PhotonView weaponPhotonView = gunInstance.GetComponent<PhotonView>();
+                if (weaponPhotonView != null)
+                {
+                    gunManager.photonView.RPC("AddWeaponToInventory", RpcTarget.All, weaponPhotonView.ViewID);
+                    if (photonView.IsMine)
+                    {
+                        photonView.RPC("destroyGun", RpcTarget.All, gunIndex, weaponPhotonView.ViewID);
+                    }                   
+                }
+                else
+                {
+                    Debug.LogError("GunInstance không có PhotonView!");
+                }
             }
             else
             {
                 Debug.LogError("Không tìm thấy GunManager trên PlayerObject!");
             }
+
+            //GunManager gunManager = playerObject.GetComponent<GunManager>();
+            //if (gunManager != null)
+            //{
+            //    gunManager.photonView.RPC("AddWeaponToInventory", RpcTarget.All, gunInstance);
+            //}
+            //else
+            //{
+            //    Debug.LogError("Không tìm thấy GunManager trên PlayerObject!");
+            //}
             // Đặt gunInstance làm con của gunPosition
             TransferOwnershipToBuyer(gunInstance.GetComponent<PhotonView>().ViewID);
             if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("viewID", out var viewIDValue))
@@ -480,35 +503,35 @@ public class GunShop : MonoBehaviourPun
                 photonView.RPC("SetGunToPositionRPC", RpcTarget.AllBuffered, gunInstance.GetComponent<PhotonView>().ViewID, playerViewID);
 
             }
-            if (gunIndex == 0)
-            {
-                Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(0) : null;
+            //if (gunIndex == 0)
+            //{
+            //    Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(0) : null;
 
-                // Kiểm tra và xóa game con cũ nếu nó tồn tại
-                if (oldChild != null)
-                {
-                    Destroy(oldChild.gameObject); // Hoặc dùng `oldChild.gameObject.SetActive(false);` nếu chỉ muốn ẩn đi
-                }
+            //    // Kiểm tra và xóa game con cũ nếu nó tồn tại
+            //    if (oldChild != null)
+            //    {
+            //        Destroy(oldChild.gameObject); // Hoặc dùng `oldChild.gameObject.SetActive(false);` nếu chỉ muốn ẩn đi
+            //    }
 
-                // Đặt gunInstance làm con của gunPosition
-                gunInstance.transform.SetParent(gunPosition, false);
-                gunInstance.transform.SetSiblingIndex(0);
-            }
-            else
-            {
-                Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(1) : null;
+            //    // Đặt gunInstance làm con của gunPosition
+            //    gunInstance.transform.SetParent(gunPosition, false);
+            //    gunInstance.transform.SetSiblingIndex(0);
+            //}
+            //else
+            //{
+            //    Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(1) : null;
 
-                // Kiểm tra và xóa game con cũ nếu nó tồn tại
-                if (oldChild != null)
-                {
-                    Destroy(oldChild.gameObject); // Hoặc dùng `oldChild.gameObject.SetActive(false);` nếu chỉ muốn ẩn đi
-                }
+            //    // Kiểm tra và xóa game con cũ nếu nó tồn tại
+            //    if (oldChild != null)
+            //    {
+            //        Destroy(oldChild.gameObject); // Hoặc dùng `oldChild.gameObject.SetActive(false);` nếu chỉ muốn ẩn đi
+            //    }
 
-                // Đặt gunInstance làm con của gunPosition
-                gunInstance.transform.SetParent(gunPosition, false);
-                gunInstance.transform.SetSiblingIndex(1);
-            }
-
+            //    // Đặt gunInstance làm con của gunPosition
+            //    gunInstance.transform.SetParent(gunPosition, false);
+            //    gunInstance.transform.SetSiblingIndex(1);
+            //}
+            
 
             // Thi?t l?p các thu?c tính cho script Weapon n?u c?n
             Weapon weaponScript = gunInstance.GetComponent<Weapon>();
@@ -528,6 +551,43 @@ public class GunShop : MonoBehaviourPun
             }
 
             Debug.Log("Súng số " + gunIndex + " ?ă ???c t?o t?i v? trí: " + gunPositions[gunIndex] + " v?i rotation: " + gunRotations[gunIndex].eulerAngles);
+        }
+    }
+    [PunRPC]
+    public void destroyGun(int gunIndex, int viewID)
+    {
+        PhotonView view = PhotonView.Find(viewID);
+        if (view != null)
+        {
+            GameObject newWeapon = view.gameObject;
+            if (gunIndex == 0)
+            {
+                Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(0) : null;
+
+                // Kiểm tra và xóa game con cũ nếu nó tồn tại
+                if (oldChild != null)
+                {
+                    Destroy(oldChild.gameObject); // Hoặc dùng `oldChild.gameObject.SetActive(false);` nếu chỉ muốn ẩn đi
+                }
+
+                // Đặt gunInstance làm con của gunPosition
+                newWeapon.transform.SetParent(gunPosition, false);
+                newWeapon.transform.SetSiblingIndex(0);
+            }
+            else
+            {
+                Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(1) : null;
+
+                // Kiểm tra và xóa game con cũ nếu nó tồn tại
+                if (oldChild != null)
+                {
+                    Destroy(oldChild.gameObject); // Hoặc dùng `oldChild.gameObject.SetActive(false);` nếu chỉ muốn ẩn đi
+                }
+
+                // Đặt gunInstance làm con của gunPosition
+                newWeapon.transform.SetParent(gunPosition, false);
+                newWeapon.transform.SetSiblingIndex(1);
+            }
         }
     }
     //[PunRPC]
