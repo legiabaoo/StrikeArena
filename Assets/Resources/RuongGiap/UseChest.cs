@@ -14,6 +14,7 @@ public class UseChest : MonoBehaviourPunCallbacks
     public int cost = 50; // Chi phí mở rương
     public bool isUsed = false;
     private bool inReach;
+    public AudioSource moruong;
     private void Awake()
     {
         Instance = this;
@@ -48,6 +49,7 @@ public class UseChest : MonoBehaviourPunCallbacks
         {
             if (GunShop.instance.playerMoney >= cost)
             {
+                moruong.Play();
                 OpenChest();
             }
             else
