@@ -17,7 +17,7 @@ public class Gamechat : MonoBehaviour
         if (!PhotonNetwork.IsConnected)
         {
             PhotonNetwork.ConnectUsingSettings(); // Kết nối tới Photon Cloud
-            Debug.Log("Connecting to Photon...");
+            Debug.Log("da ket noi");
         }
     }
 
@@ -32,13 +32,13 @@ public class Gamechat : MonoBehaviour
                 inputField.text = ""; // Đảm bảo input field luôn trống khi mở
                 inputField.Select();
                 inputField.ActivateInputField();
-                Debug.Log("Chat input field activated.");
+                Debug.Log("chat da san sang");
             }
             else if (!string.IsNullOrEmpty(inputField.text)) // Nếu input field đang bật và có nội dung, gửi tin nhắn
             {
                 if (!PhotonNetwork.IsConnected)
                 {
-                    Debug.LogError("Cannot send messages when not connected. Please connect to Photon.");
+                    Debug.LogError("chua ket noi");
                     return;
                 }
 
@@ -52,13 +52,13 @@ public class Gamechat : MonoBehaviour
                 isInputFieldToggled = false;
                 UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
 
-                Debug.Log("Message sent and chat closed.");
+                Debug.Log("tin nhan gui len thi chat tat");
             }
             else // Nếu input field đang bật nhưng không có nội dung, tắt nó
             {
                 isInputFieldToggled = false;
                 UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
-                Debug.Log("Chat input field deactivated.");
+                Debug.Log("chat da bi vo hieu qua");
             }
         }
 
@@ -67,7 +67,7 @@ public class Gamechat : MonoBehaviour
         {
             isInputFieldToggled = false;
             UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
-            Debug.Log("Chat input field deactivated.");
+            Debug.Log("chat da bi vo hieu qua");
         }
     }
 
@@ -81,7 +81,7 @@ public class Gamechat : MonoBehaviour
     // Callback khi kết nối tới Photon thành công
     public void OnConnectedToMaster()
     {
-        Debug.Log("Connected to Photon!");
+        Debug.Log("da ket noi ");
         PhotonNetwork.JoinLobby(); // Tham gia một lobby nếu cần
     }
 }
