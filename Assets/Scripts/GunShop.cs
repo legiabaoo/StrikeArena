@@ -471,10 +471,10 @@ public class GunShop : MonoBehaviourPun
                 if (weaponPhotonView != null)
                 {
                     gunManager.photonView.RPC("AddWeaponToInventory", RpcTarget.All, weaponPhotonView.ViewID);
-                    if (photonView.IsMine)
-                    {
-                        photonView.RPC("destroyGun", RpcTarget.All, gunIndex, weaponPhotonView.ViewID);
-                    }                   
+                    //if (photonView.IsMine)
+                    //{
+                    //    photonView.RPC("destroyGun", RpcTarget.All, gunIndex, weaponPhotonView.ViewID);
+                    //}                   
                 }
                 else
                 {
@@ -503,35 +503,35 @@ public class GunShop : MonoBehaviourPun
                 photonView.RPC("SetGunToPositionRPC", RpcTarget.AllBuffered, gunInstance.GetComponent<PhotonView>().ViewID, playerViewID);
 
             }
-            //if (gunIndex == 0)
-            //{
-            //    Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(0) : null;
+            if (gunIndex == 0)
+            {
+                Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(0) : null;
 
-            //    // Kiểm tra và xóa game con cũ nếu nó tồn tại
-            //    if (oldChild != null)
-            //    {
-            //        Destroy(oldChild.gameObject); // Hoặc dùng `oldChild.gameObject.SetActive(false);` nếu chỉ muốn ẩn đi
-            //    }
+                // Kiểm tra và xóa game con cũ nếu nó tồn tại
+                if (oldChild != null)
+                {
+                    Destroy(oldChild.gameObject); // Hoặc dùng `oldChild.gameObject.SetActive(false);` nếu chỉ muốn ẩn đi
+                }
 
-            //    // Đặt gunInstance làm con của gunPosition
-            //    gunInstance.transform.SetParent(gunPosition, false);
-            //    gunInstance.transform.SetSiblingIndex(0);
-            //}
-            //else
-            //{
-            //    Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(1) : null;
+                // Đặt gunInstance làm con của gunPosition
+                gunInstance.transform.SetParent(gunPosition, false);
+                gunInstance.transform.SetSiblingIndex(0);
+            }
+            else
+            {
+                Transform oldChild = gunPosition.childCount > 0 ? gunPosition.GetChild(1) : null;
 
-            //    // Kiểm tra và xóa game con cũ nếu nó tồn tại
-            //    if (oldChild != null)
-            //    {
-            //        Destroy(oldChild.gameObject); // Hoặc dùng `oldChild.gameObject.SetActive(false);` nếu chỉ muốn ẩn đi
-            //    }
+                // Kiểm tra và xóa game con cũ nếu nó tồn tại
+                if (oldChild != null)
+                {
+                    Destroy(oldChild.gameObject); // Hoặc dùng `oldChild.gameObject.SetActive(false);` nếu chỉ muốn ẩn đi
+                }
 
-            //    // Đặt gunInstance làm con của gunPosition
-            //    gunInstance.transform.SetParent(gunPosition, false);
-            //    gunInstance.transform.SetSiblingIndex(1);
-            //}
-            
+                // Đặt gunInstance làm con của gunPosition
+                gunInstance.transform.SetParent(gunPosition, false);
+                gunInstance.transform.SetSiblingIndex(1);
+            }
+
 
             // Thi?t l?p các thu?c tính cho script Weapon n?u c?n
             Weapon weaponScript = gunInstance.GetComponent<Weapon>();
