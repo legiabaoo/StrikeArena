@@ -27777,6 +27777,7 @@ MonoBehaviour:
   isCountTeam: 0
   gunshop: {fileID: 1122015387}
   isSpike: 0
+  _player: {fileID: 0}
   roomlist: {fileID: 1296754363}
 --- !u!4 &958552425
 Transform:
