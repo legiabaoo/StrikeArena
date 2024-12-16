@@ -54,6 +54,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public Roomlist roomlist;
     //ItemSpawn spawnItem;
     health health;
+
     private void Awake()
     {
         instance = this;
@@ -83,6 +84,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         byte maxPlayers = roomlist.GetSelectedMaxPlayers();
         Debug.Log(maxPlayers);
         Debug.Log("Kết nối ...");
+
 
         if (!PhotonNetwork.IsConnected)
         {
