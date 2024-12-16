@@ -18,6 +18,8 @@ public class Roomlist : MonoBehaviourPunCallbacks
     public GameObject roomListItemPrefab;
 
     public TMP_InputField roomNameInputField;
+    public TMP_Dropdown maxPlayersDropdown;
+
     private List<RoomInfo> cachedRoomList = new List<RoomInfo>();
     public GameObject taoPhong;
     public GameObject chondoi;
@@ -27,6 +29,21 @@ public class Roomlist : MonoBehaviourPunCallbacks
     private void Update()
     {
         roomNameInputField.onValueChanged.AddListener(thongbaoUI);
+      
+    }
+    public byte GetSelectedMaxPlayers()
+    {
+        if (maxPlayersDropdown != null && maxPlayersDropdown.options.Count > 0)
+        {
+            string selectedText = maxPlayersDropdown.options[maxPlayersDropdown.value].text;
+            if (byte.TryParse(selectedText, out byte maxPlayers))
+            {
+                Debug.Log(maxPlayers);
+                return maxPlayers;
+            }
+        }
+        Debug.LogError("Failed to get max players. Check TMP_Dropdown setup.");
+        return 0; // Trả về giá trị mặc định nếu có lỗi
     }
     public void OnCreateRoomButtonClicked()
     {
@@ -76,8 +93,25 @@ public class Roomlist : MonoBehaviourPunCallbacks
     {
         Instance = this;
     }
+    private void OnMaxPlayersChanged(int index)
+    {
+      
+    }
     private IEnumerator Start()
     {
+        if (!PhotonNetwork.IsConnected)
+        {
+            // Kết nối lại nếu không kết nối
+
+            PhotonNetwork.ConnectUsingSettings();
+        }
+
+        if (!PhotonNetwork.InLobby)
+        {
+            Debug.LogError("tham gia lai lobby");
+            // Tham gia lại lobby để nhận danh sách phòng
+            PhotonNetwork.JoinLobby();
+        }
         if (PhotonNetwork.InRoom)
         {
             PhotonNetwork.LeaveRoom();
@@ -193,7 +227,7 @@ public class Roomlist : MonoBehaviourPunCallbacks
            GameObject roomItem = Instantiate(roomListItemPrefab, roomListParent); 
             Debug.Log("Room Name: " + room.Name);
             roomItem.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = room.Name;
-            roomItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = room.PlayerCount+"/"+"4";
+            roomItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = room.PlayerCount+"/"+room.MaxPlayers;
 
             roomItem.GetComponent<RoomItemButton>().Roomname = room.Name;
         }
