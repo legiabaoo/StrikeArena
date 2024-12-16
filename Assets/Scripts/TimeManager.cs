@@ -95,6 +95,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
             {
                 if (currentPhase == GamePhase.Buy)
                 {
+                    ItemSpawn.instance.SpawnRandomObject();
                     PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "SpikeExists", false } });
                     if (!isTextBuy)
                     {
@@ -303,6 +304,7 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
             useChest.isUsed = false;
             useChest.OB.GetComponent<Animator>().SetBool("open", false);
         }
+        ItemSpawn.instance.maxObjects = 0;
         GunShop.instance.lucMacDinhHien.SetActive(true);
         GunShop.instance.IconM4A1Hien.SetActive(false);
         GunShop.instance.IconAk47Hien.SetActive(false);

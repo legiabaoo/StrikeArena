@@ -52,7 +52,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public bool isSpike = false;
     public GameObject _player;
     public Roomlist roomlist;
-    ItemSpawn spawnItem;
+    //ItemSpawn spawnItem;
     health health;
     private void Awake()
     {
@@ -273,12 +273,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
             }
         }
 
-        if (redTeamCount >= 2 && blueTeamCount >= 2)
+        if (redTeamCount >= 1 && blueTeamCount >= 0)
         {
-
             TimeManager.instance.startGame = true;
-            StartCoroutine(spawnItem.SpawnLoop());
-
         }
     }
     public void UpdatePlayerStatus(bool isAlive)
