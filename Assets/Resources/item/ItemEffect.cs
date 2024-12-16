@@ -37,7 +37,7 @@ public class ItemEffect : MonoBehaviour
         health playerHealth = player.GetComponent<health>();
         if (playerHealth != null)
         {
-            playerHealth.TakeDamage(-healthBoostAmount);  // Tăng máu cho người chơi
+            playerHealth.Heal(healthBoostAmount);  // Tăng máu cho người chơi
         }
     }
 
