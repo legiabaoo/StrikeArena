@@ -90,6 +90,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
         thoigian.SetActive(true);
         gunshop.GetComponent<GunShop>().enabled = true;
 
+        Debug.Log("Number of players in room: " + PhotonNetwork.CurrentRoom.PlayerCount);
+
+        Debug.Log("You are currently in the dev region: " + PhotonNetwork.CloudRegion);
+        CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
+
     }
     public void JoinRoomButtonPressed()
     {
@@ -128,10 +133,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
         //    photonView.RPC("CountSpike", RpcTarget.AllBuffered);
         //}
 
-        Debug.Log("Number of players in room: " + PhotonNetwork.CurrentRoom.PlayerCount);
+        //Debug.Log("Number of players in room: " + PhotonNetwork.CurrentRoom.PlayerCount);
 
-        Debug.Log("You are currently in the dev region: " + PhotonNetwork.CloudRegion);
-        CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
+        //Debug.Log("You are currently in the dev region: " + PhotonNetwork.CloudRegion);
+        //CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
 
     }
     public void LeaveRoom()
@@ -287,7 +292,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             }
         }
 
-        if (redTeamCount >= 2 && blueTeamCount >= 2)
+        if (redTeamCount >= 1 && blueTeamCount >= 1)
         {
             TimeManager.instance.startGame = true;
         }

@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using DevionGames;
+using Photon.Pun;
 using Photon.Realtime;
 using scgFullBodyController;
 using System.Collections;
@@ -23,6 +24,7 @@ public class PlayerSetup : MonoBehaviour
     public Transform gunPosition;
     public Camera minimap;
     Transform spinerCameraTransform;
+    public GameObject txtName;
     void Awake()
     {
         photonView = GetComponent<PhotonView>(); // Gán photonView ở đây
@@ -31,6 +33,7 @@ public class PlayerSetup : MonoBehaviour
         cameraPlayer.GetComponent<MouseLook>().enabled = false;
         gunPosition = gameObject.transform.Find("Ch15_nonPBR/mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2/mixamorig:RightShoulder/mixamorig:RightArm/mixamorig:RightForeArm/mixamorig:RightHand/GunPos");
         spinerCameraTransform = gameObject.transform.Find("CameraControl/Main Camera/sniperCamera");
+        txtName = gameObject.transform.Find("Nickname/Text (TMP)").gameObject;
     }
     private void Start()
     {
@@ -66,6 +69,9 @@ public class PlayerSetup : MonoBehaviour
         cameraPlayer.GetComponent<MouseLook>().enabled = true;
         gameObject.GetComponentInChildren<Canvas>().enabled = true;
         gameObject.GetComponentInChildren<GunController>().enabled = true;
+        txtName.GetComponent<TextMeshPro>().enabled = true;
+        gameObject.GetComponent<Collider>().enabled = true;
+
         if (spinerCameraTransform != null)
         {
             Camera spinerCamera = spinerCameraTransform.GetComponentInChildren<Camera>();
@@ -112,21 +118,25 @@ public class PlayerSetup : MonoBehaviour
         Transform child = transform.Find("Ch15_nonPBR");
 
         if (child != null)
-        {
-            int ViewID = PlayerPrefs.GetInt("ViewIDHasSpike");
-            Debug.LogError(ViewID);
-            GameObject playerViewID = PhotonView.Find(ViewID).gameObject;
-            //Collider collider = playerViewID.GetComponent<Collider>();
-            //collider.enabled = false;
-            PlantTheSpike plantTheSpike = playerViewID.GetComponent<PlantTheSpike>();
-            if (plantTheSpike.isHasSpike)
-            {
-                PlantTheSpike.instance.DropSpike();
-                Debug.LogError("dieeeeeeee");
-                plantTheSpike.isHasSpike = false;
-            }
+        {   
             // Tắt GameObject con
             child.gameObject.SetActive(false);
+            GameObject txtName = gameObject.transform.Find("Nickname/Text (TMP)").gameObject;
+            txtName.GetComponent<TextMeshPro>().enabled = false;
+            Collider collider = gameObject.GetComponent<Collider>();
+            collider.enabled = false;
+
+            //PHAN ROT BOM
+            //PlantTheSpike plantTheSpike = playerViewID.GetComponent<PlantTheSpike>();
+            //int ViewID = PlayerPrefs.GetInt("ViewIDHasSpike");
+            //Debug.LogError(ViewID);
+            //GameObject playerViewID = PhotonView.Find(ViewID).gameObject;
+            //if (plantTheSpike.isHasSpike)
+            //{
+            //    PlantTheSpike.instance.DropSpike();
+            //    Debug.LogError("dieeeeeeee");
+            //    plantTheSpike.isHasSpike = false;
+            //}
         }
         else
         {
@@ -137,7 +147,7 @@ public class PlayerSetup : MonoBehaviour
     public void SetNickname(string _name)
     {
         nickname = _name;
-       nickNameText.text = nickname;   
+        nickNameText.text = nickname;
     }
     [PunRPC]
     public void RequestDestroyPlayer(int viewID)
