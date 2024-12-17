@@ -80,7 +80,7 @@ public class health : MonoBehaviour
             blood.ShowBloodEffect();
         }
 
-        if (healths <= 0)
+        if (healths <= 0 && armor <=0)
         {
             if (isLocalPlayer)
             {

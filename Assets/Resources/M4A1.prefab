@@ -14980,7 +14980,7 @@ MonoBehaviour:
   fireRate: 8
   camera: {fileID: 0}
   raycat: {fileID: 6088911627053043428}
-  hitVFX: {fileID: 3432958286849152088, guid: 87ee7299dd44ed747af24dbb91bcd33b, type: 3}
+  hitVFX: {fileID: 5112403345868107898, guid: 6f34ef0d986e9db4199cf75805f79753, type: 3}
   mag: 5
   ammo: 30
   magAmmo: 30
