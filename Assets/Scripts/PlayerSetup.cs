@@ -133,12 +133,12 @@ public class PlayerSetup : MonoBehaviour
             Debug.LogError("Không tìm thấy GameObject con!");
         }
     }
-    //[PunRPC]
-    //public void SetNickname(string _name)
-    //{
-    //    nickname = _name;
-    //    nickNameText.text = nickname;   
-    //}
+    [PunRPC]
+    public void SetNickname(string _name)
+    {
+        nickname = _name;
+       nickNameText.text = nickname;   
+    }
     [PunRPC]
     public void RequestDestroyPlayer(int viewID)
     {
