@@ -18,9 +18,11 @@ public class Roomlist : MonoBehaviourPunCallbacks
     public GameObject roomListItemPrefab;
 
     public TMP_InputField roomNameInputField;
-    public TMP_Dropdown maxPlayersDropdown;
+    public TMP_Dropdown[] dropDownSL;
 
-    
+    [Header("Control")]
+    public string AttackText="0";
+    public string DefText="0";
 
     private List<RoomInfo> cachedRoomList = new List<RoomInfo>();
     public GameObject taoPhong;
@@ -33,19 +35,29 @@ public class Roomlist : MonoBehaviourPunCallbacks
         roomNameInputField.onValueChanged.AddListener(thongbaoUI);
 
     }
-    public byte GetSelectedMaxPlayers()
+    public int GetSelectedMaxPlayers()
     {
-        if (maxPlayersDropdown != null && maxPlayersDropdown.options.Count > 0)
+        if (dropDownSL != null && dropDownSL[0].options.Count > 0 && dropDownSL[1].options.Count > 0)
         {
-            string selectedText = maxPlayersDropdown.options[maxPlayersDropdown.value].text;
-            if (byte.TryParse(selectedText, out byte maxPlayers))
-            {
-                Debug.Log(maxPlayers);
-                return maxPlayers;
-            }
+            AttackText = dropDownSL[0].options[dropDownSL[0].value].text;
+            DefText = dropDownSL[1].options[dropDownSL[1].value].text;
+            //if (byte.TryParse(selectedText, out byte maxPlayers))
+            //{
+
+            //}
+            photonView.RPC("SyncDropDown", RpcTarget.AllBuffered, AttackText, DefText);
+            int maxPlayers = int.Parse(AttackText)+int.Parse(DefText);
+            Debug.Log(maxPlayers);
+            return maxPlayers;
         }
         Debug.LogError("Failed to get max players. Check TMP_Dropdown setup.");
         return 0; // Trả về giá trị mặc định nếu có lỗi
+    }
+    [PunRPC]
+    public void SyncDropDown(string A, string D)
+    {
+        AttackText = A;
+        DefText = D;
     }
     public void OnCreateRoomButtonClicked()
     {
@@ -177,7 +189,7 @@ public class Roomlist : MonoBehaviourPunCallbacks
     {
         SceneManager.LoadScene("LoginScene");
     }
-    
+
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
 
@@ -231,7 +243,7 @@ public class Roomlist : MonoBehaviourPunCallbacks
             Debug.Log("Room Name: " + room.Name);
             roomItem.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = room.Name;
             roomItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = room.PlayerCount + "/" + room.MaxPlayers;
-            
+
             roomItem.GetComponent<RoomItemButton>().Roomname = room.Name;
 
         }
