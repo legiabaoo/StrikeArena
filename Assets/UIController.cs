@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 public class UIController : MonoBehaviour
 {
     public Slider _musicSlider;
-
+    public string url;
+    public string doiten;
     public void ToggleMusic()
     {
         AudioManager.Instance.ToggleMusic();
@@ -20,5 +21,13 @@ public class UIController : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+    public void OpenUrlQuenMK()
+    {
+        Application.OpenURL(url);
+    }
+    public void OpenUrlDoiten()
+    {
+        Application.OpenURL(doiten);
     }
 }

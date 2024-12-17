@@ -987,8 +987,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 763ef6481f64ff044b076930e3e76ba2, type: 3}
   audioSource: {fileID: 6898800885094063738}
   footstepSensitivity: 0.6
-  playbackSpeedDamping: 0.14
-  speed: 0.35
+  playbackSpeedDamping: 0.01
+  speed: 2
   isAi: 0
 --- !u!82 &6898800885094063738
 AudioSource:
