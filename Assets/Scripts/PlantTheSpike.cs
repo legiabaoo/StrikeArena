@@ -4,10 +4,12 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class PlantTheSpike : MonoBehaviour
 {
     public static PlantTheSpike instance;
     public GameObject spikePrefab;
+    public GameObject spike0;
     public float holdTimeRequired = 3.0f;
     public Slider progressBar;
     public Image iconPlant;
@@ -17,11 +19,15 @@ public class PlantTheSpike : MonoBehaviour
     private bool canPlantBomb = false;
     private bool isBlinking = false;
     public bool spikeExists = false;
-    private bool isHasSpike = false;
+    public bool isHasSpike = false;
     public bool isLocalPlayer;
     private Vector3 spikePosition;
 
     private float blinkInterval = 0.5f;
+
+    [Header("UI")]
+    public GameObject hasSpike;
+
     private void Awake()
     {
         instance = this;
@@ -40,6 +46,7 @@ public class PlantTheSpike : MonoBehaviour
             spikeExists = (bool)PhotonNetwork.CurrentRoom.CustomProperties["SpikeExists"];
             if (!spikeExists) RemoveSpikeFromScene();
         }
+        hasSpike.SetActive(false);
     }
 
     void Update()
@@ -106,6 +113,31 @@ public class PlantTheSpike : MonoBehaviour
             Debug.LogError("No PhotonView found on Spike prefab!");
         }
     }
+    public void DropSpike()
+    {
+        int ViewID = PlayerPrefs.GetInt("ViewIDHasSpike");
+        GameObject playerHasSpike = PhotonView.Find(ViewID).gameObject;
+        // Tìm vị trí để đặt Spike
+        Transform positionSpikeTransform = playerHasSpike.transform.Find("positionSpike");
+        if (positionSpikeTransform == null)
+        {
+            Debug.LogError("Không tìm thấy positionSpike trong Player!");
+            return;
+        }
+
+        Vector3 spikePosition2 = positionSpikeTransform.position;
+
+        // Spawn Spike tại vị trí đã xác định
+        GameObject spike = PhotonNetwork.Instantiate(spike0.name, spikePosition2, Quaternion.identity);
+
+        // Gọi RPC để gán Tag hoặc xử lý khác
+        PhotonView spikePhotonView = spike.GetComponent<PhotonView>();
+        if (spikePhotonView != null)
+        {
+            spikePhotonView.RPC("SetSpike0Tag", RpcTarget.AllBuffered, spikePhotonView.ViewID);
+            Debug.LogError("Rot bom diiiiiii");
+        }
+    }
 
     [PunRPC]
     public void SetIsPlantSpike2()
@@ -148,6 +180,10 @@ public class PlantTheSpike : MonoBehaviour
             PhotonView spikePhotonView = other.GetComponent<PhotonView>();
             spikePhotonView.RPC("RemoveSpike", RpcTarget.AllBuffered, spikePhotonView.ViewID);
             isHasSpike = true;
+            hasSpike.SetActive(true);
+            PhotonView playerPhotonView = gameObject.GetComponent<PhotonView>();
+            int ViewID = playerPhotonView.ViewID;
+            PlayerPrefs.SetInt("ViewIDHasSpike", ViewID);
         }
     }
 

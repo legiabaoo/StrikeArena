@@ -12,6 +12,7 @@ public class PlayerSetup : MonoBehaviour
     public ThirdPersonUserControl movemnet;
     public Camera cameraPlayer;
     public Canvas canvas;
+    public Canvas minimapCanvas;
     public string nickname;
     public TextMeshPro nickNameText;
     private PhotonView photonView;
@@ -21,7 +22,7 @@ public class PlayerSetup : MonoBehaviour
     //public bool gunPositionFound => gunPosition != null;
     public Transform gunPosition;
     public Camera minimap;
-    Transform spinerCameraTransform ;
+    Transform spinerCameraTransform;
     void Awake()
     {
         photonView = GetComponent<PhotonView>(); // Gán photonView ở đây
@@ -60,6 +61,7 @@ public class PlayerSetup : MonoBehaviour
         cameraPlayer.enabled = true;
         minimap.enabled = true;
         canvas.gameObject.SetActive(true);
+        minimapCanvas.gameObject.SetActive(true);
         cameraPlayer.GetComponent<AudioListener>().enabled = true;
         cameraPlayer.GetComponent<MouseLook>().enabled = true;
         gameObject.GetComponentInChildren<Canvas>().enabled = true;
@@ -101,7 +103,7 @@ public class PlayerSetup : MonoBehaviour
         //    }
         //}
     }
-    
+
     public void OnPlayerDeath()
     {
         // Tắt nhân vật
@@ -111,6 +113,18 @@ public class PlayerSetup : MonoBehaviour
 
         if (child != null)
         {
+            int ViewID = PlayerPrefs.GetInt("ViewIDHasSpike");
+            Debug.LogError(ViewID);
+            GameObject playerViewID = PhotonView.Find(ViewID).gameObject;
+            //Collider collider = playerViewID.GetComponent<Collider>();
+            //collider.enabled = false;
+            PlantTheSpike plantTheSpike = playerViewID.GetComponent<PlantTheSpike>();
+            if (plantTheSpike.isHasSpike)
+            {
+                PlantTheSpike.instance.DropSpike();
+                Debug.LogError("dieeeeeeee");
+                plantTheSpike.isHasSpike = false;
+            }
             // Tắt GameObject con
             child.gameObject.SetActive(false);
         }

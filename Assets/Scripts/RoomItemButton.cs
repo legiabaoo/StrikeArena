@@ -9,7 +9,7 @@ public class RoomItemButton : MonoBehaviour
     public void OnButtonPressed()
     {
         Roomlist.Instance.JoinRoomByName(Roomname);
-
+        RoomManager.instance.JoinRoomButtonPressed();
     }
 
 }

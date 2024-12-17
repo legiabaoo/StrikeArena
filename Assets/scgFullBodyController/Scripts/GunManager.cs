@@ -192,7 +192,6 @@ namespace scgFullBodyController
                 return;
             }
             weapons[i].SetActive(false);
-            Debug.LogError(i);
         }
         [PunRPC]
         public void AddWeaponToInventory(int viewID)

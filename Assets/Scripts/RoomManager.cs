@@ -4,9 +4,9 @@ using UnityEngine;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Photon.Realtime;
-using Unity.VisualScripting;
 using TMPro;
-using System.Linq;
+
+
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
@@ -52,6 +52,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public bool isSpike = false;
     public GameObject _player;
     public Roomlist roomlist;
+    [Header("ControlRoom")]
+    public int redTeamCount;
+    public int blueTeamCount;
+    [Header("UI")]
+    public TMP_Text txtSLA;
+    public TMP_Text txtSLD;
     //ItemSpawn spawnItem;
     health health;
 
@@ -65,26 +71,31 @@ public class RoomManager : MonoBehaviourPunCallbacks
             Debug.Log(PlayerPrefs.GetString("Username"));
         }
     }
-  
+
     void Update()
     {
         CountPlayersInTeams();
     }
-  
+
     public void ChangeNickname(string _name)
     {
         nickname = _name;
     }
-   public void ThamGiaPhong()
+    public void ThamGiaPhong()
     {
-        PhotonNetwork.JoinRoom(roomNameToJoin);
+        camRoom.SetActive(false);
+        HandleTeamSelection();
+        nameUI.SetActive(false);
+        connectingUI.SetActive(true);
+        thoigian.SetActive(true);
+        gunshop.GetComponent<GunShop>().enabled = true;
+
     }
     public void JoinRoomButtonPressed()
     {
         byte maxPlayers = roomlist.GetSelectedMaxPlayers();
         Debug.Log(maxPlayers);
         Debug.Log("Kết nối ...");
-
 
         if (!PhotonNetwork.IsConnected)
         {
@@ -96,10 +107,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             RoomOptions roomOptions = new RoomOptions();
             roomOptions.MaxPlayers = maxPlayers;
             PhotonNetwork.JoinOrCreateRoom(roomNameToJoin, roomOptions, TypedLobby.Default);
-            nameUI.SetActive(false);
-            connectingUI.SetActive(true);
-            thoigian.SetActive(true);
-            gunshop.GetComponent<GunShop>().enabled = true;
+            
         }
         else
         {
@@ -113,9 +121,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         base.OnJoinedRoom();
 
-        camRoom.SetActive(false);
 
-        HandleTeamSelection();
         //if (countSpike == 0)
         //{
         //    TimeManager.instance.isSpawnSpike = false;
@@ -127,6 +133,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
         Debug.Log("You are currently in the dev region: " + PhotonNetwork.CloudRegion);
         CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
 
+    }
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
     }
     //[PunRPC]
     //public void CountSpike()
@@ -147,7 +157,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         // Lấy các điểm spawn tương ứng với team
         Transform[] teamSpawnPoints = selectedTeam == 0 ? attackSpawnPoints : defenseSpawnPoints;
         GameObject teamPrefab = selectedTeam == 0 ? attackTeamPrefab : defenseTeamPrefab;
-        
+
 
         Transform spawnPoint;
 
@@ -171,7 +181,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
 
         // Tạo nhân vật tại điểm spawn và đồng bộ hóa với tất cả người chơi
-         _player = PhotonNetwork.Instantiate(teamPrefab.name, spawnPoint.position, spawnPoint.rotation);
+        _player = PhotonNetwork.Instantiate(teamPrefab.name, spawnPoint.position, spawnPoint.rotation);
         int playerViewID = _player.GetComponent<PhotonView>().ViewID;
         // Thiết lập thuộc tính cho người chơi hiện tại
         Hashtable hash = new Hashtable
@@ -246,15 +256,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         }
     }
-
+    [PunRPC]
     public void CountPlayersInTeams()
     {
-        int redTeamCount = 0;
-        int blueTeamCount = 0;
-
+        redTeamCount = 0;
+        blueTeamCount = 0;
         // L?y danh sách t?t c? ng??i ch?i trong pḥng
         Player[] players = PhotonNetwork.PlayerList;
-
+        //Debug.LogWarning(players.Length);
         // Duy?t qua t?ng ng??i ch?i
         foreach (Player player in players)
         {
@@ -267,15 +276,17 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 if (team == 0) // ??i ??
                 {
                     redTeamCount++;
+                    txtSLA.text = "Đội tấn công: " + redTeamCount;
                 }
                 else if (team == 1) // ??i xanh
                 {
                     blueTeamCount++;
+                    txtSLD.text = "Đội phòng thủ: " + blueTeamCount;
                 }
             }
         }
 
-        if (redTeamCount >= 2 && blueTeamCount >= 2)
+        if (redTeamCount >= 2 && blueTeamCount >= 1)
         {
             TimeManager.instance.startGame = true;
         }

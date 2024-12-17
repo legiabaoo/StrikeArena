@@ -103,6 +103,9 @@ MonoBehaviour:
   - OpenChest
   - AddArmor
   - Heal
+  - CountPlayersInTeams
+  - CountRed
+  - CountBlue
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

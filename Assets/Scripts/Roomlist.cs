@@ -11,7 +11,7 @@ public class Roomlist : MonoBehaviourPunCallbacks
     public static Roomlist Instance;
 
     public GameObject roomManagerGameobject;
-    public RoomManager roomManager; 
+    public RoomManager roomManager;
 
     [Header("UI")]
     public Transform roomListParent;
@@ -19,6 +19,8 @@ public class Roomlist : MonoBehaviourPunCallbacks
 
     public TMP_InputField roomNameInputField;
     public TMP_Dropdown maxPlayersDropdown;
+
+    
 
     private List<RoomInfo> cachedRoomList = new List<RoomInfo>();
     public GameObject taoPhong;
@@ -29,7 +31,7 @@ public class Roomlist : MonoBehaviourPunCallbacks
     private void Update()
     {
         roomNameInputField.onValueChanged.AddListener(thongbaoUI);
-      
+
     }
     public byte GetSelectedMaxPlayers()
     {
@@ -56,19 +58,19 @@ public class Roomlist : MonoBehaviourPunCallbacks
                 thongbao1.SetActive(true);
 
                 return;
-               
+
             }
         }
-       
+
         // Ki?m tra xem tên pḥng có h?p l? không
         if (!string.IsNullOrEmpty(roomName))
         {
             // G?i ph??ng th?c trong RoomManager ?? t?o pḥng
-        
             Debug.Log("Tao phong thanh cong");
-           chondoi.SetActive(true);
+            RoomManager.instance.JoinRoomButtonPressed();
+            chondoi.SetActive(true);
             taoPhong.SetActive(false);
-           
+
         }
         else
         {
@@ -77,13 +79,14 @@ public class Roomlist : MonoBehaviourPunCallbacks
             return;
         }
     }
-    public void thongbaoUI( string inputText) {
+    public void thongbaoUI(string inputText)
+    {
         if (!string.IsNullOrEmpty(inputText))
         {
             thongbao.SetActive(false);
             thongbao1.SetActive(false);
         }
-       
+
     }
     public void ChangRoomToCreateName(string _roomName)
     {
@@ -95,7 +98,7 @@ public class Roomlist : MonoBehaviourPunCallbacks
     }
     private void OnMaxPlayersChanged(int index)
     {
-      
+
     }
     private IEnumerator Start()
     {
@@ -174,10 +177,10 @@ public class Roomlist : MonoBehaviourPunCallbacks
     {
         SceneManager.LoadScene("LoginScene");
     }
-   
+    
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-      
+
         if (cachedRoomList.Count <= 0)
         {
             cachedRoomList = roomList;
@@ -208,36 +211,37 @@ public class Roomlist : MonoBehaviourPunCallbacks
                 }
             }
         }
-       
-        
+
+
         UpdateUI();
-        
+
     }
 
     private void UpdateUI()
     {
         Debug.Log("Number of rooms in cached list: " + cachedRoomList.Count);
-      
+
         foreach (Transform roomItem in roomListParent)
         {
             Destroy(roomItem.gameObject);
         }
-        foreach(var room in cachedRoomList)
+        foreach (var room in cachedRoomList)
         {
-           GameObject roomItem = Instantiate(roomListItemPrefab, roomListParent); 
+            GameObject roomItem = Instantiate(roomListItemPrefab, roomListParent);
             Debug.Log("Room Name: " + room.Name);
             roomItem.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = room.Name;
-            roomItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = room.PlayerCount+"/"+room.MaxPlayers;
-
+            roomItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = room.PlayerCount + "/" + room.MaxPlayers;
+            
             roomItem.GetComponent<RoomItemButton>().Roomname = room.Name;
+
         }
     }
-   
+
     public void JoinRoomByName(string _name)
     {
         roomManager.roomNameToJoin = _name;
         roomManagerGameobject.SetActive(true);
         gameObject.SetActive(false);
-       
+
     }
 }
