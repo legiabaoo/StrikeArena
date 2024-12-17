@@ -45,7 +45,7 @@ public class AudioManager : MonoBehaviour
             musicSource.Play();
         }
     }    
-    public void PlaySFX(string name)
+    /*public void PlaySFX(string name)
     {
         Sound s = Array.Find(sfxSounds, x => x.name == name);
 
@@ -58,24 +58,25 @@ public class AudioManager : MonoBehaviour
         {
             sfxSource.PlayOneShot(s.clip);
         }
-    }
+    }*/
 
     public void ToggleMusic()
     {
         musicSource.mute =!musicSource.mute;
     }
-    public void ToggleSFX()
+   /* public void ToggleSFX()
     {
         sfxSource.mute = !sfxSource.mute;
-    }
+    }*/
 
     public void MusicVolume(float volume)
     {
         musicSource.volume = volume;
     }
-    public void SFXVolume(float volume)
+
+    /*public void SFXVolume(float volume)
     {
         sfxSource.volume = volume;
-    }
+    }*/
 
 }
