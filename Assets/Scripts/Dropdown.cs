@@ -60,7 +60,7 @@ public class Dropdown : MonoBehaviour
             thongBao.SetActive(false);
             batdauthat.SetActive(true);
             batdauao.SetActive(false);
-            if (redTeamCount >= 1)
+            if (redTeamCount >= 2)
             {
                 thongBao.SetActive(true);
                 batdauthat.SetActive(false);
@@ -74,7 +74,7 @@ public class Dropdown : MonoBehaviour
             thongBao.SetActive(false);
             batdauthat.SetActive(true);
             batdauao.SetActive(false);
-            if (blueTeamCount >= 1)
+            if (blueTeamCount >= 2)
             {
                 thongBao.SetActive(true);
                 batdauthat.SetActive(false);

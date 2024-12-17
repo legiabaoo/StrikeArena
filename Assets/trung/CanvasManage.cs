@@ -8,7 +8,7 @@ public class CanvasManage : MonoBehaviour
     public GameObject login;
     public GameObject register;
     public GameObject mainHall;
-    public TMP_InputField inputField; // Tham chiếu đến Input Field
+    public TMP_InputField[] inputField; // Tham chiếu đến Input Field
 
     private bool isPasswordMode = true; // Trạng thái hiện tại
     void Start()
@@ -47,18 +47,18 @@ public class CanvasManage : MonoBehaviour
     {
         PlayerPrefs.SetInt("login", 2);
     }
-    public void ToggleContentType()
+    public void ToggleContentType(int i)
     {
         if (isPasswordMode)
         {
-            inputField.contentType = TMP_InputField.ContentType.Standard; // Chuyển sang chế độ văn bản thường
+            inputField[i].contentType = TMP_InputField.ContentType.Standard; // Chuyển sang chế độ văn bản thường
         }
         else
         {
-            inputField.contentType = TMP_InputField.ContentType.Password; // Chuyển sang chế độ mật khẩu
+            inputField[i].contentType = TMP_InputField.ContentType.Password; // Chuyển sang chế độ mật khẩu
         }
 
         isPasswordMode = !isPasswordMode; // Đảo trạng thái
-        inputField.ForceLabelUpdate(); // Cập nhật giao diện
+        inputField[i].ForceLabelUpdate(); // Cập nhật giao diện
     }
 }
