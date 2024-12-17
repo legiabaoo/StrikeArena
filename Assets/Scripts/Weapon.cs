@@ -187,7 +187,7 @@ public class Weapon : MonoBehaviour
 
                     // Gây sát th??ng cho m?c tiêu
                     PhotonNetwork.LocalPlayer.AddScore(finalDamage);
-                    if (damege >= targetHealth.healths)
+                    if (damege >= targetHealth.healths + targetHealth.armor)
                     {
                         RoomManager.instance.kills++;
                         RoomManager.instance.SetHashes();
