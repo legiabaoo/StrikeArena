@@ -1472,7 +1472,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healths: 100
-  armor: 50
+  armor: 0
   isLocalPlayer: 0
   healthText: {fileID: 3220566854210987906}
   armorText: {fileID: 8823823673889425088}
