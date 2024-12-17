@@ -117,8 +117,11 @@ public class health : MonoBehaviour
             RoomManager.instance.UpdatePlayerStatus(false);
         }
     }
-    public void Heal(int amount)
+    [PunRPC]
+    public void Heal(int amount, int ViewID)
     {
+        health health = PhotonView.Find(ViewID).GetComponent<health>();
+        healths = health.healths;
         healths += amount;
         if (healths > 100) // Giới hạn máu tối đa, tùy thuộc vào game của bạn
         {
@@ -134,8 +137,11 @@ public class health : MonoBehaviour
             healthBar.UpdateHealth(healths); // Cập nhật thanh máu
         }
     }
-    public void AddArmor(int amount)
+    [PunRPC]
+    public void AddArmor(int amount, int ViewID)
     {
+        health health = PhotonView.Find(ViewID).GetComponent<health>();
+        armor = health.armor;
         armor += amount;
         if (armor > 100) // Giới hạn giáp tối đa, tùy thuộc vào game của bạn
         {
@@ -146,6 +152,4 @@ public class health : MonoBehaviour
         if (armorText != null)
             armorText.text = armor.ToString();
     }
-
-
 }

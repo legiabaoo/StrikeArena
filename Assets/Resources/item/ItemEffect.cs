@@ -2,8 +2,9 @@
 using UnityEngine;
 using System.Collections;
 using scgFullBodyController;
+using Photon.Realtime;
 
-public class ItemEffect : MonoBehaviour
+public class ItemEffect : MonoBehaviourPunCallbacks
 {
     public int healthBoostAmount = 20;       // Lượng máu tăng khi va chạm với item "hp"
     public float speedBoostDuration = 5f;    // Thời gian tăng tốc
@@ -18,13 +19,15 @@ public class ItemEffect : MonoBehaviour
             if (gameObject.CompareTag("hp"))
             {
                 // Tăng máu cho người chơi
-                ApplyHealthBoost(other.gameObject);
+                PhotonView playerView = other.gameObject.GetComponent<PhotonView>();
+                ApplyHealthBoost(playerView.ViewID);
                 PhotonNetwork.Destroy(gameObject);  // Xóa item sau khi sử dụng và đồng bộ hóa qua Photon
             }
             // Kiểm tra nếu đối tượng va chạm có tag "speed" (item tăng tốc)
             else if (gameObject.CompareTag("speed"))
             {
                 // Tăng tốc cho người chơi
+                
                 ActivateSpeedBoost(other.gameObject);
                 PhotonNetwork.Destroy(gameObject);  // Xóa item sau khi sử dụng và đồng bộ hóa qua Photon
             }
@@ -32,13 +35,24 @@ public class ItemEffect : MonoBehaviour
     }
 
     // Phương thức để tăng máu cho người chơi
-    void ApplyHealthBoost(GameObject player)
+    void ApplyHealthBoost(int ViewIDCollider)
     {
-        health playerHealth = player.GetComponent<health>();
-        if (playerHealth != null)
+        foreach (Player player in PhotonNetwork.PlayerList)
         {
-            playerHealth.Heal(healthBoostAmount);  // Tăng máu cho người chơi
+            if (
+                player.CustomProperties.TryGetValue("viewID", out var viewIDValue) && viewIDValue is int viewID &&
+                 viewID == ViewIDCollider)
+            {
+                GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
+                
+                if (playerObject != null)
+                {
+                    PhotonView playerPhotonView = playerObject.GetComponent<PhotonView>();
+                    playerPhotonView.RPC("Heal", RpcTarget.AllBuffered, healthBoostAmount, viewID); // Tăng máu cho người chơi
+                }
+            }
         }
+
     }
 
     // Phương thức để tăng tốc cho người chơi
@@ -59,9 +73,9 @@ public class ItemEffect : MonoBehaviour
         yield return new WaitForSeconds(speedBoostDuration); // Chờ hết thời gian hiệu ứng
 
         // Phục hồi tốc độ ban đầu nếu chưa bị thay đổi bởi logic khác
-       
-            playerControl.walkSpeed = 0.8f;
-        
+
+        playerControl.walkSpeed = 0.8f;
+
     }
 
 }
