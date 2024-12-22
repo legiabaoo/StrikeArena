@@ -84,19 +84,19 @@ public class RoomManager : MonoBehaviourPunCallbacks
     }
     public void ThamGiaPhong()
     {
-        int selectedTeam = dropdownManager.teamDropdown.value;
-        if (redTeamCount == int.Parse(roomlist.AttackText) && selectedTeam == 0)
-        {
-            thongBaoFullSlot.gameObject.SetActive(false);
-            thongBaoFullSlot.gameObject.SetActive(true);
-        }
-        else if (blueTeamCount == int.Parse(roomlist.DefText) && selectedTeam == 1)
-        {
-            thongBaoFullSlot.gameObject.SetActive(false);
-            thongBaoFullSlot.gameObject.SetActive(true);
-        }
-        else
-        {
+        //int selectedTeam = dropdownManager.teamDropdown.value;
+        //if (redTeamCount == int.Parse(roomlist.AttackText) && selectedTeam == 0)
+        //{
+        //    thongBaoFullSlot.gameObject.SetActive(false);
+        //    thongBaoFullSlot.gameObject.SetActive(true);
+        //}
+        //else if (blueTeamCount == int.Parse(roomlist.DefText) && selectedTeam == 1)
+        //{
+        //    thongBaoFullSlot.gameObject.SetActive(false);
+        //    thongBaoFullSlot.gameObject.SetActive(true);
+        //}
+        //else
+        //{
             thongBaoFullSlot.gameObject.SetActive(false);
             camRoom.SetActive(false);
             HandleTeamSelection();
@@ -109,9 +109,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
             Debug.Log("You are currently in the dev region: " + PhotonNetwork.CloudRegion);
             CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
-        }
-
-
+        //}
     }
     public void JoinRoomButtonPressed()
     {
@@ -284,8 +282,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         redTeamCount = 0;
         blueTeamCount = 0;
-        photonView.RPC("SyncTXTSLA", RpcTarget.AllBuffered);
-        photonView.RPC("SyncTXTSLD", RpcTarget.AllBuffered);
+        //if (PhotonNetwork.IsMasterClient)
+        //{
+        //photonView.RPC("SyncTXTSLA", RpcTarget.AllBuffered);
+        //photonView.RPC("SyncTXTSLD", RpcTarget.AllBuffered);
+        //}
+
         // L?y danh sách t?t c? ng??i ch?i trong pḥng
         Player[] players = PhotonNetwork.PlayerList;
         //Debug.LogWarning(players.Length);
@@ -301,17 +303,24 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 if (team == 0) // ??i ??
                 {
                     redTeamCount++;
-                    photonView.RPC("SyncTXTSLA", RpcTarget.AllBuffered);
+                    //if (PhotonNetwork.IsMasterClient) {
+                    //photonView.RPC("SyncTXTSLA", RpcTarget.AllBuffered);
+                    //}
+                    txtSLA.text = "Đội tấn công: " + redTeamCount ;
                 }
                 else if (team == 1) // ??i xanh
                 {
                     blueTeamCount++;
-                    photonView.RPC("SyncTXTSLD", RpcTarget.AllBuffered);
+                    //if (PhotonNetwork.IsMasterClient)
+                    //{
+                    //photonView.RPC("SyncTXTSLD", RpcTarget.AllBuffered);
+                    //}
+                    txtSLD.text = "Đội phòng thủ: " + blueTeamCount ;
                 }
             }
         }
 
-        if (redTeamCount >= 1 && blueTeamCount >= 1)
+        if (redTeamCount >= 2 && blueTeamCount >= 2)
         {
             TimeManager.instance.startGame = true;
         }
@@ -319,12 +328,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SyncTXTSLA()
     {
-        txtSLA.text = "Đội tấn công: " + redTeamCount + "/" + roomlist.AttackText;
+        txtSLA.text = "Đội tấn công: " + redTeamCount + "/2" ;
     }
     [PunRPC]
     public void SyncTXTSLD()
     {
-        txtSLD.text = "Đội phòng thủ: " + blueTeamCount + "/" + roomlist.DefText;
+        txtSLD.text = "Đội phòng thủ: " + blueTeamCount + "/2" ;
     }
     public void UpdatePlayerStatus(bool isAlive)
     {

@@ -39,14 +39,18 @@ public class Roomlist : MonoBehaviourPunCallbacks
     {
         if (dropDownSL != null && dropDownSL[0].options.Count > 0 && dropDownSL[1].options.Count > 0)
         {
-            AttackText = dropDownSL[0].options[dropDownSL[0].value].text;
-            DefText = dropDownSL[1].options[dropDownSL[1].value].text;
+            //AttackText = dropDownSL[0].options[dropDownSL[0].value].text;
+            //DefText = dropDownSL[1].options[dropDownSL[1].value].text;
             //if (byte.TryParse(selectedText, out byte maxPlayers))
             //{
 
             //}
-            photonView.RPC("SyncDropDown", RpcTarget.AllBuffered, AttackText, DefText);
-            int maxPlayers = int.Parse(AttackText)+int.Parse(DefText);
+            //if (
+            //PhotonNetwork.IsMasterClient) {
+            //photonView.RPC("SyncDropDown", RpcTarget.AllBuffered, AttackText, DefText);
+            //}
+            
+            int maxPlayers = int.Parse(dropDownSL[0].options[dropDownSL[0].value].text);
             Debug.Log(maxPlayers);
             return maxPlayers;
         }

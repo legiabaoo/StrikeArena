@@ -402,14 +402,14 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
             countRound = 0;
             Debug.Log("Xanh thắng");
             photonView.RPC("DisplayEndGameResult", RpcTarget.All, 1); // Truyền 1 cho team Xanh là đội chiến thắng
-            Invoke("BackHomeDelay", 1f);
+            Invoke("BackHomeDelay", 4f);
         }
         else if (scoreDo == 4)
         {
             countRound = 0;
             Debug.Log("Xanh thắng");
             photonView.RPC("DisplayEndGameResult", RpcTarget.All, 0); // Truyền 1 cho team Xanh là đội chiến thắng
-            Invoke("BackHomeDelay", 1f);
+            Invoke("BackHomeDelay", 4f);
         }
         else
         {

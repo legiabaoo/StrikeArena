@@ -34,6 +34,7 @@ public class PlayerSetup : MonoBehaviour
         gunPosition = gameObject.transform.Find("Ch15_nonPBR/mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2/mixamorig:RightShoulder/mixamorig:RightArm/mixamorig:RightForeArm/mixamorig:RightHand/GunPos");
         spinerCameraTransform = gameObject.transform.Find("CameraControl/Main Camera/sniperCamera");
         txtName = gameObject.transform.Find("Nickname/Text (TMP)").gameObject;
+        minimapCanvas = gameObject.transform.Find("MinapMapCanvas").gameObject.GetComponent<Canvas>();
     }
     private void Start()
     {
@@ -64,7 +65,7 @@ public class PlayerSetup : MonoBehaviour
         cameraPlayer.enabled = true;
         minimap.enabled = true;
         canvas.gameObject.SetActive(true);
-        minimapCanvas.gameObject.SetActive(true);
+        minimapCanvas.enabled=true;
         cameraPlayer.GetComponent<AudioListener>().enabled = true;
         cameraPlayer.GetComponent<MouseLook>().enabled = true;
         gameObject.GetComponentInChildren<Canvas>().enabled = true;
