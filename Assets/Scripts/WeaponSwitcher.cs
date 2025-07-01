@@ -4,27 +4,40 @@ using UnityEngine;
 
 public class WeaponSwitcher : MonoBehaviour
 {
-    private int selectedWeapon = 0;
+    public static WeaponSwitcher instance;
+    public int selectedWeapon = 0;
+    public GameObject nutbanImage;
+    private void Awake()
+    {
+        instance = this;
+    }
     // Start is called before the first frame update
     void Start()
     {
         SelectWeapon();
     }
-
+     public void SetNutbanImageActive(bool isActive)
+    {
+        nutbanImage.SetActive(isActive);
+    }
     // Update is called once per frame
     void Update()
     {
+        SelectWeapon();
         int previousSelectedWeapon = selectedWeapon;
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
+            nutbanImage.SetActive(true);
             selectedWeapon = 0;
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
+            nutbanImage.SetActive(true);
             selectedWeapon = 1;
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
+            nutbanImage.SetActive(false);
             selectedWeapon = 2;
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))

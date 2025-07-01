@@ -19,7 +19,7 @@ MonoBehaviour:
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: asia
     Server: 
     Port: 0
     ProxyServer: 
@@ -50,6 +50,65 @@ MonoBehaviour:
   - TakeDamage
   - SetPlayerTag
   - DestroyPlayer
+  - SetSpikeTag
+  - DestroySpike
+  - RemoveSpike
+  - UpdateScoreXanh
+  - UpdateScoreDo
+  - ResetPositions
+  - ResetPlayerPositions
+  - StartBlinking
+  - StopBlinkingIcon
+  - ResetTime
+  - RemovePlayerInstances
+  - EndGame
+  - HandleTeamSelection
+  - RequestDestroyPlayer
+  - SetTagForPlayers
+  - UI
+  - GetAllPlayerCameras
+  - CreateGunForPlayer
+  - SyncTeammateCameraRotation
+  - offText
+  - onText
+  - SetIsSpikeExists
+  - ReateIsSpikeExists
+  - SetNotify
+  - SetIsPlantSpike
+  - SetIsPlantSpikee
+  - SetIsPlantSpike2
+  - DisplayEndGameResult
+  - BackHome
+  - ShieldDown
+  - Explode
+  - RPC_PlayMuzzleFlash
+  - RPC_SyncWeapon
+  - SetGunParent
+  - <CreateGunForPlayer>g__SetGunParent|29_0
+  - SetGunToPositionRPC
+  - Money
+  - SetMoneyPrefs
+  - SetRound
+  - SetSpike0Tag
+  - WinnerRound
+  - ExplodeEffectAndSound
+  - PlayExplosionSound
+  - PlaySmokeSound
+  - setIsGunShop
+  - TriggerExplosion
+  - activeWeapon
+  - AddWeaponToInventory
+  - destroyGun
+  - SendChatMessage
+  - OpenChest
+  - AddArmor
+  - Heal
+  - CountPlayersInTeams
+  - CountRed
+  - CountBlue
+  - SyncTXTSLA
+  - SyncTXTSLD
+  - SyncDropDown
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

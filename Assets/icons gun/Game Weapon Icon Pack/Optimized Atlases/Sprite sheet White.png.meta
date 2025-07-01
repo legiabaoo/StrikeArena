@@ -20,12 +20,11 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
-    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMipmapLimit: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -64,7 +63,6 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
-  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -77,7 +75,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -90,7 +87,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -103,7 +99,42 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -1464,72 +1495,73 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Sprite sheet White_0: 80174111
-      Sprite sheet White_1: 1436512622
-      Sprite sheet White_10: -376480667
-      Sprite sheet White_11: -1106920268
-      Sprite sheet White_12: 292321255
-      Sprite sheet White_13: 1643039036
-      Sprite sheet White_14: -1557532715
-      Sprite sheet White_15: 683187554
-      Sprite sheet White_16: 217534693
-      Sprite sheet White_17: 626770832
-      Sprite sheet White_18: -1863459577
-      Sprite sheet White_19: -580398477
-      Sprite sheet White_2: -1979265249
-      Sprite sheet White_20: 1039522688
-      Sprite sheet White_21: -1511086784
-      Sprite sheet White_22: -1490460263
-      Sprite sheet White_23: 212650312
-      Sprite sheet White_24: 1234379130
-      Sprite sheet White_25: -106412908
-      Sprite sheet White_26: 185873679
-      Sprite sheet White_27: -96210521
-      Sprite sheet White_28: 1247450681
       Sprite sheet White_29: -1834382266
-      Sprite sheet White_3: 2039867649
-      Sprite sheet White_30: -2042604377
-      Sprite sheet White_31: 826367233
-      Sprite sheet White_32: 1041082314
-      Sprite sheet White_33: 1251856274
-      Sprite sheet White_34: 462965172
-      Sprite sheet White_35: 937215883
-      Sprite sheet White_36: -1420955141
-      Sprite sheet White_37: 965352971
-      Sprite sheet White_38: 887192536
-      Sprite sheet White_39: -1605570315
-      Sprite sheet White_4: 1296039536
-      Sprite sheet White_40: 41733768
-      Sprite sheet White_41: 1570456868
-      Sprite sheet White_42: 1290488812
-      Sprite sheet White_43: -75956892
-      Sprite sheet White_44: -1050042597
-      Sprite sheet White_45: 2136314749
-      Sprite sheet White_46: 1303292771
-      Sprite sheet White_47: 2016552157
-      Sprite sheet White_48: -2075890262
-      Sprite sheet White_49: -1073410526
-      Sprite sheet White_5: 807343106
-      Sprite sheet White_50: -1253684534
-      Sprite sheet White_51: -443633593
+      Sprite sheet White_14: -1557532715
       Sprite sheet White_52: 88292544
-      Sprite sheet White_53: -647459673
-      Sprite sheet White_54: 1681174127
-      Sprite sheet White_55: -68253368
-      Sprite sheet White_56: -1368033140
-      Sprite sheet White_57: -1712697992
-      Sprite sheet White_58: -601057875
-      Sprite sheet White_59: -1837564906
-      Sprite sheet White_6: 870321632
-      Sprite sheet White_60: 1236272153
-      Sprite sheet White_61: -1858031637
-      Sprite sheet White_62: -479742290
-      Sprite sheet White_63: -1955041602
-      Sprite sheet White_7: -738649755
+      Sprite sheet White_49: -1073410526
       Sprite sheet White_8: 1821818961
+      Sprite sheet White_41: 1570456868
+      Sprite sheet White_59: -1837564906
+      Sprite sheet White_18: -1863459577
+      Sprite sheet White_13: 1643039036
+      Sprite sheet White_34: 462965172
+      Sprite sheet White_48: -2075890262
+      Sprite sheet White_12: 292321255
+      Sprite sheet White_45: 2136314749
+      Sprite sheet White_26: 185873679
+      Sprite sheet White_24: 1234379130
+      Sprite sheet White_39: -1605570315
+      Sprite sheet White_31: 826367233
+      Sprite sheet White_2: -1979265249
+      Sprite sheet White_36: -1420955141
+      Sprite sheet White_38: 887192536
+      Sprite sheet White_57: -1712697992
+      Sprite sheet White_25: -106412908
+      Sprite sheet White_1: 1436512622
+      Sprite sheet White_30: -2042604377
+      Sprite sheet White_42: 1290488812
+      Sprite sheet White_17: 626770832
+      Sprite sheet White_35: 937215883
+      Sprite sheet White_46: 1303292771
+      Sprite sheet White_3: 2039867649
+      Sprite sheet White_6: 870321632
+      Sprite sheet White_4: 1296039536
+      Sprite sheet White_11: -1106920268
+      Sprite sheet White_5: 807343106
+      Sprite sheet White_22: -1490460263
+      Sprite sheet White_21: -1511086784
+      Sprite sheet White_62: -479742290
+      Sprite sheet White_32: 1041082314
+      Sprite sheet White_37: 965352971
+      Sprite sheet White_50: -1253684534
+      Sprite sheet White_44: -1050042597
+      Sprite sheet White_51: -443633593
+      Sprite sheet White_23: 212650312
+      Sprite sheet White_60: 1236272153
+      Sprite sheet White_33: 1251856274
+      Sprite sheet White_27: -96210521
+      Sprite sheet White_0: 80174111
+      Sprite sheet White_10: -376480667
+      Sprite sheet White_54: 1681174127
+      Sprite sheet White_63: -1955041602
       Sprite sheet White_9: 1891682625
-  mipmapLimitGroupName: 
+      Sprite sheet White_55: -68253368
+      Sprite sheet White_28: 1247450681
+      Sprite sheet White_43: -75956892
+      Sprite sheet White_19: -580398477
+      Sprite sheet White_56: -1368033140
+      Sprite sheet White_58: -601057875
+      Sprite sheet White_40: 41733768
+      Sprite sheet White_53: -647459673
+      Sprite sheet White_20: 1039522688
+      Sprite sheet White_15: 683187554
+      Sprite sheet White_7: -738649755
+      Sprite sheet White_47: 2016552157
+      Sprite sheet White_16: 217534693
+      Sprite sheet White_61: -1858031637
+  spritePackingTag: 
   pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

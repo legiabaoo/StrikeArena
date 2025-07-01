@@ -1,7 +1,9 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Photon.Realtime;
 public class dichuyen : MonoBehaviour
 {
     public float walkSpeed = 4f;
@@ -18,10 +20,12 @@ public class dichuyen : MonoBehaviour
     private bool jumping;
     private bool grounded = false;
 
+   /*  private Animator animator;*/
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+      /*  animator = GetComponentInChildren<Animator>();*/
     }
 
     // Update is called once per frame
@@ -30,12 +34,18 @@ public class dichuyen : MonoBehaviour
         input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         input.Normalize();
         sprinting = Input.GetButton("Sprint");
-        jumping = Input.GetButton("Jump");  
+        jumping = Input.GetButton("Jump");
+
+      /*  Vector3 velocity = rb.velocity;
+        animator.SetFloat("VelocityX", velocity.x);
+        animator.SetFloat("VelocityZ", velocity.z);*/
     }
     private void OnTriggerStay(Collider other)
     {
         grounded = true;
     }
+    private float fallMultiplier = 2.5f; // T?c ?? r?i nhanh h?n khi nh?y
+
     private void FixedUpdate()
     {
         if (grounded)
@@ -54,11 +64,17 @@ public class dichuyen : MonoBehaviour
                 velocity1 = new Vector3(velocity1.x * 0.2f * Time.deltaTime, velocity1.y, velocity1.z * 0.2f * Time.deltaTime);
                 rb.velocity = velocity1;
             }
-        }else
+        }
+        else
         {
+            if (rb.velocity.y < 0) // Khi nhân v?t ?ang r?i xu?ng
+            {
+                rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+            }
+
             if (input.magnitude > 0.5f)
             {
-                rb.AddForce(CalculateMovement(sprinting ? sprintSpeed*ariControl : walkSpeed*ariControl), ForceMode.VelocityChange);
+                rb.AddForce(CalculateMovement(sprinting ? sprintSpeed * ariControl : walkSpeed * ariControl), ForceMode.VelocityChange);
             }
             else
             {
@@ -68,9 +84,12 @@ public class dichuyen : MonoBehaviour
             }
         }
         grounded = false;
-      
     }
-       public void thoatgame()
+
+
+
+
+    public void thoatgame()
     {
 
     }
@@ -80,6 +99,7 @@ public class dichuyen : MonoBehaviour
         targetVelocity *= _speed;
 
          Vector3 velocity = rb.velocity;
+      
         if (input.magnitude > 0.5f){
             Vector3 velocityChange = targetVelocity - velocity;
             velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);

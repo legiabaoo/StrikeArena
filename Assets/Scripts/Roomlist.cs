@@ -1,39 +1,108 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Roomlist : MonoBehaviourPunCallbacks
 {
     public static Roomlist Instance;
 
     public GameObject roomManagerGameobject;
-    public RoomManager roomManager; 
+    public RoomManager roomManager;
+
     [Header("UI")]
     public Transform roomListParent;
     public GameObject roomListItemPrefab;
 
     public TMP_InputField roomNameInputField;
+    public TMP_Dropdown[] dropDownSL;
+
+    [Header("Control")]
+    public string AttackText="0";
+    public string DefText="0";
+
     private List<RoomInfo> cachedRoomList = new List<RoomInfo>();
+    public GameObject taoPhong;
+    public GameObject chondoi;
+    public GameObject thongbao;
+    public GameObject thongbao1;
+    public RoomItemButton roomItem;
+    private void Update()
+    {
+        roomNameInputField.onValueChanged.AddListener(thongbaoUI);
 
+    }
+    public int GetSelectedMaxPlayers()
+    {
+        if (dropDownSL != null && dropDownSL[0].options.Count > 0 && dropDownSL[1].options.Count > 0)
+        {
+            //AttackText = dropDownSL[0].options[dropDownSL[0].value].text;
+            //DefText = dropDownSL[1].options[dropDownSL[1].value].text;
+            //if (byte.TryParse(selectedText, out byte maxPlayers))
+            //{
 
+            //}
+            //if (
+            //PhotonNetwork.IsMasterClient) {
+            //photonView.RPC("SyncDropDown", RpcTarget.AllBuffered, AttackText, DefText);
+            //}
+            
+            int maxPlayers = int.Parse(dropDownSL[0].options[dropDownSL[0].value].text);
+            Debug.Log(maxPlayers);
+            return maxPlayers;
+        }
+        Debug.LogError("Failed to get max players. Check TMP_Dropdown setup.");
+        return 0; // Tr·∫£ v·ªÅ gi√° tr·ªã m·∫∑c ƒë·ªãnh n·∫øu c√≥ l·ªói
+    }
+    [PunRPC]
+    public void SyncDropDown(string A, string D)
+    {
+        AttackText = A;
+        DefText = D;
+    }
     public void OnCreateRoomButtonClicked()
     {
         string roomName = roomNameInputField.text;
+        foreach (var room in cachedRoomList)
+        {
+            if (room.Name == roomName)
+            {
+                Debug.Log("Phong da ton tai");
+                thongbao1.SetActive(true);
 
-        // Ki?m tra xem tÍn phÚng cÛ h?p l? khÙng
+                return;
+
+            }
+        }
+
+        // Ki?m tra xem t√™n phÃ£ng c√≥ h?p l? kh√¥ng
         if (!string.IsNullOrEmpty(roomName))
         {
-            // G?i ph??ng th?c trong RoomManager ?? t?o phÚng
-           
+            // G?i ph??ng th?c trong RoomManager ?? t?o phÃ£ng
             Debug.Log("Tao phong thanh cong");
+            RoomManager.instance.JoinRoomButtonPressed();
+            chondoi.SetActive(true);
+            taoPhong.SetActive(false);
+
         }
         else
         {
-            Debug.LogError("TÍn phÚng khÙng h?p l?!");
+            thongbao.SetActive(true);
+            Debug.LogError("T√™n phong kh√¥ng hop li");
+            return;
         }
+    }
+    public void thongbaoUI(string inputText)
+    {
+        if (!string.IsNullOrEmpty(inputText))
+        {
+            thongbao.SetActive(false);
+            thongbao1.SetActive(false);
+        }
+
     }
     public void ChangRoomToCreateName(string _roomName)
     {
@@ -43,8 +112,25 @@ public class Roomlist : MonoBehaviourPunCallbacks
     {
         Instance = this;
     }
+    private void OnMaxPlayersChanged(int index)
+    {
+
+    }
     private IEnumerator Start()
     {
+        if (!PhotonNetwork.IsConnected)
+        {
+            // K·∫øt n·ªëi l·∫°i n·∫øu kh√¥ng k·∫øt n·ªëi
+
+            PhotonNetwork.ConnectUsingSettings();
+        }
+
+        if (!PhotonNetwork.InLobby)
+        {
+            //Debug.LogError("tham gia lai lobby");
+            // Tham gia l·∫°i lobby ƒë·ªÉ nh·∫≠n danh s√°ch ph√≤ng
+            PhotonNetwork.JoinLobby();
+        }
         if (PhotonNetwork.InRoom)
         {
             PhotonNetwork.LeaveRoom();
@@ -53,7 +139,8 @@ public class Roomlist : MonoBehaviourPunCallbacks
         }
         yield return new WaitUntil(() => !PhotonNetwork.IsConnected);
 
-        PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = "asia"; // Ch·ªâ ƒë·ªãnh v√πng
+        PhotonNetwork.ConnectUsingSettings(); // K·∫øt n·ªëi v·ªõi v√πng ƒë√£ ch·ªçn
     }
     public override void OnConnectedToMaster()
     {
@@ -61,61 +148,65 @@ public class Roomlist : MonoBehaviourPunCallbacks
 
         PhotonNetwork.JoinLobby();
     }
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    /*  public override void OnRoomListUpdate(List<RoomInfo> roomList)
+      {
+          // T?o m?t danh s√°ch m?i ?? l?u tr? danh s√°ch phÃ£ng ?ƒÉ c?p nh?t
+          List<RoomInfo> updatedRoomList = new List<RoomInfo>(roomList);
+
+          foreach (var room in roomList)
+          {
+              Debug.Log("Room Name: " + room.Name);
+              // TÃÅm ki?m phÃ£ng trong danh s√°ch cachedRoomList
+              int index = cachedRoomList.FindIndex(r => r.Name == room.Name);
+              if (index != -1)
+              {
+                  // N?u phÃ£ng ?ƒÉ t?n t?i trong danh s√°ch cachedRoomList
+                  if (room.RemovedFromList)
+                  {
+                      // N?u phÃ£ng ?ƒÉ b? x√≥a kh?i danh s√°ch, lo?i b? n√≥ kh?i danh s√°ch c?p nh?t
+                      updatedRoomList.RemoveAt(index);
+                  }
+                  else
+                  {
+                      // N?u kh√¥ng, c?p nh?t th√¥ng tin c?a phÃ£ng trong danh s√°ch c?p nh?t
+                      updatedRoomList[index] = room;
+                  }
+              }
+              else
+              {
+                  // N?u phÃ£ng kh√¥ng t?n t?i trong danh s√°ch cachedRoomList v√† kh√¥ng b? x√≥a kh?i danh s√°ch,
+                  // th√™m n√≥ v√†o danh s√°ch c?p nh?t
+                  if (!room.RemovedFromList)
+                  {
+                      updatedRoomList.Add(room);
+                  }
+              }
+          }
+
+          // C?p nh?t cachedRoomList v?i danh s√°ch ?ƒÉ c?p nh?t
+          cachedRoomList = updatedRoomList;
+
+          // C?p nh?t giao di?n ng??i d√πng
+          UpdateUI();
+      }*/
+    public void LoadSceen1()
     {
-        // T?o m?t danh s·ch m?i ?? l?u tr? danh s·ch phÚng ?„ c?p nh?t
-        List<RoomInfo> updatedRoomList = new List<RoomInfo>(roomList);
-
-        foreach (var room in roomList)
-        {
-            Debug.Log("Room Name: " + room.Name);
-            // TÏm ki?m phÚng trong danh s·ch cachedRoomList
-            int index = cachedRoomList.FindIndex(r => r.Name == room.Name);
-            if (index != -1)
-            {
-                // N?u phÚng ?„ t?n t?i trong danh s·ch cachedRoomList
-                if (room.RemovedFromList)
-                {
-                    // N?u phÚng ?„ b? xÛa kh?i danh s·ch, lo?i b? nÛ kh?i danh s·ch c?p nh?t
-                    updatedRoomList.RemoveAt(index);
-                }
-                else
-                {
-                    // N?u khÙng, c?p nh?t thÙng tin c?a phÚng trong danh s·ch c?p nh?t
-                    updatedRoomList[index] = room;
-                }
-            }
-            else
-            {
-                // N?u phÚng khÙng t?n t?i trong danh s·ch cachedRoomList v‡ khÙng b? xÛa kh?i danh s·ch,
-                // thÍm nÛ v‡o danh s·ch c?p nh?t
-                if (!room.RemovedFromList)
-                {
-                    updatedRoomList.Add(room);
-                }
-            }
-        }
-
-        // C?p nh?t cachedRoomList v?i danh s·ch ?„ c?p nh?t
-        cachedRoomList = updatedRoomList;
-
-        // C?p nh?t giao di?n ng??i d˘ng
-        UpdateUI();
+        SceneManager.LoadScene("LoginScene");
     }
 
-   /* public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-       
+
         if (cachedRoomList.Count <= 0)
         {
             cachedRoomList = roomList;
         }
         else
         {
-            foreach(var room in roomList)
+            foreach (var room in roomList)
             {
                 Debug.Log("Room Name: " + room.Name);
-                for (int i = 0; i< cachedRoomList.Count; i++)
+                for (int i = 0; i < cachedRoomList.Count; i++)
                 {
                     if (cachedRoomList[i].Name == room.Name)
                     {
@@ -127,7 +218,7 @@ public class Roomlist : MonoBehaviourPunCallbacks
                         }
                         else
                         {
-                            newList[i]= room;
+                            newList[i] = room;
                         }
                         cachedRoomList = newList;
 
@@ -136,31 +227,37 @@ public class Roomlist : MonoBehaviourPunCallbacks
                 }
             }
         }
+
+
         UpdateUI();
+
     }
-*/
+
     private void UpdateUI()
     {
         Debug.Log("Number of rooms in cached list: " + cachedRoomList.Count);
-      
+
         foreach (Transform roomItem in roomListParent)
         {
             Destroy(roomItem.gameObject);
         }
-        foreach(var room in cachedRoomList)
+        foreach (var room in cachedRoomList)
         {
-           GameObject roomItem = Instantiate(roomListItemPrefab, roomListParent);
+            GameObject roomItem = Instantiate(roomListItemPrefab, roomListParent);
             Debug.Log("Room Name: " + room.Name);
             roomItem.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = room.Name;
-            roomItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = room.PlayerCount+"/16";
+            roomItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = room.PlayerCount + "/" + room.MaxPlayers;
 
             roomItem.GetComponent<RoomItemButton>().Roomname = room.Name;
+
         }
     }
+
     public void JoinRoomByName(string _name)
     {
         roomManager.roomNameToJoin = _name;
         roomManagerGameobject.SetActive(true);
         gameObject.SetActive(false);
+
     }
 }

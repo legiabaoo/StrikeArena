@@ -1,10 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
+guid: 191644e29967ebb4999c604bd6271d96
+=======
 <<<<<<<< HEAD:Assets/sung/sungtruong/m4red/source/M4.rar.meta
-guid: 499839a62b8095b418a7eba6f095d66d
+guid: 0163fb7191650a44c9265198abf7abab
 ========
 guid: 84849aedff8f90a488c2967c63b50d4d
+>>>>>>> Stashed changes
 folderAsset: yes
->>>>>>>> Bao:Assets/Resources/source.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

@@ -16,6 +16,35 @@ TagManager:
   - Defender
   - tancong
   - phongthu
+  - Spike
+  - Side
+  - OldPlayer
+  - metal
+  - hud
+  - concrete
+  - gravel
+  - vaultObject
+  - water
+  - Door
+  - grass
+  - hitCollider
+  - AmmoText
+  - nutngam
+  - RightHand
+  - campoint
+  - head
+  - LeftHand
+  - ngontay
+  - hitCollider
+  - AmmoText
+  - hud
+  - nutngam
+  - Spike0
+  - hp
+  - speed
+  - ak
+  - m500
+  - Reach
   layers:
   - Default
   - TransparentFX
@@ -23,11 +52,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Camera
+  - miniMapTanCong
+  - word
+  - miniMapPhongThu
+  - sung
   - 
   - 
   - 
@@ -50,6 +79,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: New Layer 1
+    uniqueID: 3646170153
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

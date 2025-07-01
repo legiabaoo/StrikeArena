@@ -8,8 +8,8 @@ using UnityEngine.Networking;
 
 namespace DevionGames.LoginSystem
 {
-    public class LoginManager : MonoBehaviour
-    {
+	public class LoginManager : MonoBehaviour
+	{
 		private static LoginManager m_Current;
 
 		/// <summary>
@@ -39,24 +39,24 @@ namespace DevionGames.LoginSystem
 			else
 			{
 				LoginManager.m_Current = this;
-				if(LoginManager.DefaultSettings.debug)
+				if (LoginManager.DefaultSettings.debug)
 					Debug.Log("LoginManager initialized.");
 
 			}
 		}
 
-        private void Start()
-        {
+		private void Start()
+		{
 			if (LoginManager.DefaultSettings.skipLogin)
 			{
 				if (LoginManager.DefaultSettings.debug)
-					Debug.Log("Login System is disabled...Loading "+ LoginManager.DefaultSettings.sceneToLoad+" scene.");
+					Debug.Log("Login System is disabled...Loading " + LoginManager.DefaultSettings.sceneToLoad + " scene.");
 				UnityEngine.SceneManagement.SceneManager.LoadScene(LoginManager.DefaultSettings.sceneToLoad);
 			}
 		}
 
 
-        [SerializeField]
+		[SerializeField]
 		private LoginConfigurations m_Configurations = null;
 
 		/// <summary>
@@ -163,19 +163,23 @@ namespace DevionGames.LoginSystem
 			newForm.AddField("password", password);
 			newForm.AddField("email", email);
 
-			using (UnityWebRequest www = UnityWebRequest.Post(LoginManager.Server.serverAddress + "/" + LoginManager.Server.createAccount, newForm)) {
+			using (UnityWebRequest www = UnityWebRequest.Post(LoginManager.Server.serverAddress + "/" + LoginManager.Server.createAccount, newForm))
+			{
 				yield return www.SendWebRequest();
 				if (www.isNetworkError || www.isHttpError)
 				{
 					Debug.Log(www.error);
 				}
-				else {
+				else
+				{
 					if (www.downloadHandler.text.Contains("true"))
 					{
 						if (LoginManager.DefaultSettings.debug)
 							Debug.Log("[CreateAccount] Account creation was successfull!");
 						EventHandler.Execute("OnAccountCreated");
-					}else {
+					}
+					else
+					{
 						if (LoginManager.DefaultSettings.debug)
 							Debug.Log("[CreateAccount] Failed to create account.");
 						EventHandler.Execute("OnFailedToCreateAccount");
@@ -329,7 +333,7 @@ namespace DevionGames.LoginSystem
 						if (LoginManager.DefaultSettings.debug)
 							Debug.Log("[RecoverPassword] Password resetted!");
 						EventHandler.Execute("OnPasswordResetted");
-				
+
 					}
 					else
 					{

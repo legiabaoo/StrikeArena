@@ -12,6 +12,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Huongdan.unity
     guid: b6e8316e5bb05104ca8f7907bb07fd8b
   - enabled: 1
-    path: Assets/Scenes/Sence1.unity
+    path: Assets/Scenes/LoginScene.unity
+    guid: a7d190bbab97fb440bca80308bd3b047
+  - enabled: 1
+    path: Assets/Scenes/Scene1.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}

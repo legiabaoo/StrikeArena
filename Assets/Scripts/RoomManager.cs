@@ -1,10 +1,16 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Photon.Realtime;
+using TMPro;
+
+
+
 public class RoomManager : MonoBehaviourPunCallbacks
 {
+    public GameObject thoigian;
     public static RoomManager instance;
     public GameObject player;
     [Space]
@@ -24,111 +30,237 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public Renderer playerRender;
     public string roomNameToJoin = "test";
 
+    public TMP_InputField username;
+
     public Dropdown dropdownManager;
-    public GameObject attackTeamPrefab;  // Prefab cho ??i t?n c�ng
-    public GameObject defenseTeamPrefab; // Prefab cho ??i ph�ng th?
+    public GameObject attackTeamPrefab;  // Prefab cho ??i t?n công
+    public GameObject defenseTeamPrefab; // Prefab cho ??i pḥng th?
 
     [Space]
-    public Transform[] attackSpawnPoints; // ?i?m spawn cho ??i t?n c�ng
-    public Transform[] defenseSpawnPoints; // ?i?m spawn cho ??i ph�ng th?
+    public Transform[] attackSpawnPoints; // ?i?m spawn cho ??i t?n công
+    public Transform[] defenseSpawnPoints; // ?i?m spawn cho ??i pḥng th?
 
-    private GameObject currentPlayer;    // L?u tr? tham chi?u ??n nh�n v?t hi?n t?i
+    private GameObject currentPlayer;
+    public TimeManager timeManager;// L?u tr? tham chi?u ??n nhân v?t hi?n t?i
+
+    public GameObject TeamDoThang;
+    public GameObject TeamXanhThang;
+
+    public bool hasCalledEndGame = false;
+    public bool isCountTeam = false;
+    public GameObject gunshop;
+    public bool isSpike = false;
+    public GameObject _player;
+    public Roomlist roomlist;
+    public GameObject thongBaoFullSlot;
+    [Header("ControlRoom")]
+    public int redTeamCount;
+    public int blueTeamCount;
+    [Header("UI")]
+    public TMP_Text txtSLA;
+    public TMP_Text txtSLD;
+    //ItemSpawn spawnItem;
+    health health;
 
     private void Awake()
     {
-        instance = this;    
+        instance = this;
+        if (PlayerPrefs.HasKey("Username"))
+        {
+            username.text = PlayerPrefs.GetString("Username");
+            Debug.Log(username.text);
+            Debug.Log(PlayerPrefs.GetString("Username"));
+        }
+    }
+
+    void Update()
+    {
+        CountPlayersInTeams();
     }
 
     public void ChangeNickname(string _name)
     {
         nickname = _name;
     }
+    public void ThamGiaPhong()
+    {
+        //int selectedTeam = dropdownManager.teamDropdown.value;
+        //if (redTeamCount == int.Parse(roomlist.AttackText) && selectedTeam == 0)
+        //{
+        //    thongBaoFullSlot.gameObject.SetActive(false);
+        //    thongBaoFullSlot.gameObject.SetActive(true);
+        //}
+        //else if (blueTeamCount == int.Parse(roomlist.DefText) && selectedTeam == 1)
+        //{
+        //    thongBaoFullSlot.gameObject.SetActive(false);
+        //    thongBaoFullSlot.gameObject.SetActive(true);
+        //}
+        //else
+        //{
+            thongBaoFullSlot.gameObject.SetActive(false);
+            camRoom.SetActive(false);
+            HandleTeamSelection();
+            nameUI.SetActive(false);
+            connectingUI.SetActive(true);
+            thoigian.SetActive(true);
+            gunshop.GetComponent<GunShop>().enabled = true;
+
+            Debug.Log("Number of players in room: " + PhotonNetwork.CurrentRoom.PlayerCount);
+
+            Debug.Log("You are currently in the dev region: " + PhotonNetwork.CloudRegion);
+            CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
+        //}
+    }
     public void JoinRoomButtonPressed()
     {
+        int maxPlayers = roomlist.GetSelectedMaxPlayers();
+        Debug.Log(maxPlayers);
+        Debug.Log("Kết nối ...");
 
-        Debug.Log("Ket Noi ...");
-        PhotonNetwork.ConnectUsingSettings();
-        nameUI.SetActive(false);
-        connectingUI.SetActive(true);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-     
-    }
-    public override void OnConnectedToMaster()
-    {
-        base.OnConnectedToMaster();
-        Debug.Log("Dang Ket Noi Sever...");
-        PhotonNetwork.JoinLobby();
+        if (!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
 
-    }
-    public override void OnJoinedLobby()
-    {
-        base.OnJoinedLobby();
+        if (PhotonNetwork.IsConnected)
+        {
+            RoomOptions roomOptions = new RoomOptions();
+            roomOptions.MaxPlayers = maxPlayers;
+            PhotonNetwork.JoinOrCreateRoom(roomNameToJoin, roomOptions, TypedLobby.Default);
 
-        PhotonNetwork.JoinOrCreateRoom(roomNameToJoin,null,null);
-        Debug.Log("Dang ket noi va o trong phong ngay bay gio");
-
+        }
+        else
+        {
+            Debug.LogWarning("Chưa kết nối được với Photon!");
+        }
     }
+
+
     public override void OnJoinedRoom()
     {
 
         base.OnJoinedRoom();
 
-        camRoom.SetActive(false);
-        
-      HandleTeamSelection();
-    
-}
-   
-    public void ResPawnPlayer()
-    {
-        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        GameObject _player = PhotonNetwork.Instantiate(player.name, spawnPoint.position, Quaternion.identity);
-        _player.GetComponent<PlayerSetup>().IsLocalPlayer();
-        _player.GetComponent<health>().isLocalPlayer = true;
-        _player.GetComponent<PhotonView>().RPC("SetNickname", RpcTarget.AllBuffered, nickname);
-        PhotonNetwork.LocalPlayer.NickName = nickname;
-    
+
+        //if (countSpike == 0)
+        //{
+        //    TimeManager.instance.isSpawnSpike = false;
+        //    photonView.RPC("CountSpike", RpcTarget.AllBuffered);
+        //}
+
+        //Debug.Log("Number of players in room: " + PhotonNetwork.CurrentRoom.PlayerCount);
+
+        //Debug.Log("You are currently in the dev region: " + PhotonNetwork.CloudRegion);
+        //CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
+
     }
-   
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
+    //[PunRPC]
+    //public void CountSpike()
+    //{
+    //    countSpike++;
+    //}
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        base.OnPlayerEnteredRoom(newPlayer);
+        // Gọi lại để cập nhật danh sách camera khi có người chơi mới
+        CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
+    }
+
     public void HandleTeamSelection()
     {
-        // L?y gi� tr? team ???c ch?n t? DropdownManager
-        int selectedTeam = dropdownManager.teamDropdown.value; // L?y ch? s? c?a team ???c ch?n
+        int selectedTeam = dropdownManager.teamDropdown.value; // Lấy chỉ số của team được chọn
+
+        // Lấy các điểm spawn tương ứng với team
+        Transform[] teamSpawnPoints = selectedTeam == 0 ? attackSpawnPoints : defenseSpawnPoints;
+        GameObject teamPrefab = selectedTeam == 0 ? attackTeamPrefab : defenseTeamPrefab;
+
 
         Transform spawnPoint;
-        GameObject teamPrefab;
 
-        if (selectedTeam == 0) // N?u ??i t?n c�ng ???c ch?n
+        // Kiểm tra nếu người chơi đã có vị trí spawn ban đầu
+        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("initialSpawnPoint", out var savedPosition))
         {
-            Debug.Log("??i t?n c�ng ???c ch?n.");
-            spawnPoint = attackSpawnPoints[Random.Range(0, attackSpawnPoints.Length)];
-            teamPrefab = attackTeamPrefab; // Nh�n v?t cho ??i t?n c�ng
+            spawnPoint = new GameObject("SavedSpawnPoint").transform;
+            spawnPoint.position = (Vector3)savedPosition;
         }
-        else // N?u ??i ph�ng th? ???c ch?n
+        else
         {
-            Debug.Log("??i ph�ng th? ???c ch?n.");
-            spawnPoint = defenseSpawnPoints[Random.Range(0, defenseSpawnPoints.Length)];
-            teamPrefab = defenseTeamPrefab; // Nh�n v?t cho ??i ph�ng th?
+            spawnPoint = GetAvailableSpawnPoint(teamSpawnPoints);
+            if (spawnPoint == null)
+            {
+                Debug.LogError("Tất cả các điểm spawn đã bị chiếm.");
+                return;
+            }
+
+            // Lưu vị trí spawn ban đầu
+            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { "initialSpawnPoint", spawnPoint.position } });
         }
 
-        // T?o nh�n v?t t?i ?i?m spawn t??ng ?ng v� ??ng b? h�a gi?a t?t c? ng??i ch?i
-        GameObject _player = PhotonNetwork.Instantiate(teamPrefab.name, spawnPoint.position, spawnPoint.rotation);
-
-        // G�n team cho ng??i ch?i trong Custom Properties
-        Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
-        hash["team"] = selectedTeam; // G�n team v�o Custom Properties
+        // Tạo nhân vật tại điểm spawn và đồng bộ hóa với tất cả người chơi
+        _player = PhotonNetwork.Instantiate(teamPrefab.name, spawnPoint.position, spawnPoint.rotation);
+        int playerViewID = _player.GetComponent<PhotonView>().ViewID;
+        // Thiết lập thuộc tính cho người chơi hiện tại
+        Hashtable hash = new Hashtable
+    {
+        { "isAlive", true },
+        { "team", selectedTeam },
+        { "spawnPoint", spawnPoint.position },
+        { "viewID", playerViewID }
+    };
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 
-        // ??t t�n ng??i ch?i
-        _player.GetComponent<PhotonView>().RPC("SetNickname", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.NickName);
+        // Đặt tên cho người chơi và thiết lập camera, vị trí vũ khí
+        /*_player.GetComponent<PhotonView>().RPC("SetNickname", RpcTarget.AllBuffered, PhotonNetwork.LocalPlayer.NickName);*/
         _player.GetComponent<PlayerSetup>().IsLocalPlayer();
         _player.GetComponent<health>().isLocalPlayer = true;
-
         PhotonNetwork.LocalPlayer.NickName = nickname;
+        _player.GetComponent<PhotonView>().RPC("SetNickname", RpcTarget.All, nickname);
+
+        GameObject currentPlayerObject = gameObject;
+        CameraManager.instance.RespawnPlayerCamera(currentPlayerObject);
+        GunShop.instance.ResetGunPosition();
+        GunShop.instance.isGunBig = false;
     }
+
+    private Transform GetAvailableSpawnPoint(Transform[] spawnPoints)
+    {
+        List<Transform> availableSpawnPoints = new List<Transform>();
+
+        // Lọc danh sách các điểm spawn chưa có ai sử dụng
+        foreach (Transform point in spawnPoints)
+        {
+            bool isOccupied = false;
+
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                if (player.CustomProperties.TryGetValue("spawnPoint", out var spawnPosition) &&
+                    (Vector3)spawnPosition == point.position)
+                {
+                    isOccupied = true;
+                    break;
+                }
+            }
+
+            if (!isOccupied)
+            {
+                availableSpawnPoints.Add(point);
+            }
+        }
+
+        // Chọn ngẫu nhiên một điểm từ danh sách các điểm spawn trống
+        if (availableSpawnPoints.Count > 0)
+        {
+            return availableSpawnPoints[Random.Range(0, availableSpawnPoints.Count)];
+        }
+
+        // Trả về null nếu không còn điểm trống nào
+        return null;
+    }
+
 
     public void SetHashes()
     {
@@ -136,13 +268,159 @@ public class RoomManager : MonoBehaviourPunCallbacks
         {
             Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
             hash["kills"] = kills;
-            hash["deaths"] =deaths;
+            hash["deaths"] = deaths;
 
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }
         catch
         {
 
+        }
+    }
+    [PunRPC]
+    public void CountPlayersInTeams()
+    {
+        redTeamCount = 0;
+        blueTeamCount = 0;
+        //if (PhotonNetwork.IsMasterClient)
+        //{
+        //photonView.RPC("SyncTXTSLA", RpcTarget.AllBuffered);
+        //photonView.RPC("SyncTXTSLD", RpcTarget.AllBuffered);
+        //}
+
+        // L?y danh sách t?t c? ng??i ch?i trong pḥng
+        Player[] players = PhotonNetwork.PlayerList;
+        //Debug.LogWarning(players.Length);
+        // Duy?t qua t?ng ng??i ch?i
+        foreach (Player player in players)
+        {
+            // Ki?m tra n?u ng??i ch?i có Custom Properties ch?a key "team"
+            if (player.CustomProperties.TryGetValue("team", out var teamValue))
+            {
+                int team = (int)teamValue; // Chuy?n ??i giá tr? sang ki?u int
+
+                // ??m s? l??ng ng??i ch?i thu?c team ?? ho?c xanh
+                if (team == 0) // ??i ??
+                {
+                    redTeamCount++;
+                    //if (PhotonNetwork.IsMasterClient) {
+                    //photonView.RPC("SyncTXTSLA", RpcTarget.AllBuffered);
+                    //}
+                    txtSLA.text = "Đội tấn công: " + redTeamCount ;
+                }
+                else if (team == 1) // ??i xanh
+                {
+                    blueTeamCount++;
+                    //if (PhotonNetwork.IsMasterClient)
+                    //{
+                    //photonView.RPC("SyncTXTSLD", RpcTarget.AllBuffered);
+                    //}
+                    txtSLD.text = "Đội phòng thủ: " + blueTeamCount ;
+                }
+            }
+        }
+
+        if (redTeamCount >= 2 && blueTeamCount >= 2)
+        {
+            TimeManager.instance.startGame = true;
+        }
+    }
+    [PunRPC]
+    public void SyncTXTSLA()
+    {
+        txtSLA.text = "Đội tấn công: " + redTeamCount + "/2" ;
+    }
+    [PunRPC]
+    public void SyncTXTSLD()
+    {
+        txtSLD.text = "Đội phòng thủ: " + blueTeamCount + "/2" ;
+    }
+    public void UpdatePlayerStatus(bool isAlive)
+    {
+        Hashtable properties = new Hashtable
+            {
+                { "isAlive", isAlive }
+            };
+        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+
+    }
+    //public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    //{
+    //    if (PhotonNetwork.IsMasterClient) // Chỉ cho MasterClient kiểm tra
+    //    {
+    //        if (changedProps.ContainsKey("isAlive"))
+    //        {
+    //            CheckRedTeamStatus();
+    //        }
+    //    }
+    //    else
+    //    {
+    //        // Máy khách khác chỉ cần cập nhật camera mà không gọi kiểm tra
+    //        CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
+    //    }
+    //}
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        Debug.Log("Custom Properties updated: " + targetPlayer.CustomProperties.ToStringFull());
+
+        if (targetPlayer.CustomProperties.ContainsKey("isAlive"))
+        {
+            if (PhotonNetwork.IsMasterClient) // Chỉ gọi từ Master Client và kiểm tra cờ
+            {
+                CheckRedTeamStatus();
+            }
+            CameraManager.instance.photonView.RPC("GetAllPlayerCameras", RpcTarget.AllBuffered);
+        }
+    }
+
+
+
+    public void CheckRedTeamStatus()
+    {
+        if (hasCalledEndGame) return; // Dừng nếu hàm đã được gọi
+
+        bool allDeadRed = true;
+        bool allDeadBlue = true;
+
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (player.CustomProperties.TryGetValue("team", out var teamValue) &&
+                player.CustomProperties.TryGetValue("isAlive", out var isAliveValue) &&
+                (bool)isAliveValue)
+            {
+                if ((int)teamValue == 0) allDeadRed = false;
+                if ((int)teamValue == 1) allDeadBlue = false;
+            }
+        }
+
+        if ((allDeadRed || allDeadBlue) && !hasCalledEndGame && PhotonNetwork.IsMasterClient && !TimeManager.instance.isGameOver && TimeManager.instance.startGame)
+        {
+            hasCalledEndGame = true;
+            if (allDeadRed)
+            {
+                Debug.Log("Đội đỏ đã chết hết");
+                TimeManager.instance.isAllDeathRed = true;
+            }
+            else if (allDeadBlue)
+            {
+                Debug.Log("Đội xanh đã chết hết");
+                TimeManager.instance.isAllDeathBlue = true;
+            }
+        }
+    }
+
+
+    public void RemovePlayerInstances()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("OldPlayer");
+
+        foreach (GameObject player in players)
+        {
+            PhotonView photonView = player.GetComponent<PhotonView>();
+            if (photonView != null)
+            {
+                photonView.RPC("RequestDestroyPlayer", RpcTarget.AllBuffered, photonView.ViewID);
+            }
         }
     }
 }

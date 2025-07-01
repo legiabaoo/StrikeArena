@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using TMPro;
 using Photon.Pun.UtilityScripts;
+using scgFullBodyController;
 
 public class Weapon : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class Weapon : MonoBehaviour
     public float fireRate;
     public Camera camera;
     private float nextFire;
-
+    public GameObject raycat;
     [Header("Hieu Ung")]
     public GameObject hitVFX;
     [Header("So Dan")]
@@ -19,86 +20,124 @@ public class Weapon : MonoBehaviour
     public int ammo = 30;
     public int magAmmo = 30;
     [Header("UI")]
-    public TextMeshProUGUI magText;
+  
     public TextMeshProUGUI ammoText;
 
-    [Header("Do Giat")]
+   /* [Header("Do Giat")]
     [Range(0f, 2f)]
     public float recoverPercent = 0.7f;
-    [Space]
-    public float recoilUp = 1f;
-    public float recoilBack = 0f;
+    [Space]*/
+   /* public float recoilUp = 1f;
+    public float recoilBack = 0f;*/
 
     private Vector3 origianlPosition;
     private Vector3 recoilVeclocity = Vector3.zero;
 
-    private bool recoiling;
-    public bool recovering;
-    private float recoilLength;
-    private float recoverLength;
+ /*   private bool recoiling;*/
+   /* public bool recovering;*/
+  /*  private float recoilLength;
+    private float recoverLength;*/
     public float doxa = 0f;
-
+    public GunController gun;
+    public 
     // Start is called before the first frame update
     void Start()
     {
-        magText.text = mag.ToString();
-        ammoText.text = ammo + "/" + magAmmo;
+     
 
-        origianlPosition = transform.localPosition;
+    
 
-        recoilLength = 0;
-        recoverLength = 1 / fireRate * recoverPercent;
+       
     }
 
     // Update is called once per frame
     void Update()
     {
+        PhotonView photonView = GetComponentInParent<PhotonView>();
+        if (photonView == null || !photonView.IsMine)
+        {
+            return;
+        }
+
         if (nextFire > 0)
         {
             nextFire -= Time.deltaTime;
         }
+        GunController.ShootTypes shootType = gun.shootType;
 
-        if (Input.GetButton("Fire1") && nextFire <= 0 && ammo > 0)
+
+        if (shootType == GunController.ShootTypes.SemiAuto  )
         {
-            Debug.Log("ban ne...");
-            nextFire = 1 / fireRate;
-            ammo--;
-            magText.text = mag.ToString();
-            ammoText.text = ammo + "/" + magAmmo;
-            Fire();
+            if (Input.GetButtonDown("Fire1") && nextFire <= 0 && gun.bulletsInMag > 0)
+            {
+                Debug.Log("sung luc va ngam");
+                nextFire = 1 / fireRate;
+                /*  ammo--;
+
+                  ammoText.text = ammo + "/" + magAmmo;*/
+                Fire();
+            }
+        }
+        if (shootType == GunController.ShootTypes.FullAuto)
+        {
+            if (Input.GetButton("Fire1") && nextFire <= 0 && gun.bulletsInMag > 0)
+            {
+                Debug.Log("sungtruongdangban");
+                nextFire = 1 / fireRate;
+                /*  ammo--;
+
+                  ammoText.text = ammo + "/" + magAmmo;*/
+                Fire();
+            }
+        }
+        if (shootType == GunController.ShootTypes.BoltAction)
+        {
+            if (Input.GetButtonDown("Fire1") && nextFire <= 0 && gun.bulletsInMag > 0)
+            {
+                Debug.Log("sung luc va ngam");
+                nextFire = 1 / fireRate;
+                /*  ammo--;
+
+                  ammoText.text = ammo + "/" + magAmmo;*/
+                Fire();
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && mag > 0)
-        {
-            Reload();
-        }
 
-        if (recoiling)
-        {
-            Recoil();
-        }
 
-        if (recovering)
-        {
-            Recovering();
-        }
+
+
+        /* if (Input.GetKeyDown(KeyCode.R) && mag > 0)
+         {
+             Reload();
+         }*/
+
+        /*  if (recoiling)
+          {
+              Recoil();
+          }
+
+          if (recovering)
+          {
+              Recovering();
+          }*/
     }
 
-    void Reload()
+/*    void Reload()
     {
         if (mag > 0)
         {
             mag--;
             ammo = magAmmo;
         }
-        magText.text = mag.ToString();
+        
         ammoText.text = ammo + "/" + magAmmo;
-    }
+    }*/
 
-    private void Fire()
+    public void Fire()
     {
-        recoiling = true;
-        recovering = false;
+ /*       recoiling = true;
+        recovering = false;*/
 
         // L?y PhotonView c?a ng??i b?n (shooter)
         PhotonView shooterPhotonView = GetComponentInParent<PhotonView>();
@@ -112,7 +151,7 @@ public class Weapon : MonoBehaviour
         int shooterTeam = (int)shooterPhotonView.Owner.CustomProperties["team"];
 
         // T?o ray t? camera
-        Ray ray = new Ray(camera.transform.position, camera.transform.forward);
+        Ray ray = new Ray(raycat.transform.position, raycat.transform.forward);
         RaycastHit hit;
 
         // Ki?m tra va ch?m v?i raycast
@@ -139,17 +178,24 @@ public class Weapon : MonoBehaviour
                 // Ki?m tra n?u khác team m?i cho phép gây sát th??ng
                 if (shooterTeam != targetTeam)
                 {
+                  int finalDamage = damege; // Giá tr? sát th??ng m?c ??nh
+                    if (hit.collider.CompareTag("head")) // Ki?m tra tag "head"
+                    {
+                        finalDamage *= 3; // Nhân sát th??ng lên 4 l?n
+                        Debug.Log("trung dau nè....");
+                    }
+
                     // Gây sát th??ng cho m?c tiêu
-                    PhotonNetwork.LocalPlayer.AddScore(damege);
-                    if (damege >= targetHealth.healths)
+                    PhotonNetwork.LocalPlayer.AddScore(finalDamage);
+                    if (damege >= targetHealth.healths + targetHealth.armor)
                     {
                         RoomManager.instance.kills++;
                         RoomManager.instance.SetHashes();
                         PhotonNetwork.LocalPlayer.AddScore(100);
                     }
-
+                    Debug.LogWarning(finalDamage);
                     // G?i RPC ?? c?p nh?t sát th??ng lên t?t c? các client
-                    targetPhotonView.RPC("TakeDamege", RpcTarget.All, damege);
+                    targetPhotonView.RPC("TakeDamage", RpcTarget.All, finalDamage);
                 }
                 else
                 {
@@ -158,12 +204,12 @@ public class Weapon : MonoBehaviour
             }
             else
             {
-                Debug.LogError("??i t??ng không có component health.");
+                Debug.Log(" không có component health.");
             }
         }
     }
 
-    void Recoil()
+   /* void Recoil()
     {
         Vector3 finalPositon = new Vector3(origianlPosition.x, origianlPosition.y + recoilUp, origianlPosition.z - recoilBack);
         transform.localPosition = Vector3.SmoothDamp(transform.localPosition, finalPositon, ref recoilVeclocity, recoilLength);
@@ -185,5 +231,5 @@ public class Weapon : MonoBehaviour
             recoiling = false;
             recovering = false;
         }
-    }
+    }*/
 }
