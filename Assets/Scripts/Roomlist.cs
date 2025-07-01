@@ -127,7 +127,7 @@ public class Roomlist : MonoBehaviourPunCallbacks
 
         if (!PhotonNetwork.InLobby)
         {
-            Debug.LogError("tham gia lai lobby");
+            //Debug.LogError("tham gia lai lobby");
             // Tham gia lại lobby để nhận danh sách phòng
             PhotonNetwork.JoinLobby();
         }

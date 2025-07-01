@@ -65,10 +65,18 @@ public class TimeManager : MonoBehaviourPunCallbacks, IPunObservable
         //{
         //    photonView.RPC("SyncTime", RpcTarget.All, currentTime);
         //}
-        StartBuyPhase();
-        minutes = Mathf.FloorToInt(currentTime / 60);
-        seconds = Mathf.FloorToInt(currentTime % 60);
-        timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        if (!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
+        else
+        {
+            StartBuyPhase();
+            minutes = Mathf.FloorToInt(currentTime / 60);
+            seconds = Mathf.FloorToInt(currentTime % 60);
+            timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
+
     }
 
     private void Update()
