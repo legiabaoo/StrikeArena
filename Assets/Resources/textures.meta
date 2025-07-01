@@ -1,5 +1,12 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
 guid: 8828232f90092894ab48d4e0a4b50958
+=======
+<<<<<<<< HEAD:Assets/Invector-3rdPersonController_LITE/Documentation_BasicLocomotion_LITE.pdf.meta
+guid: ca6461c5055c73341b7fe203fe96f378
+========
+guid: bc47b924051031f44b124c5140e10d91
+>>>>>>> Stashed changes
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
